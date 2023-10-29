@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import "./NavBar.scss";
-import logo from "../logo.png";
-import profileImage from "../profile-image.png";
+import logo from "../img/logo.png";
+import profileImage from "../img/profile-image.png";
 import Menu from './Menu';
 export default function NavBar() {
   return (
