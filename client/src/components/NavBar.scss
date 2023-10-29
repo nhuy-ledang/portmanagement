@@ -1,35 +1,10 @@
-@import '~bootstrap/scss/bootstrap';
-
-.container-navbar {
-    display: flex;
-    justify-content: space-between;
+nav {
     margin: 18px 48px;
-    .nav {
-        display: flex;
-        gap: 50px;       
-        .nav-item {
-            color: black;
-            font-weight: 600; 
-            .nav-link {
-                color: black;
-                font-weight: 600; 
-                &:hover {
-                    background-color: #FFDDDD;
-                    display: block;
-                } 
-            }
-        }
-        .nav-link {
-            color: black;
-            font-weight: 600; 
-            &:hover {
-                background-color: #FFDDDD;
-                display: block;
-            } 
-        }
-           
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .nav-link {
+        text-decoration: none;
+        color: black;
     }
 }
-
-
-
