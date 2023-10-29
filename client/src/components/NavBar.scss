@@ -8,3 +8,28 @@ nav {
         color: black;
     }
 }
+
+
+.account-dropdown {
+    width: 200px;
+    background: #FFDDDD;
+    transition: all linear 0.3s;
+    position: absolute;
+    margin-left: -150px;
+    ul {
+      list-style: none;
+      padding: unset;
+      margin: unset;
+      li {
+        transition: all linear 0.3s;
+        font-size: 16px;
+        font-weight: 700;
+        padding: 10px 18px;
+        &:hover {
+          background: #C1C1C1;
+          cursor: pointer;
+          color: #fff;
+        }
+      }
+    }
+  }
