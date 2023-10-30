@@ -4,7 +4,7 @@ import "./Login.scss";
 import logo from "../img/logo.png";
 
 async function loginUser(credentials) {
-  return fetch("https://reqres.in/api/login", {
+  return fetch("http://homethang.duckdns.org:3000/api/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -14,13 +14,14 @@ async function loginUser(credentials) {
 }
 
 export default function Login({ setToken }) {
-  const [email, setEmail] = useState();
+  const [adminname, setAdminname] = useState();
   const [password, setPassword] = useState();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // console.log(adminname, password);
     const token = await loginUser({
-      email,
+      adminname,
       password,
     });
     setToken(token);
@@ -28,28 +29,29 @@ export default function Login({ setToken }) {
 
   return (
     <>
-    <div className="nav-login"><img src={logo} alt="Logo" /></div>
-    <div className="login-wrapper">
-      <div className="login">
-        <h1>Login</h1>
-        <form onSubmit={handleSubmit}>
-        {/* <h1>Login</h1> */}
-          <input
-            type="text"
-            placeholder="Administrator"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          
-            <button className="btn-login" type="submit">LOGIN</button>
-          
-        </form>
+      <div className="nav-login">
+        <img src={logo} alt="Logo" />
       </div>
-    </div>
+      <div className="login-wrapper">
+        <div className="login">
+          <h1>Login</h1>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Administrator"
+              onChange={(e) => setAdminname(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button className="btn-login" type="submit">
+              LOGIN
+            </button>
+          </form>
+        </div>
+      </div>
     </>
   );
 }

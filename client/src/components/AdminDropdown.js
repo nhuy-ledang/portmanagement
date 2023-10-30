@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from 'react-router-dom';
 export default function AdminDropdown() {
   return (
-    <div className="dropdown-menu">
+    <div className="dropdown-list">
       <ul>
         <li><Link to='/administrator' className='nav-link'>Administrator</Link></li>
         <li><Link to='/audit-log' className='nav-link'>Audit Log</Link></li>

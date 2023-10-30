@@ -45,7 +45,7 @@
                 color: #787878;
             }
             .btn-login {
-                width: 60%;
+                width: 50%;
                 height: 55px;
                 border-radius: 20px;
                 border: none;
@@ -55,6 +55,20 @@
                 font-weight: 700;
                 font-size: 18px;
             }
+        }
+    }
+}
+
+@media only screen and (max-width: 992px) {
+    .nav-login {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    .login-wrapper {
+        width: 100%;
+        .login {
+            width: 80%;
         }
     }
 }

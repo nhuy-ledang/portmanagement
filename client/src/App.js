@@ -3,18 +3,22 @@ import "./App.scss";
 import NavBar from "./components/NavBar";
 import { BrowserRouter } from 'react-router-dom'
 import { Routes, Route } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import Home from "./pages/Home";
 import UserManagement from "./pages/user/UserManagement";
 import RightAssignment from "./pages/user/RightAssignment";
 import LayoutManagement from "./pages/port/LayoutManagement";
 import PortAssignment from "./pages/port/PortAssignment";
 import PortScheduler from "./pages/port/PortScheduler";
-import Administrator from "./pages/admin/Administrator";
+import Administrator from "./pages/admin/Administrator/Administrator";
 import AuditLog from "./pages/admin/AuditLog";
 import DeviceDetection from "./pages/admin/DeviceDetection";
 import Report from "./pages/admin/Report";
 import ChangePassword from "./pages/account/ChangePassword";
 import Login from "./pages/Login";
+import CreateAdministrator from "./pages/admin/Administrator/CreateAdministrator";
+
 import useToken from './useToken';
 
 function App() {
@@ -40,6 +44,8 @@ function App() {
           <Route path='/report' element={<Report />} />
           <Route path='/change-password' element={<ChangePassword />} />
           <Route path='/login' element={<Login />} />
+
+          <Route path='/create-administrator' element={<CreateAdministrator />} />
         </Routes>
       </div>
     </BrowserRouter>
