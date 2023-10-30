@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "./Login.scss";
+import logo from "../img/logo.png";
 
 async function loginUser(credentials) {
-  return fetch("http://localhost:8080/api/login", {
+  return fetch("https://reqres.in/api/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -13,19 +14,21 @@ async function loginUser(credentials) {
 }
 
 export default function Login({ setToken }) {
-  const [administrator, setAdministrator] = useState();
+  const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = await loginUser({
-      administrator,
+      email,
       password,
     });
     setToken(token);
   };
 
   return (
+    <>
+    <div className="nav-login"><img src={logo} alt="Logo" /></div>
     <div className="login-wrapper">
       <div className="login">
         <h1>Login</h1>
@@ -34,7 +37,7 @@ export default function Login({ setToken }) {
           <input
             type="text"
             placeholder="Administrator"
-            onChange={(e) => setAdministrator(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <input
             type="password"
@@ -47,6 +50,7 @@ export default function Login({ setToken }) {
         </form>
       </div>
     </div>
+    </>
   );
 }
 
