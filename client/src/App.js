@@ -13,6 +13,7 @@ import Administrator from "./pages/admin/Administrator";
 import AuditLog from "./pages/admin/AuditLog";
 import DeviceDetection from "./pages/admin/DeviceDetection";
 import Report from "./pages/admin/Report";
+import ChangePassword from "./pages/account/ChangePassword";
 import Login from "./pages/Login";
 import useToken from './useToken';
 
@@ -37,6 +38,7 @@ function App() {
           <Route path='/audit-log' element={<AuditLog />} />
           <Route path='/device-detection' element={<DeviceDetection />} />
           <Route path='/report' element={<Report />} />
+          <Route path='/change-password' element={<ChangePassword />} />
           <Route path='/login' element={<Login />} />
         </Routes>
       </div>
