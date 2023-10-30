@@ -4,13 +4,14 @@ import "./Login.scss";
 import logo from "../img/logo.png";
 
 async function loginUser(credentials) {
+  console.log(JSON.stringify(credentials))
   return fetch("http://homethang.duckdns.org:3000/api/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(credentials),
-  }).then((data) => data.json());
+  }).then((data) => data.text());
 }
 
 export default function Login({ setToken }) {
@@ -24,6 +25,7 @@ export default function Login({ setToken }) {
       adminname,
       password,
     });
+    console.log(token);
     setToken(token);
   };
 
