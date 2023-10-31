@@ -6,21 +6,31 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Administrator() {
-  const [administrator, setAdministrator] = useState([]);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("https://reqres.in/api/users?page=2");
-        const json = await response.json();
-        setAdministrator(json.data);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    };
     fetchData();
   }, []);
 
+  const fetchData = async () => {
+    try {
+      const ADMIN_API = "http://homethang.duckdns.org:3000/api/admin";
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: JSON.parse(localStorage.token).token,
+      };
+
+      const response = await fetch(ADMIN_API, { headers });
+      const jsonData = await response.json();
+      setData(jsonData);
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+  const handleUpdateTable = (admin)  => {
+    setData([admin, ...data]);
+  }
 
   return (
     <>
@@ -28,36 +38,36 @@ export default function Administrator() {
         <h1>Administrator Management</h1>
         <div className="aaaa">
           <div>
-            <CreateAdministrator />
+            <CreateAdministrator handleUpdateTable={handleUpdateTable} />
           </div>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th className="col-1">ID</th>
-              <th className="col-4">ADMINISTRATOR</th>
-              <th className="col-2">EMAIL</th>
-              <th className="col-2">FULL NAME</th>
-              <th className="col-5"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {administrator.map((user) => (
-              <tr key={user.id}>
-                <td className="table-data">{user.id}</td>
-                <td className="table-data">{user.email}</td>
-                <td className="table-data">{user.first_name}</td>
-                <td className="table-data">{user.last_name}</td>
-                <td className="table-data table-button">
-                  <Button variant="primary">Edit</Button>{" "}
-                  <Button variant="danger">
-                    Delete
-                  </Button>{" "}
-                </td>
+        {data ? (
+          <table>
+            <thead>
+              <tr>
+                <th className="col-3">ADMINISTRATOR</th>
+                <th className="col-3">EMAIL</th>
+                <th className="col-3">FULL NAME</th>
+                <th className="col-3"></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.map((admin, index) => (
+                <tr key={index}>
+                  <td className="table-data">{admin.adminname}</td>
+                  <td className="table-data">{admin.email}</td>
+                  <td className="table-data">{admin.fullname}</td>
+                  <td className="table-data table-button">
+                    <Button variant="primary">Edit</Button>{" "}
+                    <Button variant="danger">Delete</Button>{" "}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>Loading...</p>
+        )}
       </div>
       <ToastContainer
         position="bottom-right"

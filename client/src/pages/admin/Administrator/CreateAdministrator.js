@@ -2,92 +2,129 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import axios from "axios";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
-export default function CreateAdministrator() {
-  const [name, setName] = useState("");
-  const [job, setJob] = useState("");
-
+export default function CreateAdministrator(props) {
+  const [adminname, setAdminname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmpassword] = useState("");
+  const [fullname, setFullname] = useState("");
   const [show, setShow] = useState(false);
-
+  const { handleUpdateTable } = props;
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const postCreateAdmin = (name, job) => {
-    return axios.post("https://reqres.in/api/users", {name, job})
-}
+  const postCreateAdmin = async () => {
+    const url = "http://homethang.duckdns.org:3000/api/admin";
+    const data = { adminname, email, password, confirmpassword, fullname };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: JSON.parse(localStorage.token).token,
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        throw new Error("Request failed with status code " + response.status);
+      }
+      const responseData = await response.text();
+      return responseData;
+    } catch (error) {
+      console.error("Error:", error);
+      throw error;
+    }
+  };
 
   const handleSaveAdmin = async () => {
-    let res = await postCreateAdmin(name, job);
-    console.log(res)
-    if (res && res.data.id) {
-      handleClose();
-      setName('');
-      setJob('');
-      toast.success("A admin is created succeed!");
-    } else {
-      //error
-      toast.success("Error!");
+    try {
+      const res = await postCreateAdmin();
+      console.log(res);
+      if (res === "Admin already exists") {
+        toast.error("Admin đã tồn tại!");
+      } else if (res === "Add admin succeed") {
+        handleClose();
+        setAdminname("");
+        setEmail("");
+        setPassword("");
+        setConfirmpassword("");
+        setFullname("");
+        toast.success("Admin được tạo thành công!");
+        await handleUpdateTable({
+          adminname,
+          email,
+          password,
+          confirmpassword,
+          fullname,
+        });
+      } else {
+        toast.error("Lỗi!");
+      }
+    } catch (error) {
+      toast.error(error.message);
     }
-  }
-  
+  };
+
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <Button variant="success" onClick={handleShow}>
         Create
-      </Button>
-
+      </Button>{" "}
       <Modal show={show} onHide={handleClose} className="modal-create-admin">
         <Modal.Header closeButton>
-          <Modal.Title>Edit Administrator</Modal.Title>
+          <Modal.Title>Create Administrator</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
-            {/* <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Administrator</Form.Label>
-              <Form.Control
+            <div className="mb-3">
+              <label className="form-label">Administrator</label>
+              <input
                 type="text"
-                placeholder="Administrator"
-                autoFocus
+                className="form-control"
+                value={adminname}
+                onChange={(e) => setAdminname(e.target.value)}
               />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Email"
-                autoFocus
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Email</label>
+              <input
+                type="text"
+                className="form-control"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Password"
-                autoFocus
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Full Name</label>
+              <input
+                type="text"
+                className="form-control"
+                value={fullname}
+                onChange={(e) => setFullname(e.target.value)}
               />
-            </Form.Group> */}
-            <form onSubmit={handleSaveAdmin}>
-              <div className="mb-3">
-                <label className="form-label">Name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-              <div className="mb-3">
-                <label class="form-label">Job</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={job}
-                  onChange={(e) => setJob(e.target.value)}
-                />
-              </div>
-            </form>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Password</label>
+              <input
+                type="text"
+                className="form-control"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Confirm Password</label>
+              <input
+                type="text"
+                className="form-control"
+                value={confirmpassword}
+                onChange={(e) => setConfirmpassword(e.target.value)}
+              />
+            </div>
+            
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -95,7 +132,7 @@ export default function CreateAdministrator() {
             Close
           </Button>
           <Button variant="primary" onClick={handleSaveAdmin}>
-            Save Changes
+            Save
           </Button>
         </Modal.Footer>
       </Modal>
