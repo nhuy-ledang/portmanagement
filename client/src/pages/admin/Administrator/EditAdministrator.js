@@ -1,27 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 
-export default function CreateAdministrator(props) {
+export default function EditAdministrator(props) {
   const [adminname, setAdminname] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmpassword, setConfirmpassword] = useState("");
   const [fullname, setFullname] = useState("");
   const [show, setShow] = useState(false);
-  const { handleUpdateTable } = props;
+  const { admin, handleUpdateTable } = props;
+
+  useEffect(() => {
+    if (admin) {
+      setAdminname(admin.adminname);
+      setEmail(admin.email);
+      setFullname(admin.fullname);
+    }
+  }, [admin]);
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const postCreateAdmin = async () => {
-    const url = "http://homethang.duckdns.org:3000/api/admin";
-    const data = { adminname, email, password, confirmpassword, fullname };
+  const postUpdateAdmin = async () => {
+    const url = `http://homethang.duckdns.org:3000/api/admin/${admin.adminId}`;
+    const data = { adminname, email, fullname };
 
     try {
       const response = await fetch(url, {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: JSON.parse(localStorage.token).token,
@@ -39,25 +46,16 @@ export default function CreateAdministrator(props) {
     }
   };
 
-  const handleSaveAdmin = async () => {
+  const handleUpdateAdmin = async () => {
     try {
-      const res = await postCreateAdmin();
+      const res = await postUpdateAdmin();
       console.log(res);
-      if (res === "Admin already exists") {
-        toast.error("Admin đã tồn tại!");
-      } else if (res === "Add admin succeed") {
+      if (res === "Update admin succeed") {
         handleClose();
-        setAdminname("");
-        setEmail("");
-        setPassword("");
-        setConfirmpassword("");
-        setFullname("");
-        toast.success("Admin được tạo thành công!");
-        await handleUpdateTable({
+        toast.success("Thông tin người quản trị đã được cập nhật!");
+        await handleUpdateTable(admin.adminId, {
           adminname,
           email,
-          password,
-          confirmpassword,
           fullname,
         });
       } else {
@@ -70,12 +68,12 @@ export default function CreateAdministrator(props) {
 
   return (
     <>
-      <Button variant="success" onClick={handleShow}>
-        Create
+      <Button variant="primary" onClick={handleShow}>
+        Edit
       </Button>{" "}
       <Modal show={show} onHide={handleClose} className="modal-create-admin">
         <Modal.Header closeButton>
-          <Modal.Title>Create Administrator</Modal.Title>
+          <Modal.Title>Edit Administrator</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -106,33 +104,14 @@ export default function CreateAdministrator(props) {
                 onChange={(e) => setFullname(e.target.value)}
               />
             </div>
-            <div className="mb-3">
-              <label className="form-label">Password</label>
-              <input
-                type="text"
-                className="form-control"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Confirm Password</label>
-              <input
-                type="text"
-                className="form-control"
-                value={confirmpassword}
-                onChange={(e) => setConfirmpassword(e.target.value)}
-              />
-            </div>
-            
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSaveAdmin}>
-            OK
+          <Button variant="primary" onClick={handleUpdateAdmin}>
+            Save
           </Button>
         </Modal.Footer>
       </Modal>

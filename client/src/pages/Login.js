@@ -2,31 +2,54 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "./Login.scss";
 import logo from "../img/logo.png";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 async function loginUser(credentials) {
-  console.log(JSON.stringify(credentials))
-  return fetch("http://homethang.duckdns.org:3000/api/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(credentials),
-  }).then((data) => data.text());
+  try {
+    const response = await axios.post(
+      "http://homethang.duckdns.org:3000/api/login",
+      credentials,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 export default function Login({ setToken }) {
-  const [adminname, setAdminname] = useState();
-  const [password, setPassword] = useState();
+  const [adminname, setAdminname] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(adminname, password);
-    const token = await loginUser({
-      adminname,
-      password,
-    });
-    console.log(token);
-    setToken(token);
+    try {
+      const token = await loginUser({
+        adminname,
+        password,
+      });
+      console.log(token);
+      if (token === "Invailid adminname or password" || token === "Wrong adminname or password") {
+        console.log("adminname:", adminname, "password:", password);
+        toast.error("Đăng nhập không thành công");
+      } else {
+        localStorage.setItem("token", token);
+        setToken(token);
+        console.log("adminname:", adminname, "password:", password);
+        toast.success("Đăng nhập thành công");
+      }
+    } catch (error) {
+      console.error(error);
+      console.log("adminname:", adminname, "password:", password);
+      toast.error("Đăng nhập thất bại");
+    }
   };
 
   return (
@@ -41,11 +64,13 @@ export default function Login({ setToken }) {
             <input
               type="text"
               placeholder="Administrator"
+              value={adminname}
               onChange={(e) => setAdminname(e.target.value)}
             />
             <input
               type="password"
               placeholder="Password"
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
             <button className="btn-login" type="submit">
@@ -54,6 +79,7 @@ export default function Login({ setToken }) {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 }
