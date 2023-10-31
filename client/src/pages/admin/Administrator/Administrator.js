@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./Administrator.scss";
-// import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import CreateAdministrator from "./CreateAdministrator";
 import { ToastContainer } from "react-toastify";
@@ -8,7 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function Administrator() {
   const [administrator, setAdministrator] = useState([]);
-  // const [selectedAdministrator, setSelectedAdministrator] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,22 +18,9 @@ export default function Administrator() {
         console.error("Error fetching users:", error);
       }
     };
-    // Call the function
     fetchData();
   }, []);
 
-  // Delete a user
-  const deleteUser = async (userId) => {
-    try {
-      await fetch(`https://reqres.in/api/users/${userId}`, {
-        method: "DELETE",
-      });
-      const updatedUsers = administrator.filter((user) => user.id !== userId);
-      setAdministrator(updatedUsers);
-    } catch (error) {
-      console.error("Error deleting Administrator:", error);
-    }
-  };
 
   return (
     <>
@@ -65,7 +50,7 @@ export default function Administrator() {
                 <td className="table-data">{user.last_name}</td>
                 <td className="table-data table-button">
                   <Button variant="primary">Edit</Button>{" "}
-                  <Button variant="danger" onClick={() => deleteUser(user.id)}>
+                  <Button variant="danger">
                     Delete
                   </Button>{" "}
                 </td>
