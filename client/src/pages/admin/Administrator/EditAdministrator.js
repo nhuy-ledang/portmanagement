@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 // import { toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
-
+import { AiFillEdit } from 'react-icons/ai'; 
 export default function EditAdministrator(props) {
   // const [id, setId] = useState("");
   const [adminname, setAdminname] = useState("");
@@ -16,11 +16,10 @@ export default function EditAdministrator(props) {
   const handleShow = () => setShow(true);
 
   const putUpdateAdmin = async () => {
-    const url = "http://homethang.duckdns.org:3000/api/admin";
     const data = { adminname, email, fullname };
 
     try {
-      const response = await fetch(url, {
+      const response = await fetch( "http://homethang.duckdns.org:3000/api/admin", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +64,7 @@ export default function EditAdministrator(props) {
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
-        Edit
+        <AiFillEdit />
       </Button>{" "}
       <Modal show={show} onHide={handleClose} className="modal-create-admin">
         <Modal.Header closeButton>
