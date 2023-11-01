@@ -70,7 +70,7 @@ export default function CreateAdministrator(props) {
   return (
     <>
       <Button variant="success" onClick={handleShow}>
-        Create
+        CREATE
       </Button>{" "}
       <Modal show={show} onHide={handleClose} className="modal-create-admin">
         <Modal.Header closeButton>

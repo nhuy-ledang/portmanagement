@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./Administrator.scss";
-// import { Button } from "react-bootstrap";
 import CreateAdministrator from "./CreateAdministrator";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditAdministrator from "./EditAdministrator";
 import ReactPaginate from "react-paginate";
-import axios from 'axios';
-import { AiFillDelete } from 'react-icons/ai';
-
+import axios from "axios";
 
 export default function Administrator() {
   const [data, setData] = useState(null);
@@ -16,18 +13,23 @@ export default function Administrator() {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 6;
 
+  const [selectedItems, setSelectedItems] = useState([]);
+
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    try {     
+    try {
       const headers = {
         "Content-Type": "application/json",
         Authorization: JSON.parse(localStorage.token).token,
       };
 
-      const response = await fetch("http://homethang.duckdns.org:3000/api/admin", { headers });
+      const response = await fetch(
+        "http://homethang.duckdns.org:3000/api/admin",
+        { headers }
+      );
       const jsonData = await response.json();
       setData(jsonData);
     } catch (error) {
@@ -45,9 +47,10 @@ export default function Administrator() {
 
   const pageCount = data ? Math.ceil(data.length / itemsPerPage) : 0;
 
-  const currentData = data && Array.isArray(data)
-    ? data.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
-    : [];
+  const currentData =
+    data && Array.isArray(data)
+      ? data.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+      : [];
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
@@ -58,23 +61,48 @@ export default function Administrator() {
     setDataAdminEdit(admin);
   };
 
-  const handleDelete = (adminname) => {
+  const handleSelect = (admin) => {
+    if (selectedItems.includes(admin)) {
+      setSelectedItems(selectedItems.filter((item) => item !== admin));
+    } else {
+      setSelectedItems([...selectedItems, admin]);
+    }
+  };
+
+  const handleSelectAll = () => {
+    if (selectedItems.length === currentData.length) {
+      setSelectedItems([]);
+    } else {
+      setSelectedItems(currentData);
+    }
+  };
+
+  const handleDelete = () => {
     const headers = {
       "Content-Type": "application/json",
       Authorization: JSON.parse(localStorage.token).token,
     };
-    const data = {
-      adminname: adminname,
-    };
 
-    axios
-      .delete("http://homethang.duckdns.org:3000/api/admin", { headers, data })
-      .then((response) => {
-        console.log("Admin đã được xóa thành công");
+    // Create an array of promises for each selected item to be deleted
+    const deletePromises = selectedItems.map((admin) => {
+      const data = {
+        adminname: admin.adminname,
+      };
+      return axios.delete("http://homethang.duckdns.org:3000/api/admin", {
+        headers,
+        data,
+      });
+    });
+
+    // Execute all the delete promises
+    Promise.all(deletePromises)
+      .then(() => {
+        console.log("Admins have been successfully deleted");
         fetchData();
+        setSelectedItems([]); // Clear the selected items
       })
       .catch((error) => {
-        console.error("Lỗi xóa admin:", error);
+        console.error("Error deleting admins:", error);
       });
   };
 
@@ -82,7 +110,18 @@ export default function Administrator() {
     <>
       <div className="administrator-table">
         <h2>Administrator Management</h2>
-        <div className="aaaa">
+        <div className="button-action">         
+          <button
+            className="btn btn-danger"
+            onClick={() => {
+              if (window.confirm("Are You Sure?")) {
+                handleDelete();
+              }
+            }}
+            disabled={selectedItems.length === 0} // Disable the button when no items are selected
+          >
+            DELETE
+          </button>
           <div>
             <CreateAdministrator handleUpdateTable={handleUpdateTable} />
           </div>
@@ -92,37 +131,42 @@ export default function Administrator() {
             <table>
               <thead>
                 <tr>
-                  {/* <th className="col-1"></th> */}
+                  <th className="col-1">
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.length === currentData.length} // Check if all items are selected
+                      onChange={handleSelectAll} // Call handleSelectAll when the checkbox is changed
+                    />
+                  </th>
                   <th className="col-3">ADMINISTRATOR</th>
                   <th className="col-3">EMAIL</th>
                   <th className="col-3">FULL NAME</th>
-                  <th className="col-3"></th>
+                  <th className="col-1"></th>
                 </tr>
               </thead>
               <tbody>
                 {currentData.map((admin) => (
                   <tr key={admin.id}>
-                    {/* <td className="table-data">{admin.id}</td> */}
+                    <td className="table-data">
+                      <input
+                        type="checkbox"
+                        checked={selectedItems.includes(admin)} // Check if the item is selected
+                        onChange={() => handleSelect(admin)} // Call handleSelect when the checkbox is changed
+                      />
+                    </td>
                     <td className="table-data">{admin.adminname}</td>
                     <td className="table-data">{admin.email}</td>
                     <td className="table-data">{admin.fullname}</td>
                     <td className="table-data table-button">
                       <div onClick={() => handleEditAdmin(admin)}>
                         <EditAdministrator
-                          handleUpdateAdminFromModal={handleUpdateAdminFromModal}
+                          handleUpdateAdminFromModal={
+                            handleUpdateAdminFromModal
+                          }
                           dataAdminEdit={dataAdminEdit}
                         />
                       </div>
-                      <div
-                        className="btn btn-danger"
-                        onClick={() => {
-                          if (window.confirm('Are You Sure?')) {
-                            handleDelete(admin.adminname);
-                          }
-                        }}
-                      >
-                        <AiFillDelete />
-                      </div>
+                      
                     </td>
                   </tr>
                 ))}

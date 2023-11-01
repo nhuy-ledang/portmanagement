@@ -63,9 +63,10 @@ export default function EditAdministrator(props) {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        <AiFillEdit />
-      </Button>{" "}
+      {/* <Button variant="primary" onClick={handleShow}>
+        <AiFillEdit onClick={handleShow}/>
+      </Button>{" "} */}
+      <AiFillEdit onClick={handleShow}/>
       <Modal show={show} onHide={handleClose} className="modal-create-admin">
         <Modal.Header closeButton>
           <Modal.Title>Edit Administrator</Modal.Title>
