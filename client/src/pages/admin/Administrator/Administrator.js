@@ -63,6 +63,7 @@ export default function Administrator() {
             <table>
               <thead>
                 <tr>
+                  <th className="col-1">ID</th>
                   <th className="col-3">ADMINISTRATOR</th>
                   <th className="col-3">EMAIL</th>
                   <th className="col-3">FULL NAME</th>
@@ -72,6 +73,7 @@ export default function Administrator() {
               <tbody>
                 {currentData.map((admin, index) => (
                   <tr key={index}>
+                    <td className="table-data">{admin.id}</td>
                     <td className="table-data">{admin.adminname}</td>
                     <td className="table-data">{admin.email}</td>
                     <td className="table-data">{admin.fullname}</td>
