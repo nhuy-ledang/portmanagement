@@ -1,69 +1,48 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import { toast } from "react-toastify";
-
+import axios from 'axios';
 export default function EditAdministrator(props) {
+  const [id, setId] = useState("");
   const [adminname, setAdminname] = useState("");
   const [email, setEmail] = useState("");
   const [fullname, setFullname] = useState("");
   const [show, setShow] = useState(false);
-  const { admin, handleUpdateTable } = props;
-
-  useEffect(() => {
-    if (admin) {
-      setAdminname(admin.adminname);
-      setEmail(admin.email);
-      setFullname(admin.fullname);
-    }
-  }, [admin]);
-
+  const { dataAdminEdit } = props;
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const postUpdateAdmin = async () => {
-    const url = `http://homethang.duckdns.org:3000/api/admin/${admin.adminId}`;
-    const data = { adminname, email, fullname };
+  const putUpdateAdmin = ( adminname, email, fullname) => {
+    return axios.patch(`http://homethang.duckdns.org:3000/api/admin/${id}`, {adminname, email, fullname})
+}
 
-    try {
-      const response = await fetch(url, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: JSON.parse(localStorage.token).token,
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error("Request failed with status code " + response.status);
-      }
-      const responseData = await response.text();
-      return responseData;
-    } catch (error) {
-      console.error("Error:", error);
-      throw error;
+  useEffect(() => {
+    if (show) {
+      setAdminname(dataAdminEdit.adminname);
+      setEmail(dataAdminEdit.email);
+      setFullname(dataAdminEdit.fullname);
     }
-  };
+  }, [dataAdminEdit, show]);
 
-  const handleUpdateAdmin = async () => {
-    try {
-      const res = await postUpdateAdmin();
-      console.log(res);
-      if (res === "Update admin succeed") {
-        handleClose();
-        toast.success("Thông tin người quản trị đã được cập nhật!");
-        await handleUpdateTable(admin.adminId, {
-          adminname,
-          email,
-          fullname,
-        });
-      } else {
-        toast.error("Lỗi!");
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
+  const handleEditAdmin = async () => {
+    // try {
+    //   const response = await putUpdateAdmin(
+    //     dataAdminEdit.id,
+    //     adminname,
+    //     email,
+    //     fullname
+    //   );
+    //   console.log(response.message);
+    // } catch (error) {
+    //   console.error("Error:", error);
+    // }
+    let response = await putUpdateAdmin(
+      adminname,
+      email,
+      fullname
+    );
+    console.log(">> check handleEditAdmin", response);
   };
 
   return (
@@ -110,8 +89,8 @@ export default function EditAdministrator(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleUpdateAdmin}>
-            Save
+          <Button variant="primary" onClick={handleEditAdmin}>
+            Update
           </Button>
         </Modal.Footer>
       </Modal>

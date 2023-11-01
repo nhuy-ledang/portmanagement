@@ -6,11 +6,14 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditAdministrator from "./EditAdministrator";
 import ReactPaginate from "react-paginate";
+import axios from 'axios';
 
 export default function Administrator() {
   const [data, setData] = useState(null);
+  const [dataAdminEdit, setDataAdminEdit] = useState({});
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 6; // Số lượng dòng hiển thị trên mỗi trang
+  const itemsPerPage = 6;
+
 
   useEffect(() => {
     fetchData();
@@ -36,10 +39,8 @@ export default function Administrator() {
     setData([admin, ...data]);
   };
 
-  // Tính toán số trang
   const pageCount = data ? Math.ceil(data.length / itemsPerPage) : 0;
 
-  // Lấy dữ liệu hiện tại trên trang
   const currentData = data
     ? data.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
     : [];
@@ -48,6 +49,35 @@ export default function Administrator() {
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
+
+  const handleEditAdmin = (admin) => {
+    console.log(">> check edit admin", admin);
+    setDataAdminEdit(admin);
+  };
+
+
+  function handleDelete(adminname) {
+    const apiUrl = 'http://homethang.duckdns.org:3000/api/admin';
+
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: JSON.parse(localStorage.token).token,
+    };
+
+    const data = {
+      adminname: adminname,
+    };
+
+    axios
+      .delete(apiUrl, { headers, data })
+      .then((response) => {
+        console.log('Admin đã được xóa thành công');
+        fetchData(); 
+      })
+      .catch((error) => {
+        console.error('Lỗi xóa admin:', error);
+      });
+  }
 
   return (
     <>
@@ -71,15 +101,32 @@ export default function Administrator() {
                 </tr>
               </thead>
               <tbody>
-                {currentData.map((admin, index) => (
-                  <tr key={index}>
+                {currentData.map((admin) => (
+                  <tr key={admin.id}>
                     <td className="table-data">{admin.id}</td>
                     <td className="table-data">{admin.adminname}</td>
                     <td className="table-data">{admin.email}</td>
                     <td className="table-data">{admin.fullname}</td>
                     <td className="table-data table-button">
-                      <EditAdministrator handleUpdateTable={handleUpdateTable}/>
-                      <Button variant="danger">Delete</Button>{" "}
+                      <Button onClick={() => handleEditAdmin(admin)}>
+                        <EditAdministrator
+                          handleUpdateTable={handleUpdateTable}
+                          dataAdminEdit={dataAdminEdit}
+                        />
+                      </Button>
+                      {/* <Button  variant="danger" onClick={() => handleDeleteAdmin(admin)} >
+                        <DeleteAdministrator dataAdminDelete={dataAdminDelete}/>
+                      </Button> */}
+                      <button
+                      className="btn btn-danger"
+                      onClick={() => {
+                        if (window.confirm('Are You Sure To Delete Data ??')) {
+                          handleDelete(admin.adminname);
+                        }
+                      }}
+                    >
+                      Delete
+                    </button>
                     </td>
                   </tr>
                 ))}
@@ -95,7 +142,6 @@ export default function Administrator() {
               pageRangeDisplayed={5}
               onPageChange={handlePageChange}
               containerClassName={"pagination"}
-              subContainerClassName={"pages pagination"}
               activeClassName={"active"}
             />
           </>
@@ -103,18 +149,7 @@ export default function Administrator() {
           <p>Loading...</p>
         )}
       </div>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+      <ToastContainer />
     </>
   );
 }
