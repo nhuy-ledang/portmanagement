@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./Administrator.scss";
-// import { Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import CreateAdministrator from "./CreateAdministrator";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditAdministrator from "./EditAdministrator";
 import ReactPaginate from "react-paginate";
 import axios from 'axios';
-import { AiFillDelete } from 'react-icons/ai';
-
 
 export default function Administrator() {
   const [data, setData] = useState(null);
@@ -21,13 +19,14 @@ export default function Administrator() {
   }, []);
 
   const fetchData = async () => {
-    try {     
+    try {
+      const ADMIN_API = "http://homethang.duckdns.org:3000/api/admin";
       const headers = {
         "Content-Type": "application/json",
         Authorization: JSON.parse(localStorage.token).token,
       };
 
-      const response = await fetch("http://homethang.duckdns.org:3000/api/admin", { headers });
+      const response = await fetch(ADMIN_API, { headers });
       const jsonData = await response.json();
       setData(jsonData);
     } catch (error) {
@@ -49,6 +48,7 @@ export default function Administrator() {
     ? data.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
     : [];
 
+  // Xử lý sự kiện chuyển trang
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
@@ -59,6 +59,7 @@ export default function Administrator() {
   };
 
   const handleDelete = (adminname) => {
+    const apiUrl = "http://homethang.duckdns.org:3000/api/admin";
     const headers = {
       "Content-Type": "application/json",
       Authorization: JSON.parse(localStorage.token).token,
@@ -68,7 +69,7 @@ export default function Administrator() {
     };
 
     axios
-      .delete("http://homethang.duckdns.org:3000/api/admin", { headers, data })
+      .delete(apiUrl, { headers, data })
       .then((response) => {
         console.log("Admin đã được xóa thành công");
         fetchData();
@@ -92,7 +93,7 @@ export default function Administrator() {
             <table>
               <thead>
                 <tr>
-                  {/* <th className="col-1"></th> */}
+                  {/* <th className="col-1">ID</th> */}
                   <th className="col-3">ADMINISTRATOR</th>
                   <th className="col-3">EMAIL</th>
                   <th className="col-3">FULL NAME</th>
@@ -107,13 +108,13 @@ export default function Administrator() {
                     <td className="table-data">{admin.email}</td>
                     <td className="table-data">{admin.fullname}</td>
                     <td className="table-data table-button">
-                      <div onClick={() => handleEditAdmin(admin)}>
+                      <Button onClick={() => handleEditAdmin(admin)}>
                         <EditAdministrator
                           handleUpdateAdminFromModal={handleUpdateAdminFromModal}
                           dataAdminEdit={dataAdminEdit}
                         />
-                      </div>
-                      <div
+                      </Button>
+                      <button
                         className="btn btn-danger"
                         onClick={() => {
                           if (window.confirm('Are You Sure?')) {
@@ -121,8 +122,8 @@ export default function Administrator() {
                           }
                         }}
                       >
-                        <AiFillDelete />
-                      </div>
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}

@@ -38,17 +38,17 @@ export default function Login({ setToken }) {
       console.log(token);
       if (token === "Invailid adminname or password" || token === "Wrong adminname or password") {
         console.log("adminname:", adminname, "password:", password);
-        toast.error("Error!");
+        toast.error("Đăng nhập không thành công");
       } else {
         localStorage.setItem("token", token);
         setToken(token);
         console.log("adminname:", adminname, "password:", password);
-        toast.success("Success!");
+        toast.success("Đăng nhập thành công");
       }
     } catch (error) {
       console.error(error);
       console.log("adminname:", adminname, "password:", password);
-      toast.error("Error!!");
+      toast.error("Đăng nhập thất bại");
     }
   };
 
