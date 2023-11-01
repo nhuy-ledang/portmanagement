@@ -14,7 +14,6 @@ export default function Administrator() {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 6;
 
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -40,13 +39,12 @@ export default function Administrator() {
   };
 
   const handleUpdateAdminFromModal = (admin) => {
-
     console.error(">> Check handleUpdateAdminFromModal", admin);
   };
 
   const pageCount = data ? Math.ceil(data.length / itemsPerPage) : 0;
 
-  const currentData = data
+  const currentData = data && Array.isArray(data)
     ? data.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
     : [];
 
@@ -60,17 +58,16 @@ export default function Administrator() {
     setDataAdminEdit(admin);
   };
 
-
   const handleDelete = (adminname) => {
-    const apiUrl = "http://homethang.duckdns.org:3000/api/admin";  
+    const apiUrl = "http://homethang.duckdns.org:3000/api/admin";
     const headers = {
       "Content-Type": "application/json",
       Authorization: JSON.parse(localStorage.token).token,
-    }; 
+    };
     const data = {
       adminname: adminname,
     };
-  
+
     axios
       .delete(apiUrl, { headers, data })
       .then((response) => {
@@ -85,7 +82,7 @@ export default function Administrator() {
   return (
     <>
       <div className="administrator-table">
-        <h1>Administrator Management</h1>
+        <h2>Administrator Management</h2>
         <div className="aaaa">
           <div>
             <CreateAdministrator handleUpdateTable={handleUpdateTable} />
@@ -117,19 +114,16 @@ export default function Administrator() {
                           dataAdminEdit={dataAdminEdit}
                         />
                       </Button>
-                      {/* <Button  variant="danger" onClick={() => handleDeleteAdmin(admin)} >
-                        <DeleteAdministrator dataAdminDelete={dataAdminDelete}/>
-                      </Button> */}
                       <button
-                      className="btn btn-danger"
-                      onClick={() => {
-                        if (window.confirm('Are You Sure To Delete Data ??')) {
-                          handleDelete(admin.adminname);
-                        }
-                      }}
-                    >
-                      Delete
-                    </button>
+                        className="btn btn-danger"
+                        onClick={() => {
+                          if (window.confirm('Are You Sure?')) {
+                            handleDelete(admin.adminname);
+                          }
+                        }}
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}

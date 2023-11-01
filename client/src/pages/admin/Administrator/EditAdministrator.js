@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
+// import { toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 
 export default function EditAdministrator(props) {
   // const [id, setId] = useState("");
@@ -53,10 +55,11 @@ export default function EditAdministrator(props) {
         id: dataAdminEdit.id,
         email: email,
         fullname: fullname,
-      });
-      handleClose();
+      }); 
+       
     }
     console.log(response);
+    window.location.reload();
   };
 
   return (
