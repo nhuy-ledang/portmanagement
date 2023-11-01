@@ -16,11 +16,11 @@ export default function CreateAdministrator(props) {
   const handleShow = () => setShow(true);
 
   const postCreateAdmin = async () => {
-    const ADMIN_API = "http://homethang.duckdns.org:3000/api/admin";
+    const url = "http://homethang.duckdns.org:3000/api/admin";
     const data = { adminname, email, password, confirmpassword, fullname };
 
     try {
-      const response = await fetch(ADMIN_API, {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

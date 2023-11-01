@@ -39,6 +39,11 @@ export default function Administrator() {
     setData([admin, ...data]);
   };
 
+  const handleUpdateAdminFromModal = (admin) => {
+
+    console.error(">> Check handleUpdateAdminFromModal", admin);
+  };
+
   const pageCount = data ? Math.ceil(data.length / itemsPerPage) : 0;
 
   const currentData = data
@@ -56,28 +61,26 @@ export default function Administrator() {
   };
 
 
-  function handleDelete(adminname) {
-    const apiUrl = 'http://homethang.duckdns.org:3000/api/admin';
-
+  const handleDelete = (adminname) => {
+    const apiUrl = "http://homethang.duckdns.org:3000/api/admin";  
     const headers = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: JSON.parse(localStorage.token).token,
-    };
-
+    }; 
     const data = {
       adminname: adminname,
     };
-
+  
     axios
       .delete(apiUrl, { headers, data })
       .then((response) => {
-        console.log('Admin đã được xóa thành công');
-        fetchData(); 
+        console.log("Admin đã được xóa thành công");
+        fetchData();
       })
       .catch((error) => {
-        console.error('Lỗi xóa admin:', error);
+        console.error("Lỗi xóa admin:", error);
       });
-  }
+  };
 
   return (
     <>
@@ -93,7 +96,7 @@ export default function Administrator() {
             <table>
               <thead>
                 <tr>
-                  <th className="col-1">ID</th>
+                  {/* <th className="col-1">ID</th> */}
                   <th className="col-3">ADMINISTRATOR</th>
                   <th className="col-3">EMAIL</th>
                   <th className="col-3">FULL NAME</th>
@@ -103,14 +106,14 @@ export default function Administrator() {
               <tbody>
                 {currentData.map((admin) => (
                   <tr key={admin.id}>
-                    <td className="table-data">{admin.id}</td>
+                    {/* <td className="table-data">{admin.id}</td> */}
                     <td className="table-data">{admin.adminname}</td>
                     <td className="table-data">{admin.email}</td>
                     <td className="table-data">{admin.fullname}</td>
                     <td className="table-data table-button">
                       <Button onClick={() => handleEditAdmin(admin)}>
                         <EditAdministrator
-                          handleUpdateTable={handleUpdateTable}
+                          handleUpdateAdminFromModal={handleUpdateAdminFromModal}
                           dataAdminEdit={dataAdminEdit}
                         />
                       </Button>

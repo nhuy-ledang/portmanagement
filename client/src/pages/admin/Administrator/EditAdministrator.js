@@ -2,20 +2,40 @@ import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import axios from 'axios';
+
 export default function EditAdministrator(props) {
-  const [id, setId] = useState("");
+  // const [id, setId] = useState("");
   const [adminname, setAdminname] = useState("");
   const [email, setEmail] = useState("");
   const [fullname, setFullname] = useState("");
   const [show, setShow] = useState(false);
-  const { dataAdminEdit } = props;
+  const { dataAdminEdit, handleUpdateAdminFromModal } = props;
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const putUpdateAdmin = ( adminname, email, fullname) => {
-    return axios.patch(`http://homethang.duckdns.org:3000/api/admin/${id}`, {adminname, email, fullname})
-}
+  const putUpdateAdmin = async () => {
+    const url = "http://homethang.duckdns.org:3000/api/admin";
+    const data = { adminname, email, fullname };
+
+    try {
+      const response = await fetch(url, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: JSON.parse(localStorage.token).token,
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        throw new Error("Request failed with status code " + response.status);
+      }
+      const responseData = await response.text();
+      return responseData;
+    } catch (error) {
+      console.error("Error:", error);
+      throw error;
+    }
+  };
 
   useEffect(() => {
     if (show) {
@@ -26,23 +46,17 @@ export default function EditAdministrator(props) {
   }, [dataAdminEdit, show]);
 
   const handleEditAdmin = async () => {
-    // try {
-    //   const response = await putUpdateAdmin(
-    //     dataAdminEdit.id,
-    //     adminname,
-    //     email,
-    //     fullname
-    //   );
-    //   console.log(response.message);
-    // } catch (error) {
-    //   console.error("Error:", error);
-    // }
-    let response = await putUpdateAdmin(
-      adminname,
-      email,
-      fullname
-    );
-    console.log(">> check handleEditAdmin", response);
+    const response = await putUpdateAdmin(adminname, email, fullname);
+    if (response && response.adminname) {
+      handleUpdateAdminFromModal({
+        adminname: adminname,
+        id: dataAdminEdit.id,
+        email: email,
+        fullname: fullname,
+      });
+      handleClose();
+    }
+    console.log(response);
   };
 
   return (
@@ -62,6 +76,7 @@ export default function EditAdministrator(props) {
                 type="text"
                 className="form-control"
                 value={adminname}
+                disabled
                 onChange={(e) => setAdminname(e.target.value)}
               />
             </div>
