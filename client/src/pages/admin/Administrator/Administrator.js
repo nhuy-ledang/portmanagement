@@ -9,11 +9,11 @@ import axios from "axios";
 
 export default function Administrator() {
   const [data, setData] = useState(null);
-  const [dataAdminEdit, setDataAdminEdit] = useState({});
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 6;
+  const itemsPerPage = 8;
 
   const [selectedItems, setSelectedItems] = useState([]);
+  const [editingAdminId, setEditingAdminId] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -37,6 +37,10 @@ export default function Administrator() {
     }
   };
 
+  const handleEditAdmin = (adminId) => {
+    setEditingAdminId(adminId);
+  };
+
   const handleUpdateTable = (admin) => {
     setData([admin, ...data]);
   };
@@ -54,11 +58,6 @@ export default function Administrator() {
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
-  };
-
-  const handleEditAdmin = (admin) => {
-    console.log(">> check edit admin", admin);
-    setDataAdminEdit(admin);
   };
 
   const handleSelect = (admin) => {
@@ -106,11 +105,14 @@ export default function Administrator() {
       });
   };
 
+  
+  
+
   return (
     <>
       <div className="administrator-table">
         <h2>Administrator Management</h2>
-        <div className="button-action">         
+        <div className="button-action">
           <button
             className="btn btn-danger"
             onClick={() => {
@@ -141,7 +143,6 @@ export default function Administrator() {
                   <th className="col-3">ADMINISTRATOR</th>
                   <th className="col-3">EMAIL</th>
                   <th className="col-3">FULL NAME</th>
-                  <th className="col-1"></th>
                 </tr>
               </thead>
               <tbody>
@@ -150,24 +151,33 @@ export default function Administrator() {
                     <td className="table-data">
                       <input
                         type="checkbox"
-                        checked={selectedItems.includes(admin)} // Check if the item is selected
-                        onChange={() => handleSelect(admin)} // Call handleSelect when the checkbox is changed
+                        checked={selectedItems.includes(admin)}
+                        onChange={() => handleSelect(admin)}
                       />
                     </td>
-                    <td className="table-data">{admin.adminname}</td>
+                    <td className="table-data adminname-item">
+                      {editingAdminId === admin.id ? (
+                        <>
+                          <span onClick={() => handleEditAdmin(admin.id)}>
+                            {admin.adminname}
+                          </span>
+                          <div>
+                            <EditAdministrator
+                              handleUpdateAdminFromModal={
+                                handleUpdateAdminFromModal
+                              }
+                              dataAdminEdit={admin}
+                            />
+                          </div>
+                        </>
+                      ) : (
+                        <span onClick={() => handleEditAdmin(admin.id)}>
+                          {admin.adminname}
+                        </span>
+                      )}
+                    </td>
                     <td className="table-data">{admin.email}</td>
                     <td className="table-data">{admin.fullname}</td>
-                    <td className="table-data table-button">
-                      <div onClick={() => handleEditAdmin(admin)}>
-                        <EditAdministrator
-                          handleUpdateAdminFromModal={
-                            handleUpdateAdminFromModal
-                          }
-                          dataAdminEdit={dataAdminEdit}
-                        />
-                      </div>
-                      
-                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -186,7 +196,7 @@ export default function Administrator() {
             />
           </>
         ) : (
-          <p>Loading...</p>
+          <p className="text-load">Loading...</p>
         )}
       </div>
       <ToastContainer />
