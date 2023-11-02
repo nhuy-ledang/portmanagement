@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
+import { IoMdCreate } from 'react-icons/io';
 
 export default function CreateAdministrator(props) {
   const [adminname, setAdminname] = useState("");
@@ -69,8 +70,8 @@ export default function CreateAdministrator(props) {
 
   return (
     <>
-      <Button variant="success" onClick={handleShow}>
-        CREATE
+      <Button variant="success" onClick={handleShow} className="">
+        <IoMdCreate />
       </Button>{" "}
       <Modal show={show} onHide={handleClose} className="modal-create-admin">
         <Modal.Header closeButton>

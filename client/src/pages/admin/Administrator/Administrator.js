@@ -6,6 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 import EditAdministrator from "./EditAdministrator";
 import ReactPaginate from "react-paginate";
 import axios from "axios";
+import { AiFillDelete } from "react-icons/ai";
+import { MdCreateNewFolder } from "react-icons/md";
 
 export default function Administrator() {
   const [data, setData] = useState(null);
@@ -105,28 +107,30 @@ export default function Administrator() {
       });
   };
 
-  
-  
-
   return (
     <>
       <div className="administrator-table">
         <h2>Administrator Management</h2>
         <div className="button-action">
-          <button
-            className="btn btn-danger"
-            onClick={() => {
-              if (window.confirm("Are You Sure?")) {
-                handleDelete();
-              }
-            }}
-            disabled={selectedItems.length === 0} // Disable the button when no items are selected
-          >
-            DELETE
-          </button>
-          <div>
-            <CreateAdministrator handleUpdateTable={handleUpdateTable} />
+          <div className="btn-delete-add">
+            <button
+              className="btn btn-danger d-flex align-items-center"
+              onClick={() => {
+                if (window.confirm("Are You Sure?")) {
+                  handleDelete();
+                }
+              }}
+              disabled={selectedItems.length === 0} // Disable the button when no items are selected
+            >
+              <AiFillDelete />
+            </button>
+            <div>
+              <CreateAdministrator handleUpdateTable={handleUpdateTable} />
+            </div>
           </div>
+          <button className="btn btn-success d-flex align-items-center">
+            <MdCreateNewFolder />
+          </button>
         </div>
         {data ? (
           <>
