@@ -12,7 +12,7 @@
         margin-top: 50px;
     }
     .login {
-        width: 50%;
+        width: 40%;
         height: 500px;
         display: flex;
         flex-direction: column;
@@ -34,7 +34,7 @@
             gap: 32px;
             margin-top: -40px;
             input {
-                width: 50%;
+                width: 70%;
                 height: 55px;
                 background-color: #FFDEDE;
                 border-radius: 20px;
@@ -48,7 +48,7 @@
                 color: #787878;
             }
             .btn-login {
-                width: 50%;
+                width: 70%;
                 height: 55px;
                 border-radius: 20px;
                 border: none;
@@ -71,7 +71,106 @@
     .login-wrapper {
         width: 100%;
         .login {
+            width: 50%;
+        }
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .login-wrapper {
+        width: 100%;
+        .login {
+            width: 60%;
+            h1 {
+                font-size: 64px;
+                color: #ED1C24;
+            }
+            form {
+                width: 100%;
+                height: 100%;
+                input {
+                    width: 70%;
+                    height: 55px;
+                    font-size: 14px;
+                    
+                }
+                input::placeholder {
+                    font-size: 14px;
+                    color: #787878;
+                }
+                .btn-login {
+                    width: 70%;
+                    height: 55px;
+                    font-weight: 700;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .login-wrapper {
+        width: 100%;
+        .login {
             width: 80%;
+            h1 {
+                font-size: 64px;
+                color: #ED1C24;
+            }
+            form {
+                width: 100%;
+                height: 100%;
+                input {
+                    width: 80%;
+                    height: 55px;
+                    font-size: 14px;
+                    
+                }
+                input::placeholder {
+                    font-size: 14px;
+                    color: #787878;
+                }
+                .btn-login {
+                    width: 80%;
+                    height: 55px;
+                    font-weight: 700;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .login-wrapper {
+        width: 100%;
+        .login {
+            width: 90%;
+            h1 {
+                font-size: 48px;
+                color: #ED1C24;
+            }
+            form {
+                width: 100%;
+                height: 100%;
+                input {
+                    width: 80%;
+                    height: 55px;
+                    font-size: 14px;
+                    
+                }
+                input::placeholder {
+                    font-size: 14px;
+                    color: #787878;
+                }
+                .btn-login {
+                    width: 80%;
+                    height: 55px;
+                    font-weight: 700;
+                    font-size: 14px;
+                }
+            }
         }
     }
 }
