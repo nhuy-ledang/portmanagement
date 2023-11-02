@@ -33,3 +33,28 @@ nav {
       }
     }
   }
+
+
+  @media only screen and (max-width: 992px) {
+    nav {
+      display: flex;
+      .sidebar-menu {
+        order: 0;
+      }      
+      .logo-link {
+        order: 1;
+      }      
+      .account-menu {
+        order: 2;
+      }
+    }
+}
+
+@media only screen and (max-width: 600px) {
+  .logo-link img {
+    width: 120px;
+  }
+  .account-menu img {
+    width: 35px;
+  }
+}

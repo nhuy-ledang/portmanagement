@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 async function loginUser(credentials) {
   try {
     const response = await axios.post(
-      "http://homethang.duckdns.org:3000/api/login",
+      "https://hpid.homethang.duckdns.org/api/login",
       credentials,
       {
         headers: {

@@ -27,7 +27,7 @@ export default function Administrator() {
       };
 
       const response = await fetch(
-        "http://homethang.duckdns.org:3000/api/admin",
+        "https://hpid.homethang.duckdns.org/api/admin",
         { headers }
       );
       const jsonData = await response.json();
@@ -87,7 +87,7 @@ export default function Administrator() {
       const data = {
         adminname: admin.adminname,
       };
-      return axios.delete("http://homethang.duckdns.org:3000/api/admin", {
+      return axios.delete("https://hpid.homethang.duckdns.org/api/admin", {
         headers,
         data,
       });
@@ -140,9 +140,9 @@ export default function Administrator() {
                       onChange={handleSelectAll} // Call handleSelectAll when the checkbox is changed
                     />
                   </th>
-                  <th className="col-3">ADMINISTRATOR</th>
-                  <th className="col-3">EMAIL</th>
-                  <th className="col-3">FULL NAME</th>
+                  <th className="col-3 name-col">ADMINISTRATOR</th>
+                  <th className="col-3 name-col">EMAIL</th>
+                  <th className="col-3 name-col">FULL NAME</th>
                 </tr>
               </thead>
               <tbody>

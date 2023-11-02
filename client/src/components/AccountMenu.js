@@ -18,7 +18,7 @@ export default function AccountMenu() {
   return (
     <>
         <div
-          className="menu"
+          className="menu account-menu"
           onMouseEnter={handleAccountMouseEnter}
           onMouseLeave={handleAccountMouseLeave}
         >

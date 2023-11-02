@@ -2,16 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
-// async function loginUser(credentials) {
-//   return fetch("https://reqres.in/api/login", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(credentials),
-//   }).then((data) => data.json());
-// }
-
 export default function AccountDropdown({ setToken }) {
   const handleLogout = async () => {
     console.log("aaaaa");
