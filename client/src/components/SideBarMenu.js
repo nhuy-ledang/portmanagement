@@ -11,6 +11,7 @@ export default function SideBarMenu() {
   const [isPortDropdownVisible, setPortDropdownVisible] = useState(false);
   const [isAdminDropdownVisible, setAdminDropdownVisible] = useState(false);
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 960);
+  const [isBurgerMenuOpen, setBurgerMenuOpen] = useState(false);
 
   const handleUserMouseEnter = () => {
     setUserDropdownVisible(true);
@@ -43,6 +44,10 @@ export default function SideBarMenu() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  const closeBurgerMenu = () => {
+    setBurgerMenuOpen(false);
+  };
 
   return (
     <>
@@ -78,10 +83,10 @@ export default function SideBarMenu() {
         </div>
       ) : (
         <div className="menu-mobile">
-          <Menu>           
+          <Menu isOpen={isBurgerMenuOpen} onStateChange={(state) => setBurgerMenuOpen(state.isOpen)}>           
             <ul>
               <li>
-                <Link to="/" className="nav-link">
+                <Link to="/" className="nav-link" onClick={closeBurgerMenu}>
                   HOME
                 </Link>
               </li>
@@ -89,12 +94,12 @@ export default function SideBarMenu() {
                 USER
                 <ul>
                   <li>
-                    <Link to="/user-management" className="nav-link">
+                    <Link to="/user-management" className="nav-link" onClick={closeBurgerMenu}>
                       User Management
                     </Link>
                   </li>
                   <li>
-                    <Link to="/right-assignment" className="nav-link">
+                    <Link to="/right-assignment" className="nav-link" onClick={closeBurgerMenu}>
                       Right Assignment
                     </Link>
                   </li>
@@ -104,17 +109,17 @@ export default function SideBarMenu() {
                 PORT
                 <ul>
                   <li>
-                    <Link to="/layout-management" className="nav-link">
+                    <Link to="/layout-management" className="nav-link" onClick={closeBurgerMenu}>
                       Layout Management
                     </Link>
                   </li>
                   <li>
-                    <Link to="/port-assignment" className="nav-link">
+                    <Link to="/port-assignment" className="nav-link" onClick={closeBurgerMenu}>
                       Port Assignment
                     </Link>
                   </li>
                   <li>
-                    <Link to="/port-scheduler" className="nav-link">
+                    <Link to="/port-scheduler" className="nav-link" onClick={closeBurgerMenu}>
                       Port Scheduler
                     </Link>
                   </li>
@@ -124,22 +129,22 @@ export default function SideBarMenu() {
                 ADMIN
                 <ul>
                   <li>
-                    <Link to="/administrator" className="nav-link">
+                    <Link to="/administrator" className="nav-link" onClick={closeBurgerMenu}>
                       Administrator
                     </Link>
                   </li>
                   <li>
-                    <Link to="/audit-log" className="nav-link">
+                    <Link to="/audit-log" className="nav-link" onClick={closeBurgerMenu}>
                       Audit Log
                     </Link>
                   </li>
                   <li>
-                    <Link to="/report" className="nav-link">
+                    <Link to="/report" className="nav-link" onClick={closeBurgerMenu}>
                       Report
                     </Link>
                   </li>
                   <li>
-                    <Link to="/device-detection" className="nav-link">
+                    <Link to="/device-detection" className="nav-link" onClick={closeBurgerMenu}>
                       Device Detection
                     </Link>
                   </li>

@@ -6,7 +6,7 @@ import { Routes, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Home from "./pages/Home";
-import UserManagement from "./pages/user/UserManagement";
+import UserManagement from "./pages/user/UserManagement/UserManagement";
 import RightAssignment from "./pages/user/RightAssignment";
 import LayoutManagement from "./pages/port/LayoutManagement";
 import PortAssignment from "./pages/port/PortAssignment";
