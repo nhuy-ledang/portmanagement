@@ -4,8 +4,11 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import { IoMdCreate } from "react-icons/io";
-import { isFormCreateValid, isValidEmail } from "../../../formValidation";
-import { postAdmin } from "../../../services/AdministratorService";
+import {
+  isFormCreateValid,
+  isValidEmail,
+} from "../../../validations/AdminValidation";
+import { postAdmin } from "../../../services/AdminService";
 
 export default function CreateAdministrator(props) {
   const [adminname, setAdminname] = useState("");
@@ -27,7 +30,13 @@ export default function CreateAdministrator(props) {
 
   const handleCreateAdmin = async () => {
     if (
-      isFormCreateValid(adminname, email, password, confirmpassword, fullname) &&
+      isFormCreateValid(
+        adminname,
+        email,
+        password,
+        confirmpassword,
+        fullname
+      ) &&
       isValidEmail(email)
     ) {
       if (password !== confirmpassword) {

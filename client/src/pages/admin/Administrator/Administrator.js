@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Administrator.scss";
+import "../../../App.scss";
 import CreateAdministrator from "./CreateAdministrator";
 import EditAdministrator from "./EditAdministrator";
 import ReactPaginate from "react-paginate";
@@ -7,7 +7,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { MdCreateNewFolder } from "react-icons/md";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getAdmin, deleteAdmin } from "../../../services/AdministratorService";
+import { getAdmin, deleteAdmin } from "../../../services/AdminService";
 
 function Administrator() {
   const [data, setData] = useState(null);

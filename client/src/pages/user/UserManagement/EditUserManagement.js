@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-// import { toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
-import { AiFillEdit } from 'react-icons/ai'; 
+import { AiFillEdit } from "react-icons/ai";
+import { isFormEditValid } from "../../../validations/UserValidation";
+import { patchUser } from "../../../services/UserService";
+
 export default function EditUserManagement(props) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -13,29 +14,6 @@ export default function EditUserManagement(props) {
   const { dataUserEdit, handleUpdateUserFromModal } = props;
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  const putUpdateAdmin = async () => {
-    const data = { username, email, group };
-
-    try {
-      const response = await fetch( `${process.env.REACT_APP_API_URL}/user`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: JSON.parse(localStorage.token).token,
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error("Request failed with status code " + response.status);
-      }
-      const responseData = await response.text();
-      return responseData;
-    } catch (error) {
-      console.error("Error:", error);
-      throw error;
-    }
-  };
 
   useEffect(() => {
     if (show) {
@@ -46,15 +24,14 @@ export default function EditUserManagement(props) {
   }, [dataUserEdit, show]);
 
   const handleEditUser = async () => {
-    const response = await putUpdateAdmin(username, email, group);
+    const response = await patchUser(username, email, group);
     if (response && response.username) {
       handleUpdateUserFromModal({
         username: username,
         id: dataUserEdit.id,
         email: email,
-        fullname: group,
-      }); 
-       
+        group: group,
+      });
     }
     console.log(response);
     window.location.reload();
@@ -62,10 +39,7 @@ export default function EditUserManagement(props) {
 
   return (
     <>
-      {/* <Button variant="primary" onClick={handleShow}>
-        <AiFillEdit onClick={handleShow}/>
-      </Button>{" "} */}
-      <AiFillEdit onClick={handleShow}/>
+      <AiFillEdit onClick={handleShow} />
       <Modal show={show} onHide={handleClose} className="modal-create-admin">
         <Modal.Header closeButton>
           <Modal.Title>Edit User</Modal.Title>
@@ -73,7 +47,7 @@ export default function EditUserManagement(props) {
         <Modal.Body>
           <Form>
             <div className="mb-3">
-              <label className="form-label">Username</label>
+              <label className="form-label">User Name</label>
               <input
                 type="text"
                 className="form-control"
@@ -105,7 +79,11 @@ export default function EditUserManagement(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleEditUser}>
+          <Button
+            variant="primary"
+            onClick={handleEditUser}
+            disabled={!isFormEditValid(username, email, group)}
+          >
             Update
           </Button>
         </Modal.Footer>

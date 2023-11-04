@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import { AiFillEdit } from 'react-icons/ai'; 
-import { isFormEditValid } from "../../../formValidation";
-import {patchAdmin} from "../../../services/AdministratorService"
+import { AiFillEdit } from "react-icons/ai";
+import { isFormEditValid } from "../../../validations/AdminValidation";
+import { patchAdmin } from "../../../services/AdminService";
 
 export default function EditAdministrator(props) {
   const [adminname, setAdminname] = useState("");
@@ -36,11 +36,10 @@ export default function EditAdministrator(props) {
     console.log(response);
     window.location.reload();
   };
-  
 
   return (
     <>
-      <AiFillEdit onClick={handleShow}/>
+      <AiFillEdit onClick={handleShow} />
       <Modal show={show} onHide={handleClose} className="modal-create-admin">
         <Modal.Header closeButton>
           <Modal.Title>Edit Administrator</Modal.Title>
@@ -81,12 +80,11 @@ export default function EditAdministrator(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleEditAdmin} disabled={
-              !isFormEditValid(
-                email,
-                fullname
-              )
-            }>
+          <Button
+            variant="primary"
+            onClick={handleEditAdmin}
+            disabled={!isFormEditValid(email, fullname)}
+          >
             Update
           </Button>
         </Modal.Footer>

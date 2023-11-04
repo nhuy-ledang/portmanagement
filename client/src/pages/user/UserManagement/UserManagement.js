@@ -1,112 +1,67 @@
 import React, { useEffect, useState } from "react";
+import "../../../App.scss";
 import CreateUserManagement from "./CreateUserManagement";
 import EditUserManagement from "./EditUserManagement";
-import "./UserManagement.scss";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import ReactPaginate from "react-paginate";
-import axios from "axios";
 import { AiFillDelete } from "react-icons/ai";
 import { MdCreateNewFolder } from "react-icons/md";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { getUser, deleteUser } from "../../../services/UserService";
 
-export default function UserManagement() {
+function UserManagement() {
   const [data, setData] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 8;
-
   const [selectedItems, setSelectedItems] = useState([]);
   const [editingUserId, setEditingUserId] = useState(null);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  // Fetch Data User Management 
-  const fetchData = async () => {
-    try {
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: JSON.parse(localStorage.token).token,
-      };
-
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/user`,
-        { headers }
-      );
-      const jsonData = await response.json();
-      setData(jsonData);
-    } catch (error) {
-      console.log("Error:", error);
-    }
-  };
-
-  const handleEditUser = (adminId) => {
-    setEditingUserId(adminId);
-  };
-
-  const handleUpdateTable = (admin) => {
-    setData([admin, ...data]);
-  };
-
-  const handleUpdateUserFromModal = (admin) => {
-    console.error(">> Check handleUpdateUserFromModal", admin);
-  };
-
   const pageCount = data ? Math.ceil(data.length / itemsPerPage) : 0;
-
-  const currentData =
-    data && Array.isArray(data)
-      ? data.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
-      : [];
-
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
 
-  // Checkbox chọn 1 item => Dùng để delete
-  const handleSelect = (admin) => {
-    if (selectedItems.includes(admin)) {
-      setSelectedItems(selectedItems.filter((item) => item !== admin));
+  useEffect(() => {
+    getUser().then((userData) => setData(userData));
+  }, []);
+
+  const handleEditUser = (userId) => {
+    setEditingUserId(userId);
+  };
+
+  const handleUpdateTable = (user) => {
+    setData([user, ...data]);
+  };
+
+  const handleUpdateUserFromModal = (user) => {
+    console.error(">> Check handleUpdateUserFromModal", user);
+  };
+
+  const handleSelect = (user) => {
+    if (selectedItems.includes(user)) {
+      setSelectedItems(selectedItems.filter((item) => item !== user));
     } else {
-      setSelectedItems([...selectedItems, admin]);
+      setSelectedItems([...selectedItems, user]);
     }
   };
 
-  // Checkbox chọn tất cả item => Dùng để delete
   const handleSelectAll = () => {
-    if (selectedItems.length === currentData.length) {
+    if (selectedItems.length === data.length) {
       setSelectedItems([]);
     } else {
-      setSelectedItems(currentData);
+      setSelectedItems(data);
     }
   };
 
-  // Delete item
-  const handleDelete = () => {
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: JSON.parse(localStorage.token).token,
-    };
-
-    // Create an array of promises for each selected item to be deleted
-    const deletePromises = selectedItems.map((admin) => {
-      const data = {
-        username: admin.username,
-      };
-      return axios.delete(`${process.env.REACT_APP_API_URL}/user`, {
-        headers,
-        data,
-      });
-    });
-
-    Promise.all(deletePromises)
+  const deleteSelectedUser = () => {
+    deleteUser(selectedItems)
       .then(() => {
-        console.log("Users have been successfully deleted");
-        fetchData();
-        setSelectedItems([]); 
+        getUser().then((userData) => {
+          setData(userData);
+          setSelectedItems([]);
+        });
       })
       .catch((error) => {
-        console.error("Error deleting users:", error);
+        console.error(">> Error deleting users:", error);
       });
   };
 
@@ -120,10 +75,10 @@ export default function UserManagement() {
               className="btn btn-danger d-flex align-items-center"
               onClick={() => {
                 if (window.confirm("Are You Sure?")) {
-                  handleDelete();
+                  deleteSelectedUser();
                 }
               }}
-              disabled={selectedItems.length === 0} 
+              disabled={selectedItems.length === 0}
             >
               <AiFillDelete />
             </button>
@@ -143,8 +98,8 @@ export default function UserManagement() {
                   <th className="col-1">
                     <input
                       type="checkbox"
-                      checked={selectedItems.length === currentData.length} 
-                      onChange={handleSelectAll} 
+                      checked={selectedItems.length === data.length}
+                      onChange={handleSelectAll}
                     />
                   </th>
                   <th className="col-3 name-col">USERNAME</th>
@@ -153,42 +108,46 @@ export default function UserManagement() {
                 </tr>
               </thead>
               <tbody>
-                {currentData.map((admin) => (
-                  <tr key={admin.id}>
-                    <td className="table-data">
-                      <input
-                        type="checkbox"
-                        checked={selectedItems.includes(admin)}
-                        onChange={() => handleSelect(admin)}
-                      />
-                    </td>
-                    <td className="table-data adminname-item">
-                      {editingUserId === admin.id ? (
-                        <>
-                          <span onClick={() => handleEditUser(admin.id)}>
-                            {admin.username}
+                {data
+                  .slice(
+                    currentPage * itemsPerPage,
+                    (currentPage + 1) * itemsPerPage
+                  )
+                  .map((user) => (
+                    <tr key={user.id}>
+                      <td className="table-data">
+                        <input
+                          type="checkbox"
+                          checked={selectedItems.includes(user)}
+                          onChange={() => handleSelect(user)}
+                        />
+                      </td>
+                      <td className="table-data adminname-item">
+                        {editingUserId === user.id ? (
+                          <>
+                            <span onClick={() => handleEditUser(user.id)}>
+                              {user.username}
+                            </span>
+                            <div>
+                              <EditUserManagement
+                                handleUpdateUserFromModal={
+                                  handleUpdateUserFromModal
+                                }
+                                dataUserEdit={user}
+                              />
+                            </div>
+                          </>
+                        ) : (
+                          <span onClick={() => handleEditUser(user.id)}>
+                            {user.username}
                           </span>
-                          <div>
-                            <EditUserManagement
-                              handleUpdateUserFromModal={
-                                handleUpdateUserFromModal
-                              }
-                              dataUserEdit={admin}
-                            />
-                          </div>
-                        </>
-                      ) : (
-                        <span onClick={() => handleEditUser(admin.id)}>
-                          {admin.username}
-                        </span>
-                      )}
-                    </td>
-                    {/* <td className="table-data">{admin.id}</td> */}
-                    {/* <td className="table-data">{admin.username}</td> */}
-                    <td className="table-data">{admin.email}</td>
-                    <td className="table-data">{admin.group}</td>
-                  </tr>
-                ))}
+                        )}
+                      </td>
+                      {/* <td className="table-data">{admin.username}</td> */}
+                      <td className="table-data">{user.email}</td>
+                      <td className="table-data">{user.group}</td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
             <ReactPaginate
@@ -212,3 +171,5 @@ export default function UserManagement() {
     </>
   );
 }
+
+export default UserManagement;

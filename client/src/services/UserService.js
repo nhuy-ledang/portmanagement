@@ -3,23 +3,19 @@ const headers = {
   "Content-Type": "application/json",
   Authorization: token,
 };
-const api_admin_url = "https://hpid.homethang.duckdns.org/api/admin";
+const api_user_url = "https://hpid.homethang.duckdns.org/api/user";
 
-export const getAdmin = async () => {
+export const getUser = async () => {
   try {
-    const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
-
+    const token = localStorage.token
+      ? JSON.parse(localStorage.token)?.token
+      : null;
     if (!token) {
       console.error(">> Token is missing or invalid. Please log in.");
       return;
     }
 
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: token,
-    };
-
-    const response = await fetch(api_admin_url, {
+    const response = await fetch(api_user_url, {
       headers,
     });
     const jsonData = await response.json();
@@ -29,16 +25,12 @@ export const getAdmin = async () => {
   }
 };
 
-export const postAdmin = async (
-  adminname,
-  email,
-  password,
-  confirmpassword,
-  fullname
-) => {
-  const data = { adminname, email, password, confirmpassword, fullname };
+export const postUser = async (username, email, group) => {
+  const data = { username, email, group };
   try {
-    const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
+    const token = localStorage.token
+      ? JSON.parse(localStorage.token)?.token
+      : null;
 
     if (!token) {
       console.error("Token is missing or invalid. Please log in.");
@@ -50,7 +42,7 @@ export const postAdmin = async (
       Authorization: token,
     };
 
-    const response = await fetch(api_admin_url, {
+    const response = await fetch(api_user_url, {
       method: "POST",
       headers,
       body: JSON.stringify(data),
@@ -68,10 +60,10 @@ export const postAdmin = async (
   }
 };
 
-export const patchAdmin = async (adminname, email, fullname) => {
-  const data = { adminname, email, fullname };
+export const patchUser = async (username, email, group) => {
+  const data = { username, email, group };
   try {
-    const response = await fetch(api_admin_url, {
+    const response = await fetch(api_user_url, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -90,22 +82,22 @@ export const patchAdmin = async (adminname, email, fullname) => {
   }
 };
 
-export const deleteAdmin = (selectedItems) => {
+export const deleteUser = (selectedItems) => {
   if (!token) {
     console.error("Token is missing or invalid. Please log in.");
     return;
   }
 
-  const deletePromises = selectedItems.map((admin) => {
+  const deletePromises = selectedItems.map((user) => {
     const requestOptions = {
       method: "DELETE",
       headers: headers,
       body: JSON.stringify({
-        adminname: admin.adminname,
+        username: user.username,
       }),
     };
 
-    return fetch(api_admin_url, requestOptions)
+    return fetch(api_user_url, requestOptions)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -114,8 +106,8 @@ export const deleteAdmin = (selectedItems) => {
         return response.text();
       })
       .then((text) => {
-        if (text === "Admin removed") {
-          return "Admin removed successfully";
+        if (text === "User removed") {
+          return "User removed successfully";
         } else {
           throw new Error("Unexpected response: " + text);
         }

@@ -3,188 +3,87 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
-import { IoMdCreate } from 'react-icons/io';
+import { IoMdCreate } from "react-icons/io";
+import {
+  isFormCreateValid,
+  isValidEmail,
+} from "../../../validations/UserValidation";
+import { postUser } from "../../../services/UserService";
 
-export default function CreateAdministrator(props) {
-  const [adminname, setAdminname] = useState("");
+export default function CreateUserManagement(props) {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmpassword, setConfirmpassword] = useState("");
-  const [fullname, setFullname] = useState("");
+  const [group, setGroup] = useState("");
   const [show, setShow] = useState(false);
   const { handleUpdateTable } = props;
-
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setEmail("");
+  };
   const handleShow = () => setShow(true);
 
-  const postCreateAdmin = async () => {
-    const data = { adminname, email, password, confirmpassword, fullname };
-
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/admin`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: JSON.parse(localStorage.token).token,
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        throw new Error("Request failed with status code " + response.status);
-      }
-
-      const responseData = await response.text();
-      return responseData;
-    } catch (error) {
-      console.error("Error:", error);
-      throw error;
-    }
-  };
-
-  // const handleSaveAdmin = async () => {
-  //   try {
-  //     // Validate data before sending
-  //     if (!adminname || !email || !password || !confirmpassword || !fullname) {
-  //       toast.error("Please fill in all the required information.");
-  //       return;
-  //     }
-
-  //     const res = await postCreateAdmin();
-  //     if (res === "Admin already exists") {
-  //       toast.error("Admin already exists!");
-  //     } else if (res === "Add admin succeed") {
-  //       handleClose();
-  //       setAdminname("");
-  //       setEmail("");
-  //       setPassword("");
-  //       setConfirmpassword("");
-  //       setFullname("");
-  //       toast.success("Admin created successfully!");
-
-  //       // Call the parent's update function
-  //       handleUpdateTable({
-  //         adminname,
-  //         email,
-  //         password,
-  //         confirmpassword,
-  //         fullname,
-  //       });
-  //     } else {
-  //       toast.error("Error!");
-  //     }
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
-
-  const handleSaveAdmin = async () => {
-    try {
-      let errorMessage = null;
-  
-      if (!adminname) {
-        errorMessage = "Please fill in the Administrator field.";
-      } else if (!email) {
-        errorMessage = "Please fill in the Email field.";
-      } else if (!password) {
-        errorMessage = "Please fill in the Password field.";
-      } else if (!confirmpassword) {
-        errorMessage = "Please fill in the Confirm Password field.";
-      } else if (!fullname) {
-        errorMessage = "Please fill in the Full Name field.";
-      }
-  
-      if (errorMessage) {
-        toast.error(errorMessage);
-        return;
-      }
-  
-      const res = await postCreateAdmin();
-      switch (res) {
-        case "Admin already exists":
-          toast.error("Admin already exists!");
-          break;
-        case "Add admin succeed":
+  const handleCreateUser = async () => {
+    if (isFormCreateValid(username, email, group) && isValidEmail(email)) {
+      try {
+        const res = await postUser(username, email, group);
+        console.log(res);
+        if (res === "User already") {
+          toast.error("User already exists");
+        } else if (res === "Add user succeed") {
           handleClose();
-          setAdminname("");
-          setEmail("");
-          setPassword("");
-          setConfirmpassword("");
-          setFullname("");
-          toast.success("Admin created successfully!");
-  
-          // Call the parent's update function
-          handleUpdateTable({
-            adminname,
+          toast.success("User created successfully!");
+          await handleUpdateTable({
+            username,
             email,
-            password,
-            confirmpassword,
-            fullname,
+            group,
           });
-          break;
-        default:
-          toast.error("An error occurred while creating the admin.");
+        } else {
+          toast.error("Error!");
+        }
+      } catch (error) {
+        toast.error(error.message);
       }
-    } catch (error) {
-      toast.error("An error occurred: " + error.message);
+    } else {
+      toast.error("Please enter a valid email address");
     }
   };
-  
 
   return (
     <>
       <Button variant="success" onClick={handleShow}>
         <IoMdCreate />
-      </Button>{" "}
-      <Modal show={show} onHide={handleClose}>
+      </Button>
+      <Modal show={show} onHide={handleClose} className="modal-create-admin">
         <Modal.Header closeButton>
-          <Modal.Title>Create Administrator</Modal.Title>
+          <Modal.Title>Create User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <div className="mb-3">
-              <label className="form-label">Administrator</label>
+              <label className="form-label">User Name</label>
               <input
                 type="text"
                 className="form-control"
-                value={adminname}
-                onChange={(e) => setAdminname(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
             <div className="mb-3">
               <label className="form-label">Email</label>
               <input
-                type="text"
+                type="email"
                 className="form-control"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="mb-3">
-              <label className="form-label">Full Name</label>
+              <label className="form-label">Group</label>
               <input
                 type="text"
                 className="form-control"
-                value={fullname}
-                onChange={(e) => setFullname(e.target.value)}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Password</label>
-              <input
-                type="password"
-                className="form-control"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Confirm Password</label>
-              <input
-                type="password"
-                className="form-control"
-                value={confirmpassword}
-                onChange={(e) => setConfirmpassword(e.target.value)}
+                value={group}
+                onChange={(e) => setGroup(e.target.value)}
               />
             </div>
           </Form>
@@ -193,7 +92,11 @@ export default function CreateAdministrator(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSaveAdmin}>
+          <Button
+            variant="primary"
+            onClick={handleCreateUser}
+            disabled={!isFormCreateValid(username, email, group)}
+          >
             OK
           </Button>
         </Modal.Footer>
