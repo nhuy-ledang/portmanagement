@@ -9,9 +9,7 @@ export default function AccountDropdown({ setToken }) {
     if (typeof setToken === "function") {
       setToken(null);
     }
-    // Redirect to the login page or any other desired page
-    // Here, we assume there is a '/login' route
-    window.location.href = "/login";
+    window.location.reload();
   };
 
   return (

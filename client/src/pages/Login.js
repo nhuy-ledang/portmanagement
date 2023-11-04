@@ -2,22 +2,28 @@ import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import "./Login.scss";
 import logo from "../img/logo.png";
-import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 async function loginUser(credentials) {
   try {
-    const response = await axios.post(
+    const response = await fetch(
       "https://hpid.homethang.duckdns.org/api/login",
-      credentials,
       {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify(credentials),
       }
     );
-    return response.data;
+    
+    if (!response.ok) {
+      throw new Error("Request failed with status " + response.status);
+    }
+    
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error("Login error:", error);
     throw error;
