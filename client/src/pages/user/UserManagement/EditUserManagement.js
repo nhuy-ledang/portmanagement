@@ -18,7 +18,7 @@ export default function EditUserManagement(props) {
     const data = { username, email, group };
 
     try {
-      const response = await fetch( "https://hpid.homethang.duckdns.org/api/user", {
+      const response = await fetch( `${process.env.REACT_APP_API_URL}/user`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

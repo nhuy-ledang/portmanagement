@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import { IoMdCreate } from 'react-icons/io';
-
+import {isFormValid, isValidEmail} from '../../../formValidation'
 export default function CreateAdministrator(props) {
   const [adminname, setAdminname] = useState("");
   const [email, setEmail] = useState("");
@@ -13,14 +13,37 @@ export default function CreateAdministrator(props) {
   const [fullname, setFullname] = useState("");
   const [show, setShow] = useState(false);
   const { handleUpdateTable } = props;
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    // Reset the form fields
+    setAdminname("");
+    setEmail("");
+    setPassword("");
+    setConfirmpassword("");
+    setFullname("");
+  };
+
   const handleShow = () => setShow(true);
+
+  const isFormValid = () => {
+    return (
+      adminname.trim() !== "" &&
+      email.trim() !== "" &&
+      password.trim() !== "" &&
+      confirmpassword.trim() !== "" &&
+      fullname.trim() !== ""
+    );
+  };
+
+  const isValidEmail = (email) => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    return emailRegex.test(email);
+  };
 
   const postCreateAdmin = async () => {
     const data = { adminname, email, password, confirmpassword, fullname };
-
     try {
-      const response = await fetch("https://hpid.homethang.duckdns.org/api/admin", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/admin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,39 +63,42 @@ export default function CreateAdministrator(props) {
   };
 
   const handleSaveAdmin = async () => {
-    try {
-      const res = await postCreateAdmin();
-      console.log(res);
-      if (res === "Admin already exists") {
-        toast.error("Admin đã tồn tại!");
-      } else if (res === "Add admin succeed") {
-        handleClose();
-        setAdminname("");
-        setEmail("");
-        setPassword("");
-        setConfirmpassword("");
-        setFullname("");
-        toast.success("Admin được tạo thành công!");
-        await handleUpdateTable({
-          adminname,
-          email,
-          password,
-          confirmpassword,
-          fullname,
-        });
+    if (isFormValid(adminname, email, password, confirmpassword, fullname) && isValidEmail(email)) {
+      if (password !== confirmpassword) {
+        toast.error("Password and Confirm Password must match");
       } else {
-        toast.error("Lỗi!");
+        try {
+          const res = await postCreateAdmin();
+          console.log(res);
+          if (res === "Admin already") {
+            toast.error("Admin already exists");
+          } else if (res === "Add admin succeed") {
+            handleClose();
+            toast.success("Admin created successfully!");
+            await handleUpdateTable({
+              adminname,
+              email,
+              password,
+              confirmpassword,
+              fullname,
+            });
+          } else {
+            toast.error("Error!");
+          }
+        } catch (error) {
+          toast.error(error.message);
+        }
       }
-    } catch (error) {
-      toast.error(error.message);
+    } else {
+      toast.error("Please enter a valid email address");
     }
   };
 
   return (
     <>
-      <Button variant="success" onClick={handleShow} className="">
+      <Button variant="success" onClick={handleShow}>
         <IoMdCreate />
-      </Button>{" "}
+      </Button>
       <Modal show={show} onHide={handleClose} className="modal-create-admin">
         <Modal.Header closeButton>
           <Modal.Title>Create Administrator</Modal.Title>
@@ -91,7 +117,7 @@ export default function CreateAdministrator(props) {
             <div className="mb-3">
               <label className="form-label">Email</label>
               <input
-                type="text"
+                type="email"
                 className="form-control"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -124,14 +150,13 @@ export default function CreateAdministrator(props) {
                 onChange={(e) => setConfirmpassword(e.target.value)}
               />
             </div>
-            
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSaveAdmin}>
+          <Button variant="primary" onClick={handleSaveAdmin} disabled={!isFormValid()}>
             OK
           </Button>
         </Modal.Footer>

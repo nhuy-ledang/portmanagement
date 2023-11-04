@@ -30,7 +30,7 @@ export default function UserManagement() {
       };
 
       const response = await fetch(
-        "https://hpid.homethang.duckdns.org/api/user",
+        `${process.env.REACT_APP_API_URL}/user`,
         { headers }
       );
       const jsonData = await response.json();
@@ -93,7 +93,7 @@ export default function UserManagement() {
       const data = {
         username: admin.username,
       };
-      return axios.delete("https://hpid.homethang.duckdns.org/api/user", {
+      return axios.delete(`${process.env.REACT_APP_API_URL}/user`, {
         headers,
         data,
       });

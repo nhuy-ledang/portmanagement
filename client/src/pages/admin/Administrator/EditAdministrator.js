@@ -19,7 +19,7 @@ export default function EditAdministrator(props) {
     const data = { adminname, email, fullname };
 
     try {
-      const response = await fetch( "https://hpid.homethang.duckdns.org/api/admin", {
+      const response = await fetch( `${process.env.REACT_APP_API_URL}/admin`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

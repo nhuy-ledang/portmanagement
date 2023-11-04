@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
 import "./Administrator.scss";
 import CreateAdministrator from "./CreateAdministrator";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import EditAdministrator from "./EditAdministrator";
 import ReactPaginate from "react-paginate";
-import axios from "axios";
 import { AiFillDelete } from "react-icons/ai";
 import { MdCreateNewFolder } from "react-icons/md";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export default function Administrator() {
+function Administrator() {
   const [data, setData] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 8;
-
   const [selectedItems, setSelectedItems] = useState([]);
   const [editingAdminId, setEditingAdminId] = useState(null);
+  const token = JSON.parse(localStorage.token)?.token;
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: token,
+  };
 
   useEffect(() => {
     fetchData();
@@ -23,19 +26,21 @@ export default function Administrator() {
 
   const fetchData = async () => {
     try {
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: JSON.parse(localStorage.token).token,
-      };
+      if (!token) {
+        console.error("Token is missing or invalid. Please log in.");
+        return;
+      }
 
       const response = await fetch(
-        "https://hpid.homethang.duckdns.org/api/admin",
-        { headers }
+        `${process.env.REACT_APP_API_URL}/admin`,
+        {
+          headers,
+        }
       );
       const jsonData = await response.json();
       setData(jsonData);
     } catch (error) {
-      console.log("Error:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -78,29 +83,44 @@ export default function Administrator() {
     }
   };
 
-  const handleDelete = () => {
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: JSON.parse(localStorage.token).token,
-    };
-
-    // Create an array of promises for each selected item to be deleted
+  const handleDelete = () => {  
+    if (!token) {
+      console.error("Token is missing or invalid. Please log in.");
+      return;
+    }
+  
     const deletePromises = selectedItems.map((admin) => {
-      const data = {
-        adminname: admin.adminname,
+      const requestOptions = {
+        method: 'DELETE',
+        headers: headers,
+        body: JSON.stringify({
+          adminname: admin.adminname,
+        }),
       };
-      return axios.delete("https://hpid.homethang.duckdns.org/api/admin", {
-        headers,
-        data,
-      });
+  
+      return fetch(`${process.env.REACT_APP_API_URL}/admin`, requestOptions)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+  
+          return response.text(); // Lấy nội dung văn bản từ phản hồi
+        })
+        .then((text) => {
+          // Kiểm tra nội dung văn bản và xử lý theo cách tùy chỉnh
+          if (text === "Admin removed") {
+            return "Admin removed successfully";
+          } else {
+            throw new Error('Unexpected response: ' + text);
+          }
+        });
     });
-
-    // Execute all the delete promises
+  
     Promise.all(deletePromises)
-      .then(() => {
-        console.log("Admins have been successfully deleted");
+      .then((results) => {
+        console.log(results); // In thông báo thành công từ mỗi yêu cầu DELETE
         fetchData();
-        setSelectedItems([]); // Clear the selected items
+        setSelectedItems([]);
       })
       .catch((error) => {
         console.error("Error deleting admins:", error);
@@ -120,7 +140,7 @@ export default function Administrator() {
                   handleDelete();
                 }
               }}
-              disabled={selectedItems.length === 0} // Disable the button when no items are selected
+              disabled={selectedItems.length === 0}
             >
               <AiFillDelete />
             </button>
@@ -140,8 +160,8 @@ export default function Administrator() {
                   <th className="col-1">
                     <input
                       type="checkbox"
-                      checked={selectedItems.length === currentData.length} // Check if all items are selected
-                      onChange={handleSelectAll} // Call handleSelectAll when the checkbox is changed
+                      checked={selectedItems.length === currentData.length}
+                      onChange={handleSelectAll}
                     />
                   </th>
                   <th className="col-3 name-col">ADMINISTRATOR</th>
@@ -207,3 +227,5 @@ export default function Administrator() {
     </>
   );
 }
+
+export default Administrator;
