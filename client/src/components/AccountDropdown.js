@@ -4,12 +4,14 @@ import PropTypes from "prop-types";
 
 export default function AccountDropdown({ setToken }) {
   const handleLogout = async () => {
-    console.log("aaaaa");
+    console.log("Logging out...");
     localStorage.removeItem("token");
     if (typeof setToken === "function") {
       setToken(null);
     }
-    window.location.reload();
+    // Redirect to the login page or any other desired page
+    // Here, we assume there is a '/login' route
+    window.location.href = "/login";
   };
 
   return (

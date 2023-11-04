@@ -1,4 +1,4 @@
-const token = JSON.parse(localStorage.token)?.token;
+const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
 const headers = {
   "Content-Type": "application/json",
   Authorization: token,
@@ -7,10 +7,17 @@ const api_admin_url = "https://hpid.homethang.duckdns.org/api/admin";
 
 export const getAdmin = async () => {
   try {
+    const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
+
     if (!token) {
-      console.error("Token is missing or invalid. Please log in.");
+      console.error(">> Token is missing or invalid. Please log in.");
       return;
     }
+
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
 
     const response = await fetch(api_admin_url, {
       headers,
@@ -31,17 +38,28 @@ export const postAdmin = async (
 ) => {
   const data = { adminname, email, password, confirmpassword, fullname };
   try {
+    const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
+
+    if (!token) {
+      console.error("Token is missing or invalid. Please log in.");
+      return;
+    }
+
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+
     const response = await fetch(api_admin_url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: JSON.parse(localStorage.token).token,
-      },
+      headers,
       body: JSON.stringify(data),
     });
+
     if (!response.ok) {
       throw new Error("Request failed with status code " + response.status);
     }
+
     const responseData = await response.text();
     return responseData;
   } catch (error) {

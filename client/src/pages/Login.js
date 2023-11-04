@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import "./Login.scss";
 import logo from "../img/logo.png";
@@ -27,49 +27,36 @@ async function loginUser(credentials) {
 export default function Login({ setToken }) {
   const [adminname, setAdminname] = useState("");
   const [password, setPassword] = useState("");
+  const setTokenRef = useRef(setToken);
 
   useEffect(() => {
     function logout() {
       localStorage.removeItem("token");
-      setToken(null);
+      setTokenRef.current("");
     }
-    
-    // Kiểm tra tính hợp lệ của token mỗi khi trang được tải
-    const token = localStorage.getItem("token");
-    if (token) {
-      axios
-        .post(`${process.env.REACT_APP_API_URL}/verifyToken`, { token })
-        .then((response) => {
-          // Token hợp lệ
-        })
-        .catch((error) => {
-          // Token không hợp lệ, đăng xuất người dùng và xóa token từ localStorage
-          logout();
-        });
-    }
-    
+
     // Đăng ký sự kiện trước khi đóng trình duyệt
     window.addEventListener("beforeunload", logout);
 
     return () => {
       window.removeEventListener("beforeunload", logout);
     };
-  }, [setToken]);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!adminname || !password) {
       toast.error("Please fill in both Administrator and Password fields.");
       return;
     }
-  
+
     try {
       const token = await loginUser({
         adminname,
         password,
       });
-  
+
       if (token === null || token === undefined) {
         toast.error("Invalid response from the server.");
       } else if (token === "Wrong adminname or password") {
@@ -82,7 +69,7 @@ export default function Login({ setToken }) {
     } catch (error) {
       toast.error("An error occurred: " + error.message);
     }
-  };  
+  };
 
   return (
     <>
