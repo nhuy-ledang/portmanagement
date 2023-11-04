@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-// import { toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
 import { AiFillEdit } from 'react-icons/ai'; 
+import { isFormEditValid } from "../../../formValidation";
+import {patchAdmin} from "../../../services/AdministratorService"
+
 export default function EditAdministrator(props) {
-  // const [id, setId] = useState("");
   const [adminname, setAdminname] = useState("");
   const [email, setEmail] = useState("");
   const [fullname, setFullname] = useState("");
@@ -14,29 +14,6 @@ export default function EditAdministrator(props) {
   const { dataAdminEdit, handleUpdateAdminFromModal } = props;
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  const putUpdateAdmin = async () => {
-    const data = { adminname, email, fullname };
-
-    try {
-      const response = await fetch( `${process.env.REACT_APP_API_URL}/admin`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: JSON.parse(localStorage.token).token,
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error("Request failed with status code " + response.status);
-      }
-      const responseData = await response.text();
-      return responseData;
-    } catch (error) {
-      console.error("Error:", error);
-      throw error;
-    }
-  };
 
   useEffect(() => {
     if (show) {
@@ -47,25 +24,22 @@ export default function EditAdministrator(props) {
   }, [dataAdminEdit, show]);
 
   const handleEditAdmin = async () => {
-    const response = await putUpdateAdmin(adminname, email, fullname);
+    const response = await patchAdmin(adminname, email, fullname);
     if (response && response.adminname) {
       handleUpdateAdminFromModal({
         adminname: adminname,
         id: dataAdminEdit.id,
         email: email,
         fullname: fullname,
-      }); 
-       
+      });
     }
     console.log(response);
     window.location.reload();
   };
+  
 
   return (
     <>
-      {/* <Button variant="primary" onClick={handleShow}>
-        <AiFillEdit onClick={handleShow}/>
-      </Button>{" "} */}
       <AiFillEdit onClick={handleShow}/>
       <Modal show={show} onHide={handleClose} className="modal-create-admin">
         <Modal.Header closeButton>
@@ -107,7 +81,12 @@ export default function EditAdministrator(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleEditAdmin}>
+          <Button variant="primary" onClick={handleEditAdmin} disabled={
+              !isFormEditValid(
+                email,
+                fullname
+              )
+            }>
             Update
           </Button>
         </Modal.Footer>

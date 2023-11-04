@@ -3,8 +3,10 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
-import { IoMdCreate } from 'react-icons/io';
-import {isFormValid, isValidEmail} from '../../../formValidation'
+import { IoMdCreate } from "react-icons/io";
+import { isFormCreateValid, isValidEmail } from "../../../formValidation";
+import { postAdmin } from "../../../services/AdministratorService";
+
 export default function CreateAdministrator(props) {
   const [adminname, setAdminname] = useState("");
   const [email, setEmail] = useState("");
@@ -15,60 +17,30 @@ export default function CreateAdministrator(props) {
   const { handleUpdateTable } = props;
   const handleClose = () => {
     setShow(false);
-    // Reset the form fields
     setAdminname("");
     setEmail("");
     setPassword("");
     setConfirmpassword("");
     setFullname("");
   };
-
   const handleShow = () => setShow(true);
 
-  const isFormValid = () => {
-    return (
-      adminname.trim() !== "" &&
-      email.trim() !== "" &&
-      password.trim() !== "" &&
-      confirmpassword.trim() !== "" &&
-      fullname.trim() !== ""
-    );
-  };
-
-  const isValidEmail = (email) => {
-    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-    return emailRegex.test(email);
-  };
-
-  const postCreateAdmin = async () => {
-    const data = { adminname, email, password, confirmpassword, fullname };
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/admin`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: JSON.parse(localStorage.token).token,
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error("Request failed with status code " + response.status);
-      }
-      const responseData = await response.text();
-      return responseData;
-    } catch (error) {
-      console.error("Error:", error);
-      throw error;
-    }
-  };
-
-  const handleSaveAdmin = async () => {
-    if (isFormValid(adminname, email, password, confirmpassword, fullname) && isValidEmail(email)) {
+  const handleCreateAdmin = async () => {
+    if (
+      isFormCreateValid(adminname, email, password, confirmpassword, fullname) &&
+      isValidEmail(email)
+    ) {
       if (password !== confirmpassword) {
         toast.error("Password and Confirm Password must match");
       } else {
         try {
-          const res = await postCreateAdmin();
+          const res = await postAdmin(
+            adminname,
+            email,
+            password,
+            confirmpassword,
+            fullname
+          );
           console.log(res);
           if (res === "Admin already") {
             toast.error("Admin already exists");
@@ -156,7 +128,19 @@ export default function CreateAdministrator(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSaveAdmin} disabled={!isFormValid()}>
+          <Button
+            variant="primary"
+            onClick={handleCreateAdmin}
+            disabled={
+              !isFormCreateValid(
+                adminname,
+                email,
+                password,
+                confirmpassword,
+                fullname
+              )
+            }
+          >
             OK
           </Button>
         </Modal.Footer>
