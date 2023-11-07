@@ -4,7 +4,7 @@ import CreateAdministrator from "./CreateAdministrator";
 import EditAdministrator from "./EditAdministrator";
 import ReactPaginate from "react-paginate";
 import { AiFillDelete } from "react-icons/ai";
-import { MdCreateNewFolder } from "react-icons/md";
+// import { MdCreateNewFolder } from "react-icons/md";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getAdmin, deleteAdmin } from "../../../services/AdminService";
@@ -20,9 +20,20 @@ function Administrator() {
     setCurrentPage(selected);
   };
 
+  // useEffect(() => {
+  //   getAdmin().then((adminData) => setData(adminData));
+  // }, []);
+
   useEffect(() => {
-    getAdmin().then((adminData) => setData(adminData));
-  }, []);
+  getAdmin().then((adminData) => {
+    if (Array.isArray(adminData)) {
+      setData(adminData);
+    } else {
+      console.error("Data is not an array:", adminData);
+    }
+  });
+}, []);
+
 
   const handleEditAdmin = (adminId) => {
     setEditingAdminId(adminId);
@@ -86,9 +97,9 @@ function Administrator() {
               <CreateAdministrator handleUpdateTable={handleUpdateTable} />
             </div>
           </div>
-          <button className="btn btn-success d-flex align-items-center">
+          {/* <button className="btn btn-success d-flex align-items-center">
             <MdCreateNewFolder />
-          </button>
+          </button> */}
         </div>
         {data ? (
           <>
