@@ -1,0 +1,25 @@
+const mongoose = require("mongoose")
+
+const Schema = mongoose.Schema;
+const logSchema = new Schema({
+	created: {
+	    type: String,
+	    default: Date.now
+  	},
+	username: {
+	    type: String,
+	    require: true
+	  },
+	api:{
+		type: String,
+		require: true
+	},
+	data:{
+		type: String,
+		reuire: true
+	}
+})
+
+const LogMongoose = mongoose.model("Log", logSchema);
+
+module.exports = LogMongoose;
