@@ -4,15 +4,12 @@ import CreateUserManagement from "./CreateUserManagement";
 import EditUserManagement from "./EditUserManagement";
 import ReactPaginate from "react-paginate";
 import { AiFillDelete } from "react-icons/ai";
-import { MdCreateNewFolder } from "react-icons/md";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   getUser,
   deleteUser,
-  postUserCSV,
 } from "../../../services/UserService";
-import Papa from "papaparse";
 
 function UserManagement() {
   const [data, setData] = useState(null);
@@ -20,6 +17,7 @@ function UserManagement() {
   const itemsPerPage = 8;
   const [selectedItems, setSelectedItems] = useState([]);
   const [editingUserId, setEditingUserId] = useState(null);
+
   const pageCount = data ? Math.ceil(data.length / itemsPerPage) : 0;
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
@@ -80,81 +78,6 @@ function UserManagement() {
       });
   };
 
-  const handleImportCSV = (e) => {
-    if (e.target && e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      if (file.type !== "text/csv") {
-        toast.error("Only accept CSV file!");
-        return;
-      }
-
-      Papa.parse(file, {
-        complete: function (results) {
-          const rawCSV = results.data;
-          if (rawCSV.length > 0) {
-            if (
-              rawCSV[0] &&
-              rawCSV[0].length === 3 &&
-              rawCSV[0][0] === "username" &&
-              rawCSV[0][1] === "email" &&
-              rawCSV[0][2] === "group"
-            ) {
-              const newData = [...data];
-              rawCSV.slice(1).forEach((item) => {
-                if (item.length === 3) {
-                  const user = {
-                    username: item[0],
-                    email: item[1],
-                    group: item[2],
-                  };
-
-                  if (
-                    !newData.some(
-                      (existingUser) => existingUser.username === user.username
-                    )
-                  ) {
-                    newData.push(user);
-                  }
-                }
-              });
-
-              setData(newData);
-              console.log(">> Check newData: ", newData);
-
-              handleImportUser(newData);
-            } else {
-              toast.error("Wrong format CSV file!");
-            }
-          } else {
-            toast.error("Not found data in CSV file!");
-          }
-        },
-      });
-    }
-  };
-
-  const handleImportUser = async (newData) => {
-    try {
-      const res = await postUserCSV(newData); // Adjust the API call here
-      console.log(res);
-      if (typeof data === "string") {
-        if (res === "User already") {
-          toast.error("User already exists");
-        } else if (res === "Add user succeed") {
-          toast.success("User created successfully!");
-          await handleUpdateTable(newData);
-          // saveDataToAPI(newData);
-        } else {
-          console.error("API response:", res);
-          toast.error("Error!");
-        }
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  
 
   return (
     <>
@@ -177,19 +100,6 @@ function UserManagement() {
               <CreateUserManagement handleUpdateTable={handleUpdateTable} />
             </div>
           </div>
-          <label
-            className="btn btn-warning d-flex align-items-center gap-2"
-            htmlFor="import"
-          >
-            <MdCreateNewFolder />
-            <span>Import</span>
-          </label>
-          <input
-            type="file"
-            id="import"
-            hidden
-            onChange={(e) => handleImportCSV(e)}
-          />
         </div>
         {data ? (
           <>

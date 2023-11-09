@@ -24,10 +24,31 @@ export default function EditLayoutManagement(props) {
     }
   }, [dataLayoutEdit, show]);
 
+  // const handleImageUpload = (e) => {
+  //   const selectedFile = e.target.files[0];
+  //   if (selectedFile) {
+  //     setImage(selectedFile);
+  //     const reader = new FileReader();
+  //     reader.onload = function (e) {
+  //       const imageContainer = document.getElementById("image-container");
+  //       imageContainer.innerHTML = `<img src="${e.target.result}" alt="Preview" class="preview-image" />`;
+  //     };
+  //   } else {
+  //     toast.error("Please select an image.");
+  //   }
+  // };
+
   const handleImageUpload = (e) => {
     const selectedFile = e.target.files[0];
+
     if (selectedFile) {
       setImage(selectedFile);
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const imageContainer = document.getElementById("image-container");
+        imageContainer.innerHTML = `<img src="${e.target.result}" alt="Preview" class="preview-image" />`;
+      };
+      reader.readAsDataURL(selectedFile);
     } else {
       toast.error("Please select an image.");
     }
@@ -91,6 +112,7 @@ export default function EditLayoutManagement(props) {
                 onChange={handleImageUpload}
               />
             </div>
+            <div id="image-container"></div>
           </Form>
         </Modal.Body>
         <Modal.Footer>
