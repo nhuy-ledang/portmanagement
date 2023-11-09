@@ -26,7 +26,6 @@ function UserManagement() {
   };
 
   useEffect(() => {
-    // Gọi API để lấy dữ liệu khi tải component
     getUser()
       .then((userData) => {
         if (Array.isArray(userData)) {
@@ -45,7 +44,6 @@ function UserManagement() {
   };
 
   const handleUpdateTable = () => {
-    // You can update your table here
     getUser().then((userData) => {
       setData(userData);
     });
@@ -123,7 +121,6 @@ function UserManagement() {
               setData(newData);
               console.log(">> Check newData: ", newData);
 
-              // Send the updated data to the API
               handleImportUser(newData);
             } else {
               toast.error("Wrong format CSV file!");
@@ -146,7 +143,7 @@ function UserManagement() {
         } else if (res === "Add user succeed") {
           toast.success("User created successfully!");
           await handleUpdateTable(newData);
-          saveDataToAPI(newData);
+          // saveDataToAPI(newData);
         } else {
           console.error("API response:", res);
           toast.error("Error!");
@@ -157,48 +154,7 @@ function UserManagement() {
     }
   };
 
-  const saveDataToAPI = (newData) => {
-    // Send a POST request to your server's API endpoint for data insertion
-    fetch("https://hpid.homethang.duckdns.org/api/user/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: localStorage.token
-          ? JSON.parse(localStorage.token)?.token
-          : null,
-      },
-      body: JSON.stringify(newData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Request failed with status code " + response.status);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("API Response:", data);
-        if (data.message === "Add done") {
-          console.log("Data has been successfully saved to the database.");
-          // Fetch the updated user data from the server and update the state
-          getUser()
-            .then((userData) => {
-              if (Array.isArray(userData)) {
-                setData(userData);
-              } else {
-                console.error("Data is not an array:", userData);
-              }
-            })
-            .catch((error) => {
-              console.error("Error loading data:", error);
-            });
-        } else {
-          console.error("Server returned an unexpected response:", data);
-        }
-      })
-      .catch((error) => {
-        console.error("Error while saving data to the database:", error);
-      });
-  };
+  
 
   return (
     <>

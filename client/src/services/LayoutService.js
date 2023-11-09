@@ -3,7 +3,7 @@ const headers = {
   "Content-Type": "application/json",
   Authorization: token,
 };
-const api_layout_url = "http://localhost:8080/api/layout";
+const api_layout_url = `${process.env.REACT_APP_API_URL}/layout`;
 
 export const getLayout = async () => {
   try {
@@ -28,7 +28,7 @@ export const postLayout = (layoutname, image, token) => {
   formData.append("layoutname", layoutname);
   formData.append("file", image);
 
-  return fetch("http://localhost:8080/api/layout", {
+  return fetch(api_layout_url, {
     method: "POST",
     headers: {
       Authorization: token,
@@ -50,7 +50,7 @@ export const patchLayout = (layoutname, image, token) => {
   formData.append("layoutname", layoutname);
   formData.append("file", image);
 
-  return fetch("http://localhost:8080/api/layout", {
+  return fetch(api_layout_url, {
     method: "PATCH",
     headers: {
       Authorization: token,

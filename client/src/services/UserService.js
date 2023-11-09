@@ -3,7 +3,9 @@ const headers = {
   "Content-Type": "application/json",
   Authorization: token,
 };
-const api_user_url = "http://localhost:8080/api/user";
+const api_user_url = `${process.env.REACT_APP_API_URL}/user`;
+const api_user_right_url = `${process.env.REACT_APP_API_URL}/right`;
+const api_import_user_url = `${process.env.REACT_APP_API_URL}/user?csv=true`;
 
 export const getUser = async () => {
   try {
@@ -184,7 +186,7 @@ export const getOptionsRight = async () => {
       return []; // Trả về một mảng rỗng trong trường hợp lỗi hoặc không có dữ liệu
     }
 
-    const response = await fetch("https://hpid.homethang.duckdns.org/api/right", {
+    const response = await fetch(api_user_right_url, {
       headers: {
         "Content-Type": "application/json",
         Authorization: token,
@@ -232,7 +234,7 @@ export const getOptionsRight = async () => {
 
 export const postUserCSV = async (userData) => {
   try {
-    const response = await fetch('http://localhost:8080/api/user/csv/uploads', {
+    const response = await fetch(api_import_user_url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', Authorization: token,

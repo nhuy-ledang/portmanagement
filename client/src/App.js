@@ -9,7 +9,7 @@ import Home from "./pages/Home";
 import UserManagement from "./pages/user/UserManagement/UserManagement";
 import RightAssignment from "./pages/user/RightAssignment/RightAssignment";
 import LayoutManagement from "./pages/port/LayoutManagement/LayoutManagement";
-import PortAssignment from "./pages/port/PortAssignment";
+import PortAssignment from "./pages/port/PortAssignment/PortAssignment";
 import PortScheduler from "./pages/port/PortScheduler";
 import Administrator from "./pages/admin/Administrator/Administrator";
 import AuditLog from "./pages/admin/AuditLog";
