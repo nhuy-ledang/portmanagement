@@ -86,7 +86,7 @@ function RightAssignment() {
                       </td>
                       <td className="table-data">{user && user.email}</td>
                       <td className="table-data">{user && user.group}</td>
-                      <td className="table-data">{user && user.right}</td>
+                      <td className="table-data">{user && user.right ? user.right[0].right : null}</td>
                     </tr>
                   ))}
               </tbody>

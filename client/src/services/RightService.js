@@ -1,4 +1,4 @@
-const api_user_url = "https://hpid.homethang.duckdns.org/api/user";
+const api_user_url = "http://localhost:8080/api/user";
 const apiUrlWithRightParam = `${api_user_url}?right=true`;
 const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
 const headers = {

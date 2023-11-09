@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 async function loginUser(credentials) {
   try {
     const response = await fetch(
-      "https://hpid.homethang.duckdns.org/api/login",
+      "http://localhost:8080/api/login",
       {
         method: "POST",
         headers: {

@@ -3,7 +3,7 @@ const headers = {
   "Content-Type": "application/json",
   Authorization: token,
 };
-const api_user_url = "https://hpid.homethang.duckdns.org/api/user";
+const api_user_url = "http://localhost:8080/api/user";
 
 export const getUser = async () => {
   try {
@@ -204,37 +204,62 @@ export const getOptionsRight = async () => {
 };
 
 
-export const postUserCSV = async () => {
-  const api_user_csv_url = "https://hpid.homethang.duckdns.org/api/user";
-  // const data = { username, email, group };
+// export const postUserCSV = (newData) => {
+//   const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
+
+//   return fetch("http://localhost:8080/api/user", {
+//     method: "POST",
+//     headers: {
+//       'Content-Type': 'application/json',
+//       Authorization: token,
+//     },
+//     body: JSON.stringify(newData),
+//   })
+//     .then((response) => {
+//       if (!response.ok) {
+//         throw new Error("Request failed with status code " + response.status);
+//       }
+//       return response.text(); // Parse response as text
+//     })
+//     .then((responseText) => {
+//       return responseText; // Return the plain text response
+//     })
+//     .catch((error) => {
+//       console.error("Error while saving data to the database:", error);
+//       throw new Error("Error while saving data to the database: " + error.message);
+//     });
+// };
+
+export const postUserCSV = async (userData) => {
   try {
-    const token = localStorage.token
-      ? JSON.parse(localStorage.token)?.token
-      : null;
-
-    if (!token) {
-      console.error("Token is missing or invalid. Please log in.");
-      return;
-    }
-
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: token,
-    };
-
-    const response = await fetch(api_user_csv_url, {
-      method: "POST",
-      headers,
+    const response = await fetch('http://localhost:8080/api/user/csv/uploads', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', Authorization: token,
+      },
+      body: JSON.stringify({ data: userData }),
     });
 
     if (!response.ok) {
-      throw new Error("Request failed with status code " + response.status);
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const responseData = await response.text();
+    let responseData;
+
+    // Check if the response is JSON
+    if (response.headers.get('Content-Type')?.includes('application/json')) {
+      responseData = await response.json();
+    } else {
+      // If not JSON, treat it as plain text
+      responseData = await response.text();
+    }
+
+    console.log('API response:', responseData);
+
     return responseData;
   } catch (error) {
-    console.error("Error:", error);
-    throw error;
+    console.error('Error in postUserCSV:', error.message);
+    throw new Error('Error in postUserCSV');
   }
 };
+

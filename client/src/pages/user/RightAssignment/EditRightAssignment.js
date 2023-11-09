@@ -23,8 +23,12 @@ export default function EditRightAssignment(props) {
   const handleShow = () => setShow(true);
 
   const isFormEditValid = (right) => {
+    if (typeof right !== "string") {
+      return false;
+    }  
     return right && right.trim() !== "";
   };
+  
 
   useEffect(() => {
     if (show && dataUserRightEdit) {

@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from "./pages/Home";
 import UserManagement from "./pages/user/UserManagement/UserManagement";
 import RightAssignment from "./pages/user/RightAssignment/RightAssignment";
-import LayoutManagement from "./pages/port/LayoutManagement";
+import LayoutManagement from "./pages/port/LayoutManagement/LayoutManagement";
 import PortAssignment from "./pages/port/PortAssignment";
 import PortScheduler from "./pages/port/PortScheduler";
 import Administrator from "./pages/admin/Administrator/Administrator";

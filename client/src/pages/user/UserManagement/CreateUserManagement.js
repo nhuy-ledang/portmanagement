@@ -37,6 +37,7 @@ export default function CreateUserManagement(props) {
             email,
             group,
           });
+          window.location.reload();
         } else {
           toast.error("Error!");
         }
