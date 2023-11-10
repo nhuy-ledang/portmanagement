@@ -205,33 +205,6 @@ export const getOptionsRight = async () => {
   }
 };
 
-
-// export const postUserCSV = (newData) => {
-//   const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
-
-//   return fetch("http://localhost:8080/api/user", {
-//     method: "POST",
-//     headers: {
-//       'Content-Type': 'application/json',
-//       Authorization: token,
-//     },
-//     body: JSON.stringify(newData),
-//   })
-//     .then((response) => {
-//       if (!response.ok) {
-//         throw new Error("Request failed with status code " + response.status);
-//       }
-//       return response.text(); // Parse response as text
-//     })
-//     .then((responseText) => {
-//       return responseText; // Return the plain text response
-//     })
-//     .catch((error) => {
-//       console.error("Error while saving data to the database:", error);
-//       throw new Error("Error while saving data to the database: " + error.message);
-//     });
-// };
-
 export const postUserCSV = async (userData) => {
   try {
     const response = await fetch(api_import_user_url, {

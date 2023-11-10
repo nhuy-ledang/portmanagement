@@ -149,7 +149,7 @@ function LayoutManagement() {
                       </td>
                       <td className="table-data">
                         <img className="img-layout"
-                          src={`http://localhost:8080/images/${layout.layoutdir}`}
+                          src={`https://hpid.homethang.duckdns.org/images/${layout.layoutdir}`}
                           alt={layout.layoutname}
                         />
                         
