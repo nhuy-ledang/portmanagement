@@ -29,13 +29,14 @@ function UserManagement() {
         if (Array.isArray(userData)) {
           setData(userData);
         } else {
-          console.error("Data is not an array:", userData);
+          console.log("Invalid data format:", userData);
+          window.location.reload();
         }
       })
       .catch((error) => {
-        console.error("Error loading data:", error);
+        console.log("Error loading data:", error);
       });
-  }, []);
+  }, [currentPage]);
 
   const handleEditUser = (userId) => {
     setEditingUserId(userId);

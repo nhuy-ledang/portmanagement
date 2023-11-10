@@ -21,14 +21,19 @@ function LayoutManagement() {
   };
 
   useEffect(() => {
-    getLayout().then((layoutData) => {
-      if (Array.isArray(layoutData)) {
-        setData(layoutData);
-      } else {
-        console.error("Data is not an array:", layoutData);
-      }
-    });
-  }, []);
+    getLayout()
+      .then((layoutData) => {
+        if (Array.isArray(layoutData)) {
+          setData(layoutData);
+        } else {
+          console.log("Invalid data format:", layoutData);
+          window.location.reload();
+        }
+      })
+      .catch((error) => {
+        console.log("Error loading data:", error);
+      });
+  }, [currentPage]);
 
   const handleEditLayout = (adminId) => {
     setEditingLayoutId(adminId);
@@ -149,10 +154,9 @@ function LayoutManagement() {
                       </td>
                       <td className="table-data">
                         <img className="img-layout"
-                          src={`https://hpid.homethang.duckdns.org/images/${layout.layoutdir}`}
+                          src={`${process.env.REACT_APP_API_URL}/images/${layout.layoutdir}`}
                           alt={layout.layoutname}
                         />
-                        
                       </td>
                     </tr>
                   ))}

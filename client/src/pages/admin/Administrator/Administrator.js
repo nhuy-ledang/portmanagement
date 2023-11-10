@@ -20,19 +20,20 @@ function Administrator() {
     setCurrentPage(selected);
   };
 
-  // useEffect(() => {
-  //   getAdmin().then((adminData) => setData(adminData));
-  // }, []);
-
-  useEffect(() => {
-  getAdmin().then((adminData) => {
-    if (Array.isArray(adminData)) {
-      setData(adminData);
-    } else {
-      console.error("Data is not an array:", adminData);
-    }
-  });
-}, []);
+useEffect(() => {
+  getAdmin()
+    .then((adminData) => {
+      if (Array.isArray(adminData)) {
+        setData(adminData);
+      } else {
+        console.log("Invalid data format:", adminData);
+        window.location.reload();
+      }
+    })
+    .catch((error) => {
+      console.log("Error loading data:", error);
+    });
+}, [currentPage]);
 
 
   const handleEditAdmin = (adminId) => {

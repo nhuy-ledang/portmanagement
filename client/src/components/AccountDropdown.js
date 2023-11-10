@@ -5,11 +5,15 @@ import PropTypes from "prop-types";
 export default function AccountDropdown({ setToken }) {
   const handleLogout = async () => {
     console.log("Logging out...");
-    localStorage.removeItem("token");
-    if (typeof setToken === "function") {
-      setToken(null);
+    // localStorage.removeItem("token");
+    // if (typeof setToken === "function") {
+    //   setToken();
+    // }
+    // window.location.reload();
+    if (localStorage && localStorage.token) {
+      delete localStorage.token; // Xóa thuộc tính 'token' trong localStorage
     }
-    window.location.reload();
+    window.location.reload(); // Tải lại trang
   };
 
   return (

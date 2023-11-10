@@ -15,19 +15,20 @@ function PortAssignment() {
     setCurrentPage(selected);
   };
 
-  // useEffect(() => {
-  //   getAdmin().then((adminData) => setData(adminData));
-  // }, []);
-
   useEffect(() => {
-    getPort().then((adminData) => {
-      if (Array.isArray(adminData)) {
-        setData(adminData);
-      } else {
-        console.error("Data is not an array:", adminData);
-      }
-    });
-  }, []);
+    getPort()
+      .then((portData) => {
+        if (Array.isArray(portData)) {
+          setData(portData);
+        } else {
+          console.log("Invalid data format:", portData);
+          window.location.reload();
+        }
+      })
+      .catch((error) => {
+        console.log("Error loading data:", error);
+      });
+  }, [currentPage]);
 
   return (
     <>
@@ -52,15 +53,15 @@ function PortAssignment() {
                     currentPage * itemsPerPage,
                     (currentPage + 1) * itemsPerPage
                   )
-                  .map((admin) => (
-                    <tr key={admin.portid}>
-                      <td className="table-data">{admin.portname}</td>
+                  .map((port) => (
+                    <tr key={port.portid}>
+                      <td className="table-data">{port.portname}</td>
                       <td className="table-data">
-                        {admin.layout[0]?.layoutname}
+                        {port.layout[0]?.layoutname}
                       </td>
-                      <td className="table-data">{admin.user[0]?.username}</td>
-                      <td className="table-data">{admin.right[0]?.right}</td>
-                      <td className="table-data">{admin.status}</td>
+                      <td className="table-data">{port.user[0]?.username}</td>
+                      <td className="table-data">{port.right[0]?.right}</td>
+                      <td className="table-data">{port.status}</td>
                     </tr>
                   ))}
               </tbody>

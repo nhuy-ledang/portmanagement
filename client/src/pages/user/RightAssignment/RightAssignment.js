@@ -16,19 +16,20 @@ function RightAssignment() {
     setCurrentPage(selected);
   };
 
-  // useEffect(() => {
-  //   getUserRight().then((userData) => setData(userData));
-  // }, []);
-
   useEffect(() => {
-    getUserRight().then((userData) => {
-      if (Array.isArray(userData)) {
-        setData(userData);
-      } else {
-        console.error("Data is not an array:", userData);
-      }
-    });
-  }, []);
+    getUserRight()
+      .then((userData) => {
+        if (Array.isArray(userData)) {
+          setData(userData);
+        } else {
+          console.log("Invalid data format:", userData);
+          window.location.reload();
+        }
+      })
+      .catch((error) => {
+        console.log("Error loading data:", error);
+      });
+  }, [currentPage]);
 
   const handleEditUserRight = (userId) => {
     setEditingUserRightId(userId);

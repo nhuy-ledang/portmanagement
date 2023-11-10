@@ -4,7 +4,7 @@ import NavBar from "./components/NavBar";
 import { BrowserRouter } from 'react-router-dom'
 import { Routes, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import { Navigate } from 'react-router-dom';
 import Home from "./pages/Home";
 import UserManagement from "./pages/user/UserManagement/UserManagement";
 import RightAssignment from "./pages/user/RightAssignment/RightAssignment";
@@ -24,7 +24,7 @@ import useToken from './useToken';
 function App() {
   const { token, setToken } = useToken();
   if(!token) {
-    return <Login setToken={setToken} />
+    return <Login setToken={setToken} />;
   }
 
   return (
@@ -32,7 +32,8 @@ function App() {
       <div>
         <NavBar />
         <Routes>
-          <Route path='/' element={<Home />} />
+          {/* <Route path='/' element={<Home />} /> */}
+          <Route path='/' element={<Navigate to='/home' />} />
           <Route path='/user-management' element={<UserManagement />} />
           <Route path='/right-assignment' element={<RightAssignment />} />
           <Route path='/layout-management' element={<LayoutManagement />} />
