@@ -4,7 +4,7 @@ module.exports = (req, res, next) => {
     var created = new Date().toLocaleString();
     const LogData = new LogModel({
         created: created,
-        username: req.username,
+        adminname: req.adminname,
         api: req.originalUrl,
         data: JSON.stringify(req.body)
       });

@@ -22,6 +22,7 @@ module.exports = {
 			}
 			else{
 				var created = DateTime.now().toString();
+				console.log(req.file.originalname)
 				const LayoutData = new LayoutModel({
 					layoutname: req.body.layoutname,
 					layoutdir: req.file.originalname,

@@ -5,9 +5,9 @@ let jwtSecretKey = process.env.JWT_SECRET_KEY;
 module.exports = (req, res, next) => {
     try { 
         const token = req.header(tokenHeaderKey); 
-        // console.log(token);
+        console.log(token);
         const verified = jwt.verify(token, jwtSecretKey); 
-        req.username = verified.username;
+        req.adminname = verified.adminname;
         if(verified){ 
             console.log("Authed")
             next();

@@ -87,7 +87,7 @@ module.exports = {
 		SchedulerModel.deleteOne({
 			id: req.body.id
 		}).then(function(){
-			SchedulerModel.find({}).then(function(scheduler){
+			SchedulerModel.findOne({id:id}).then(function(scheduler){
 				console.log(scheduler)
 				if(!scheduler.length){
 					console.log("Stop cron")

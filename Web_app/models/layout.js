@@ -16,7 +16,7 @@ const layoutSchema = new Schema({
 	},
   portlist: [{
     type: Schema.Types.ObjectId,
-    ref: 'Port' // Tham chiếu đến mô hình 'Port'
+    ref: 'Port'
   }],
 	created: {
     type: String,

@@ -41,8 +41,6 @@ module.exports = {
             console.log("Confirmpassword does not match");
             return res.send("Confirmpassword does not match");
           }
-          const hash = bcrypt.hash(password, salt);
-          console.log(hash);
           return bcrypt
             .hash(password, salt)
             .then(function(hashpassword) {
@@ -98,24 +96,40 @@ module.exports = {
         )});
   },
   editAdmin: function(req,res, next){
-    const{
-      adminname,
-      email,
-      fullname
-    } = req.body;
-    AdminModel.findOne({
-      adminname: adminname
-    }).then(function(admin){
-      var created = DateTime.now().toString();
-      if (email == "" || fullname == "") {
-          return res.send("Invailid input");
-      }
-      admin.email = email;
-      admin.fullname = fullname;
-      admin.created = created;
-      admin.save();
-      return res.send("Edit admin done")
-    })
+    if(req.query.password != 'true'){
+      const{
+        adminname,
+        email,
+        fullname
+      } = req.body;
+      AdminModel.findOne({
+        adminname: adminname
+      }).then(function(admin){
+        var created = DateTime.now().toString();
+        if (email == "" || fullname == "") {
+            return res.send("Invailid input");
+        }
+        admin.email = email;
+        admin.fullname = fullname;
+        admin.created = created;
+        admin.save();
+        return res.send("Edit admin done")
+      })
+    }
+    else{
+      AdminModel.findOne({
+        adminname: req.adminname
+      }).then(function(admin){
+        var created = DateTime.now().toString();
+        bcrypt.hash(req.body.password, salt)
+        .then(function(hashpassword){
+          console.log(req.adminname)
+          admin.password = hashpassword;
+          admin.save();
+          return res.send("Edit password done")
+        })
+      })
+    }
   },
   deleteAdmin: function(req,res, next){
     const{

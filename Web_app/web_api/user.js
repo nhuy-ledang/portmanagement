@@ -72,7 +72,6 @@ module.exports = {
 				    results.push(row);
 				  })
 				  .on('end', async () =>  {
-				  	
 				  	await UserModel.findOne({}, { id: 1 }).sort({ id: -1 }).then(function(id){
 				  		// console.log(id.id)
 				  		let idCounter=id.id;
@@ -83,65 +82,66 @@ module.exports = {
 							  return item;
 							});
 				  	}) 
-				  	
-						console.log(results);
-				    results.forEach(async item => {
-				    	const {
-				    		id,
-				        username,
-				        email,
-				        group
-				      } = item;
-				      var created = DateTime.now().toString();
-				      await UserModel.findOne({
-				        username: username
-				      })
-				        .then(async function(user) {
-				        	var error = 0;
-				        	temp++;
-				          if (user) {
-				          	error = 1;
-				            console.log("User already");
-				            // console.log(errors)
-				            // console.log(count)
-				            errors.push({
-				            	"username": username,
-				            	"error": "User already" 
-				            })
-				          }
-				          if (username == "") {
-				            // console.log("Invailid username");
-				            error = 1;
-				            errors.push({
-				            	username: username,
-				            	error: "Invailid username" 
-				            })
-				          }
-				          if(!error){
-					          const UserData = new UserModel({
-					          	id: id,
-					          	username: username,
-											email: email,
-											group: group,
-											right: "No access",
-											created: created
-					          });
-					          await UserData.save({
-					          	alo: count++ 
-					          	});
-					        }
-				          // console.log(count)
-				          if(temp == results.length){
-				          	try{
-				          	return res.send({
-				          		"Saved": count,
-				          		"Error": errors
-				          	})
-				          	}
-				          	catch{}
-				          }
-				      	})
-				    })
+				  	RightModel.findOne( {right:"No access"} ).then(function(right){
+							// console.log(results);
+					    results.forEach(async item => {
+					    	const {
+					    		id,
+					        username,
+					        email,
+					        group
+					      } = item;
+					      var created = DateTime.now().toString();
+					      await UserModel.findOne({
+					        username: username
+					      })
+					        .then(async function(user) {
+					        	var error = 0;
+					        	temp++;
+					          if (user) {
+					          	error = 1;
+					            console.log("User already");
+					            // console.log(errors)
+					            // console.log(count)
+					            errors.push({
+					            	"username": username,
+					            	"error": "User already" 
+					            })
+					          }
+					          if (username == "") {
+					            // console.log("Invailid username");
+					            error = 1;
+					            errors.push({
+					            	username: username,
+					            	error: "Invailid username" 
+					            })
+					          }
+					          if(!error){
+						          const UserData = new UserModel({
+						          	id: id,
+						          	username: username,
+												email: email,
+												group: group,
+												right: right._id,
+												created: created
+						          });
+						          await UserData.save({
+						          	alo: count++ 
+						          	});
+						        }
+					          // console.log(count)
+					          if(temp == results.length){
+					          	try{
+					          	return res.send({
+					          		"Saved": count,
+					          		"Error": errors
+					          	})
+					          	}
+					          	catch{}
+					          }
+					      	})
+					    })
+					  })
 				    console.log("asdasd")
 				  });
 			}

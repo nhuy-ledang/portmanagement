@@ -6,7 +6,7 @@ const logSchema = new Schema({
 	    type: String,
 	    default: Date.now
   	},
-	username: {
+	adminname: {
 	    type: String,
 	    require: true
 	  },

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const multer = require('multer');
+const LayoutModel = require("../models/layout");
 
 const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp']; 
 const storage = multer.diskStorage({
@@ -11,8 +12,11 @@ const storage = multer.diskStorage({
     callback(null, dir);
   },
   filename: (req, file, callback) => {
-    callback(null, `${file.originalname}`);
-    console.log("Saved");
+    LayoutModel.findOne({}, { id: 1 }).sort({ id: -1 }).then(function(id){
+      file.originalname = id.id + "_" + file.originalname;
+      callback(null, `${file.originalname}`);
+      console.log("Saved");
+    })
   },
 });
 
