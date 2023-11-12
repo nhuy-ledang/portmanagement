@@ -3,7 +3,7 @@ const headers = {
   "Content-Type": "application/json",
   Authorization: token,
 };
-const api_admin_url = "https://hpid.homethang.duckdns.org/api/admin";
+const api_admin_url = `${process.env.REACT_APP_API_URL}/admin`;
 
 export const getAdmin = async () => {
   try {

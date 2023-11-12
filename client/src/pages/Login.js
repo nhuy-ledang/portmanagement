@@ -6,28 +6,13 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 async function loginUser(credentials) {
-  try {
-    const response = await fetch(
-      "https://hpid.homethang.duckdns.org/api/login",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-      }
-    );
-    
-    if (!response.ok) {
-      throw new Error("Request failed with status " + response.status);
-    }
-    
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Login error:", error);
-    throw error;
-  }
+  return fetch(`${process.env.REACT_APP_API_URL}/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  }).then((data) => data.json());
 }
 
 export default function Login({ setToken }) {
@@ -40,10 +25,7 @@ export default function Login({ setToken }) {
       localStorage.removeItem("token");
       setTokenRef.current("");
     }
-
-    // Đăng ký sự kiện trước khi đóng trình duyệt
     window.addEventListener("beforeunload", logout);
-
     return () => {
       window.removeEventListener("beforeunload", logout);
     };
@@ -56,24 +38,24 @@ export default function Login({ setToken }) {
       toast.error("Please fill in both Administrator and Password fields.");
       return;
     }
-
     try {
       const token = await loginUser({
         adminname,
         password,
-      });
-
+      })
       if (token === null || token === undefined) {
         toast.error("Invalid response from the server.");
       } else if (token === "Wrong adminname or password") {
         toast.error("Incorrect Administrator or Password.");
       } else {
-        localStorage.setItem("token", token);
+        toast.success("Login successful!");       
+        localStorage.setItem("token", token);               
         setToken(token);
-        toast.success("Login successful!");
+        setTimeout(() => {}, 3000);       
       }
-    } catch (error) {
-      toast.error("An error occurred: " + error.message);
+    }
+    catch (error){
+      toast.error(error.message);
     }
   };
 

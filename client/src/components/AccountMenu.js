@@ -2,7 +2,7 @@ import { useState } from "react";
 import AccountDropdown from "./AccountDropdown";
 
 import profileImage from "../img/profile-image.png";
-
+import useToken from "../useToken";
 
 export default function AccountMenu() {
   const [isAccountDropdownVisible, setAccountDropdownVisible] = useState(false);
@@ -15,6 +15,8 @@ export default function AccountMenu() {
     setAccountDropdownVisible(false);
   };
 
+  const { token, setToken } = useToken();
+
   return (
     <>
         <div
@@ -23,7 +25,7 @@ export default function AccountMenu() {
           onMouseLeave={handleAccountMouseLeave}
         >
           <img src={profileImage} alt="" />
-          {isAccountDropdownVisible && <AccountDropdown />}
+          {isAccountDropdownVisible && <AccountDropdown setToken={setToken}/>}
         </div>
     </>
   )

@@ -1,35 +1,32 @@
 import React, { useEffect, useState } from "react";
-import "../../../App.scss";
-import CreateUserManagement from "./CreateUserManagement";
-import EditUserManagement from "./EditUserManagement";
+import "./LayoutManagement.scss";
+import CreateLayoutManagement from "./CreateLayoutManagement";
+import EditLayoutManagement from "./EditLayoutManagement";
 import ReactPaginate from "react-paginate";
 import { AiFillDelete } from "react-icons/ai";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  getUser,
-  deleteUser,
-} from "../../../services/UserService";
+import { getLayout, deleteLayout } from "../../../services/LayoutService";
+import { toast } from "react-toastify";
 
-function UserManagement() {
+function LayoutManagement() {
   const [data, setData] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 8;
+  const itemsPerPage = 5;
   const [selectedItems, setSelectedItems] = useState([]);
-  const [editingUserId, setEditingUserId] = useState(null);
-
+  const [editingLayoutId, setEditingLayoutId] = useState(null);
   const pageCount = data ? Math.ceil(data.length / itemsPerPage) : 0;
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
 
   useEffect(() => {
-    getUser()
-      .then((userData) => {
-        if (Array.isArray(userData)) {
-          setData(userData);
+    getLayout()
+      .then((layoutData) => {
+        if (Array.isArray(layoutData)) {
+          setData(layoutData);
         } else {
-          console.log("Invalid data format:", userData);
+          console.log("Invalid data format:", layoutData);
           window.location.reload();
         }
       })
@@ -38,25 +35,23 @@ function UserManagement() {
       });
   }, [currentPage]);
 
-  const handleEditUser = (userId) => {
-    setEditingUserId(userId);
+  const handleEditLayout = (adminId) => {
+    setEditingLayoutId(adminId);
   };
 
-  const handleUpdateTable = () => {
-    getUser().then((userData) => {
-      setData(userData);
-    });
+  const handleUpdateTable = (layout) => {
+    setData([layout, ...data]);
   };
 
-  const handleUpdateUserFromModal = (user) => {
-    console.error(">> Check handleUpdateUserFromModal", user);
+  const handleUpdateAdminFromModal = (layout) => {
+    console.log(">>> Check handleUpdateLayoutFromModal:", layout);
   };
 
-  const handleSelect = (user) => {
-    if (selectedItems.includes(user)) {
-      setSelectedItems(selectedItems.filter((item) => item !== user));
+  const handleSelect = (layout) => {
+    if (selectedItems.includes(layout)) {
+      setSelectedItems(selectedItems.filter((item) => item !== layout));
     } else {
-      setSelectedItems([...selectedItems, user]);
+      setSelectedItems([...selectedItems, layout]);
     }
   };
 
@@ -68,29 +63,31 @@ function UserManagement() {
     }
   };
 
-  const deleteSelectedUser = () => {
-    deleteUser(selectedItems)
+  const deleteSelectedLayout = () => {
+    deleteLayout(selectedItems)
       .then(() => {
-        handleUpdateTable();
-        setSelectedItems([]);
+        getLayout().then((layoutData) => {
+          setData(layoutData);
+          setSelectedItems([]);
+        });
+        toast.success("Layout deleted successfully!");
       })
       .catch((error) => {
-        console.error("Error deleting users:", error);
+        console.error("Error deleting admins:", error);
       });
   };
 
-
   return (
     <>
-      <div className="administrator-table">
-        <h2>User Management</h2>
+      <div className="layout-table">
+        <h2>Layout Management</h2>
         <div className="button-action">
           <div className="btn-delete-add">
             <button
               className="btn btn-danger d-flex align-items-center"
               onClick={() => {
                 if (window.confirm("Are You Sure?")) {
-                  deleteSelectedUser();
+                  deleteSelectedLayout();
                 }
               }}
               disabled={selectedItems.length === 0}
@@ -98,9 +95,12 @@ function UserManagement() {
               <AiFillDelete />
             </button>
             <div>
-              <CreateUserManagement handleUpdateTable={handleUpdateTable} />
+              <CreateLayoutManagement handleUpdateTable={handleUpdateTable} />
             </div>
           </div>
+          {/* <button className="btn btn-success d-flex align-items-center">
+            <MdCreateNewFolder />
+          </button> */}
         </div>
         {data ? (
           <>
@@ -114,9 +114,8 @@ function UserManagement() {
                       onChange={handleSelectAll}
                     />
                   </th>
-                  <th className="col-3 name-col">USERNAME</th>
-                  <th className="col-3 name-col">EMAIL</th>
-                  <th className="col-3 name-col">GROUP</th>
+                  <th className="col-4 name-col">LAYOUT NAME</th>
+                  <th className="col-7 name-col">LAYOUT PLAN</th>
                 </tr>
               </thead>
               <tbody>
@@ -125,38 +124,40 @@ function UserManagement() {
                     currentPage * itemsPerPage,
                     (currentPage + 1) * itemsPerPage
                   )
-                  .map((user, index) => (
-                    <tr key={index}>
+                  .map((layout) => (
+                    <tr key={layout.id}>
                       <td className="table-data">
                         <input
                           type="checkbox"
-                          checked={selectedItems.includes(user)}
-                          onChange={() => handleSelect(user)}
+                          checked={selectedItems.includes(layout)}
+                          onChange={() => handleSelect(layout)}
                         />
                       </td>
                       <td className="table-data adminname-item">
-                        {editingUserId === user.id ? (
+                        {editingLayoutId === layout.id ? (
                           <>
-                            <span onClick={() => handleEditUser(user.id)}>
-                              {user.username}
+                            <span onClick={() => handleEditLayout(layout.id)}>
+                              {layout.layoutname}
                             </span>
                             <div>
-                              <EditUserManagement
-                                handleUpdateUserFromModal={
-                                  handleUpdateUserFromModal
-                                }
-                                dataUserEdit={user}
+                              <EditLayoutManagement
+                                handleUpdateAdminFromModal={handleUpdateAdminFromModal}
+                                dataLayoutEdit={layout}
                               />
                             </div>
                           </>
                         ) : (
-                          <span onClick={() => handleEditUser(user.id)}>
-                            {user.username}
+                          <span onClick={() => handleEditLayout(layout.id)}>
+                            {layout.layoutname}
                           </span>
                         )}
                       </td>
-                      <td className="table-data">{user.email}</td>
-                      <td className="table-data">{user.group}</td>
+                      <td className="table-data">
+                        <img className="img-layout"
+                          src={`${process.env.REACT_APP_API_URL}/images/${layout.layoutdir}`}
+                          alt={layout.layoutname}
+                        />
+                      </td>
                     </tr>
                   ))}
               </tbody>
@@ -183,4 +184,4 @@ function UserManagement() {
   );
 }
 
-export default UserManagement;
+export default LayoutManagement;

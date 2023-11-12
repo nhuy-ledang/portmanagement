@@ -1,17 +1,18 @@
-const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
+const token = localStorage.token ? JSON.parse(localStorage.token).token : null;
+
 const headers = {
   "Content-Type": "application/json",
   Authorization: token,
 };
-const api_user_url = "https://hpid.homethang.duckdns.org/api/user";
+const api_user_url = `${process.env.REACT_APP_API_URL}/user`;
+const api_user_right_url = `${process.env.REACT_APP_API_URL}/right`;
+const api_import_user_url = `${process.env.REACT_APP_API_URL}/user?csv=true`;
 
 export const getUser = async () => {
   try {
-    const token = localStorage.token
-      ? JSON.parse(localStorage.token)?.token
-      : null;
+    const token = localStorage.token ? JSON.parse(localStorage.token).token : null;
     if (!token) {
-      console.error(">> Token is missing or invalid. Please log in.");
+      console.error("Token is missing or invalid. Please log in.");
       return;
     }
 
@@ -22,25 +23,17 @@ export const getUser = async () => {
     return jsonData;
   } catch (error) {
     console.error("Error:", error);
+    throw error;
   }
 };
 
 export const postUser = async (username, email, group) => {
   const data = { username, email, group };
   try {
-    const token = localStorage.token
-      ? JSON.parse(localStorage.token)?.token
-      : null;
-
     if (!token) {
       console.error("Token is missing or invalid. Please log in.");
       return;
     }
-
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: token,
-    };
 
     const response = await fetch(api_user_url, {
       method: "POST",
@@ -65,15 +58,14 @@ export const patchUser = async (username, email, group) => {
   try {
     const response = await fetch(api_user_url, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: JSON.parse(localStorage.token).token,
-      },
+      headers,
       body: JSON.stringify(data),
     });
+
     if (!response.ok) {
       throw new Error("Request failed with status code " + response.status);
     }
+
     const responseData = await response.text();
     return responseData;
   } catch (error) {
@@ -82,56 +74,51 @@ export const patchUser = async (username, email, group) => {
   }
 };
 
-export const deleteUser = (selectedItems) => {
-  if (!token) {
-    console.error("Token is missing or invalid. Please log in.");
-    return;
+export const deleteUser = async (selectedItems) => {
+  try {
+    if (!token) {
+      console.error("Token is missing or invalid. Please log in.");
+      return;
+    }
+
+    const deletePromises = selectedItems.map((user) => {
+      const requestOptions = {
+        method: "DELETE",
+        headers,
+        body: JSON.stringify({
+          username: user.username,
+        }),
+      };
+
+      return fetch(api_user_url, requestOptions)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.text();
+        })
+        .then((text) => {
+          if (text === "User removed") {
+            return "User removed successfully";
+          } else {
+            throw new Error("Unexpected response: " + text);
+          }
+        });
+    });
+
+    return Promise.all(deletePromises);
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
   }
-
-  const deletePromises = selectedItems.map((user) => {
-    const requestOptions = {
-      method: "DELETE",
-      headers: headers,
-      body: JSON.stringify({
-        username: user.username,
-      }),
-    };
-
-    return fetch(api_user_url, requestOptions)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        return response.text();
-      })
-      .then((text) => {
-        if (text === "User removed") {
-          return "User removed successfully";
-        } else {
-          throw new Error("Unexpected response: " + text);
-        }
-      });
-  });
-
-  return Promise.all(deletePromises);
 };
 
-
-
-
-// User Right
 export const getUserRight = async () => {
   try {
     if (!token) {
-      console.error(">> Token is missing or invalid. Please log in.");
+      console.error("Token is missing or invalid. Please log in.");
       return;
     }
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: token,
-    };
-
     const apiUrlWithRightParam = `${api_user_url}?right=true`;
 
     const response = await fetch(apiUrlWithRightParam, {
@@ -141,16 +128,11 @@ export const getUserRight = async () => {
     return jsonData;
   } catch (error) {
     console.error("Error:", error);
+    throw error;
   }
 };
-
 export const patchUserRight = async (username, email, group, right) => {
   const data = { username, email, group, right };
-  const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: token,
-  };
   const apiUrlWithRightParam = `${api_user_url}?right=true`;
   try {
     const response = await fetch(apiUrlWithRightParam, {
@@ -178,13 +160,13 @@ export const patchUserRight = async (username, email, group, right) => {
 
 export const getOptionsRight = async () => {
   try {
-    const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
+    
     if (!token) {
       console.error(">> Token is missing or invalid. Please log in.");
       return []; // Trả về một mảng rỗng trong trường hợp lỗi hoặc không có dữ liệu
     }
 
-    const response = await fetch("https://hpid.homethang.duckdns.org/api/right", {
+    const response = await fetch(api_user_right_url, {
       headers: {
         "Content-Type": "application/json",
         Authorization: token,
@@ -203,38 +185,36 @@ export const getOptionsRight = async () => {
   }
 };
 
-
-export const postUserCSV = async () => {
-  const api_user_csv_url = "https://hpid.homethang.duckdns.org/api/user";
-  // const data = { username, email, group };
+export const postUserCSV = async (userData) => {
   try {
-    const token = localStorage.token
-      ? JSON.parse(localStorage.token)?.token
-      : null;
-
-    if (!token) {
-      console.error("Token is missing or invalid. Please log in.");
-      return;
-    }
-
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: token,
-    };
-
-    const response = await fetch(api_user_csv_url, {
-      method: "POST",
-      headers,
+    const response = await fetch(api_import_user_url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', Authorization: token,
+      },
+      body: JSON.stringify({ data: userData }),
     });
 
     if (!response.ok) {
-      throw new Error("Request failed with status code " + response.status);
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const responseData = await response.text();
+    let responseData;
+
+    // Check if the response is JSON
+    if (response.headers.get('Content-Type')?.includes('application/json')) {
+      responseData = await response.json();
+    } else {
+      // If not JSON, treat it as plain text
+      responseData = await response.text();
+    }
+
+    console.log('API response:', responseData);
+
     return responseData;
   } catch (error) {
-    console.error("Error:", error);
-    throw error;
+    console.error('Error in postUserCSV:', error.message);
+    throw new Error('Error in postUserCSV');
   }
 };
+
