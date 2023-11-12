@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../../../App.scss";
 import CreateUserManagement from "./CreateUserManagement";
 import EditUserManagement from "./EditUserManagement";
+import ImportUserManagement from "./ImportUserManagement";
 import ReactPaginate from "react-paginate";
 import { AiFillDelete } from "react-icons/ai";
 import { ToastContainer } from "react-toastify";
@@ -101,6 +102,7 @@ function UserManagement() {
               <CreateUserManagement handleUpdateTable={handleUpdateTable} />
             </div>
           </div>
+          <ImportUserManagement handleUpdateTable={handleUpdateTable} />
         </div>
         {data ? (
           <>

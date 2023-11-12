@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../../App.scss";
-import EditRightAssignment from "./EditRightAssignment";
+import AssignRight from "./AssignRight";
 import ReactPaginate from "react-paginate";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -70,7 +70,7 @@ function RightAssignment() {
                                 {user.username}
                               </span>
                               <div>
-                                <EditRightAssignment
+                                <AssignRight
                                   handleUpdateUserRightFromModal={
                                     handleUpdateUserRightFromModal
                                   }

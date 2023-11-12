@@ -154,7 +154,7 @@ function LayoutManagement() {
                       </td>
                       <td className="table-data">
                         <img className="img-layout"
-                          src={`${process.env.REACT_APP_API_URL}/images/${layout.layoutdir}`}
+                          src={`http://localhost:8080/images/${layout.layoutdir}`}
                           alt={layout.layoutname}
                         />
                       </td>

@@ -158,32 +158,23 @@ export const patchUserRight = async (username, email, group, right) => {
   }
 };
 
-export const getOptionsRight = async () => {
+
+export const getRightsFromAPI = async () => {
   try {
-    
-    if (!token) {
-      console.error(">> Token is missing or invalid. Please log in.");
-      return []; // Trả về một mảng rỗng trong trường hợp lỗi hoặc không có dữ liệu
-    }
-
-    const response = await fetch(api_user_right_url, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-    });
+    const response = await fetch(api_user_right_url); 
     if (!response.ok) {
-      console.error("Request failed with status code " + response.status);
-      return []; // Trả về một mảng rỗng trong trường hợp lỗi
+      throw new Error("Failed to fetch rights");
     }
 
-    const jsonData = await response.json();
-    return jsonData;
+    const data = await response.json();
+    console.log(data);
+    return data; 
   } catch (error) {
-    console.error("Error:", error);
-    return []; // Trả về một mảng rỗng trong trường hợp lỗi
+    console.error("Error fetching rights:", error);
+    throw error;
   }
 };
+
 
 export const postUserCSV = async (userData) => {
   try {
