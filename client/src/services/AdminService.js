@@ -119,3 +119,53 @@ export const deleteAdmin = (selectedItems) => {
 
   return Promise.all(deletePromises);
 };
+
+
+// export const changePassAdmin = async (password, confirmpassword) => {
+//   const data = { password, confirmpassword };
+//   try {
+//     const response = await fetch(api_admin_url, {
+//       method: "PATCH",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: JSON.parse(localStorage.token).token,
+//       },
+//       body: JSON.stringify(data),
+//     });
+//     if (!response.ok) {
+//       throw new Error("Request failed with status code " + response.status);
+//     }
+//     const responseData = await response.text();
+//     return responseData;
+//   } catch (error) {
+//     console.error("Error:", error);
+//     throw error;
+//   }
+// };
+
+export const changePassAdmin = async (password, confirmpassword) => {
+  const data = { password, confirmpassword };
+  const api_admin_change_pass_url = `${api_admin_url}?password=true`;
+  try {
+    const response = await fetch(api_admin_change_pass_url, {
+      method: "PATCH",
+      headers, 
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error("Request failed with status code " + response.status);
+    }
+
+    const responseData = await response.text();
+
+    if (responseData === "Edit password done") {
+      return "Edit successfully"; 
+    } else {
+      throw new Error("Edit failed: " + responseData);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};

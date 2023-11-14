@@ -29,3 +29,14 @@ export const isFormCreateValid = (
       password && password.trim() !== ""
     );
   };
+
+
+  export const isFormChangePassValid = (
+    password,
+    confirmpassword
+  ) => {
+    return (
+      password && password.trim() !== "" &&
+      confirmpassword && confirmpassword.trim() !== ""
+    );
+  };

@@ -1,6 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import ChangePasswordAdmin from "../pages/admin/Administrator/ChangePasswordAdmin";
 
 export default function AccountDropdown({ setToken }) {
   const handleLogout = async () => {
@@ -20,9 +21,10 @@ export default function AccountDropdown({ setToken }) {
     <div className="account-dropdown">
       <ul>
         <li>
-          <Link to="/change-password" className="nav-link">
+          {/* <Link to="/change-password" className="nav-link">
             Change Password
-          </Link>
+          </Link> */}
+          <ChangePasswordAdmin />
         </li>
         <li>
           <button type="button" className="nav-link" onClick={handleLogout}>

@@ -5,6 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import { AiFillEdit } from "react-icons/ai";
 import { isFormEditValid } from "../../../validations/AdminValidation";
 import { patchAdmin } from "../../../services/AdminService";
+import { toast } from "react-toastify"; 
 
 export default function EditAdministrator(props) {
   const [adminname, setAdminname] = useState("");
@@ -33,6 +34,7 @@ export default function EditAdministrator(props) {
         fullname: fullname,
       });
     }
+    toast.success("Admin edited successfully!");
     console.log(response);
     window.location.reload();
   };

@@ -110,6 +110,7 @@ export default function EditLayoutManagement(props) {
                 name="file"
                 className="form-control"
                 onChange={handleImageUpload}
+                // onChange={(e) => setLayoutdir(e.target.value)}
               />
             </div>
             <div id="image-container"></div>

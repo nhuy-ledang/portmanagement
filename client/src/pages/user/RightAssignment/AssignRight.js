@@ -4,30 +4,19 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import "react-toastify/dist/ReactToastify.css";
 import { AiFillEdit } from "react-icons/ai";
-import { patchUserRight } from "../../../services/UserService";
-
+import { patchUserRight, getOptions  } from "../../../services/UserService";
+import {isFormEditRightValid} from "../../../validations/RightValidation"
 export default function AssignRight(props) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [group, setGroup] = useState("");
   const [right, setRight] = useState("");
   const [show, setShow] = useState(false);
+  const [options, setOptions] = useState([]); 
   const { dataUserRightEdit, handleUpdateUserRightFromModal } = props;
-  const options = [
-    { id: 1, right: "No access", vlan: 1 },
-    { id: 2, right: "Internet only", vlan: 2 },
-    { id: 3, right: "Full access", vlan: 3 },
-  ];
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  const isFormEditValid = (right) => {
-    if (typeof right !== "string") {
-      return false;
-    }
-    return right && right.trim() !== "";
-  };
 
   useEffect(() => {
     if (show && dataUserRightEdit) {
@@ -37,6 +26,18 @@ export default function AssignRight(props) {
       setRight(dataUserRightEdit.right);
     }
   }, [dataUserRightEdit, show]);
+
+  
+    useEffect(() => {
+        getOptions()
+        .then((options) => {
+          setOptions(options);
+        })
+        .catch((error) => {
+          console.error("Error fetching options:", error);
+        });
+    }, []);
+
 
   const handleEditUser = async () => {
     try {
@@ -93,7 +94,6 @@ export default function AssignRight(props) {
                 value={right}
                 onChange={(e) => setRight(e.target.value)}
               >
-                {/* <option value="">Choose...</option> */}
                 {options.map((option) => (
                   <option key={option.id} value={option.right}>
                     {option.right}
@@ -110,7 +110,7 @@ export default function AssignRight(props) {
           <Button
             variant="primary"
             onClick={handleEditUser}
-            disabled={!isFormEditValid(right)}
+            disabled={!isFormEditRightValid(right)}
           >
             Update
           </Button>

@@ -29,7 +29,9 @@ function LayoutManagement() {
           console.log("Invalid data format:", layoutData);
           window.location.reload();
         }
+       
       })
+      
       .catch((error) => {
         console.log("Error loading data:", error);
       });

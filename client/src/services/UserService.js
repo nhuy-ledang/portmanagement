@@ -6,7 +6,7 @@ const headers = {
 };
 const api_user_url = `${process.env.REACT_APP_API_URL}/user`;
 const api_user_right_url = `${process.env.REACT_APP_API_URL}/right`;
-const api_import_user_url = `${process.env.REACT_APP_API_URL}/user?csv=true`;
+// const api_import_user_url = `${process.env.REACT_APP_API_URL}/user?csv=true`;
 
 export const getUser = async () => {
   try {
@@ -131,13 +131,14 @@ export const getUserRight = async () => {
     throw error;
   }
 };
+
 export const patchUserRight = async (username, email, group, right) => {
   const data = { username, email, group, right };
   const apiUrlWithRightParam = `${api_user_url}?right=true`;
   try {
     const response = await fetch(apiUrlWithRightParam, {
       method: "PATCH",
-      headers, // Điều này sẽ truyền headers trực tiếp, không cần phải wrap lại trong một đối tượng headers
+      headers, 
       body: JSON.stringify(data),
     });
 
@@ -148,7 +149,7 @@ export const patchUserRight = async (username, email, group, right) => {
     const responseData = await response.text();
 
     if (responseData === "Edit right done") {
-      return "Edit successfully"; // Hoặc trả về bất kỳ thông điệp thành công nào bạn muốn.
+      return "Edit successfully"; 
     } else {
       throw new Error("Edit failed: " + responseData);
     }
@@ -159,53 +160,35 @@ export const patchUserRight = async (username, email, group, right) => {
 };
 
 
-export const getRightsFromAPI = async () => {
-  try {
-    const response = await fetch(api_user_right_url); 
-    if (!response.ok) {
-      throw new Error("Failed to fetch rights");
-    }
-
-    const data = await response.json();
-    console.log(data);
-    return data; 
-  } catch (error) {
-    console.error("Error fetching rights:", error);
-    throw error;
-  }
-};
 
 
-export const postUserCSV = async (userData) => {
-  try {
-    const response = await fetch(api_import_user_url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json', Authorization: token,
-      },
-      body: JSON.stringify({ data: userData }),
+export function getOptions() {
+  const token = localStorage.token ? JSON.parse(localStorage.token).token : null;
+  return fetch(api_user_right_url, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch options");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (!Array.isArray(data)) {
+        throw new Error("Options data is not an array");
+      }
+      return data.map((item) => ({
+        id: item.id,
+        right: item.right,
+        vlan: item.vlan,
+      }));
+    })
+    .catch((error) => {
+      console.error("Error fetching options:", error);
+      throw error;
     });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    let responseData;
-
-    // Check if the response is JSON
-    if (response.headers.get('Content-Type')?.includes('application/json')) {
-      responseData = await response.json();
-    } else {
-      // If not JSON, treat it as plain text
-      responseData = await response.text();
-    }
-
-    console.log('API response:', responseData);
-
-    return responseData;
-  } catch (error) {
-    console.error('Error in postUserCSV:', error.message);
-    throw new Error('Error in postUserCSV');
-  }
-};
+}
 
