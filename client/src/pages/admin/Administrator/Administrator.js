@@ -8,6 +8,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getAdmin, deleteAdmin } from "../../../services/AdminService";
+import { toast } from "react-toastify";
 
 function Administrator() {
   const [data, setData] = useState(null);
@@ -34,14 +35,6 @@ function Administrator() {
     };
     fetchDataAndUpdateState();
   }, [token, currentPage]);
-
-  // useEffect(() => {
-  //   const fetchDataAndUpdateState = async () => {
-  //     const adminData = await getAdmin(token);
-  //     setData(adminData);
-  //   };
-  //   fetchDataAndUpdateState();
-  // }, []);
 
   const handleEditAdmin = (adminId) => {
     setEditingAdminId(adminId);
@@ -74,15 +67,18 @@ function Administrator() {
   const deleteSelectedAdmin = () => {
     deleteAdmin(selectedItems)
       .then(() => {
-        getAdmin().then((adminData) => {
+        getAdmin(token).then((adminData) => {
           setData(adminData);
           setSelectedItems([]);
         });
+        toast.success("Admin deleted successfully!");
       })
       .catch((error) => {
         console.error("Error deleting admins:", error);
       });
   };
+
+  
 
   return (
     <>

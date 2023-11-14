@@ -67,7 +67,7 @@ function LayoutManagement() {
   const deleteSelectedLayout = () => {
     deleteLayout(selectedItems)
       .then(() => {
-        getLayout().then((layoutData) => {
+        getLayout(token).then((layoutData) => {
           setData(layoutData);
           setSelectedItems([]);
         });

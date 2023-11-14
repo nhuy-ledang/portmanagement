@@ -11,6 +11,7 @@ import {
   getUser,
   deleteUser,
 } from "../../../services/UserService";
+import { toast } from "react-toastify";
 
 function UserManagement() {
   const [data, setData] = useState(null);
@@ -70,17 +71,22 @@ function UserManagement() {
     }
   };
 
+
   const deleteSelectedUser = () => {
     deleteUser(selectedItems)
       .then(() => {
-        handleUpdateTable();
-        setSelectedItems([]);
+        getUser(token).then((userData) => {
+          setData(userData);
+          setSelectedItems([]);
+        });
+        toast.success("User deleted successfully!");
       })
       .catch((error) => {
-        console.error("Error deleting users:", error);
+        console.error("Error deleting admins:", error);
       });
   };
 
+  
 
   return (
     <>
