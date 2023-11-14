@@ -15,21 +15,21 @@ function RightAssignment() {
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
+  const token = localStorage.token
+    ? JSON.parse(localStorage.token)?.token
+    : null;
 
   useEffect(() => {
-    getUserRight()
-      .then((userData) => {
-        if (Array.isArray(userData)) {
-          setData(userData);
-        } else {
-          console.log("Invalid data format:", userData);
-          window.location.reload();
-        }
-      })
-      .catch((error) => {
-        console.log("Error loading data:", error);
-      });
-  }, [currentPage]);
+    const fetchDataAndUpdateState = async () => {
+      try {
+        const userData = await getUserRight(token);
+        setData(userData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchDataAndUpdateState();
+  }, [token, currentPage]);
 
   const handleEditUserRight = (userId) => {
     setEditingUserRightId(userId);

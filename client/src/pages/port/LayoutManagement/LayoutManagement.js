@@ -20,22 +20,21 @@ function LayoutManagement() {
     setCurrentPage(selected);
   };
 
+  const token = localStorage.token
+    ? JSON.parse(localStorage.token)?.token
+    : null;
+
   useEffect(() => {
-    getLayout()
-      .then((layoutData) => {
-        if (Array.isArray(layoutData)) {
-          setData(layoutData);
-        } else {
-          console.log("Invalid data format:", layoutData);
-          window.location.reload();
-        }
-       
-      })
-      
-      .catch((error) => {
-        console.log("Error loading data:", error);
-      });
-  }, [currentPage]);
+    const fetchDataAndUpdateState = async () => {
+      try {
+        const layoutData = await getLayout(token);
+        setData(layoutData);
+      } catch (error) {
+        console.error("Error fetching layout data:", error);
+      }
+    };
+    fetchDataAndUpdateState();
+  }, [token, currentPage]);
 
   const handleEditLayout = (adminId) => {
     setEditingLayoutId(adminId);

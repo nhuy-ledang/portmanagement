@@ -24,20 +24,21 @@ function UserManagement() {
     setCurrentPage(selected);
   };
 
+  const token = localStorage.token
+    ? JSON.parse(localStorage.token)?.token
+    : null;
+
   useEffect(() => {
-    getUser()
-      .then((userData) => {
-        if (Array.isArray(userData)) {
-          setData(userData);
-        } else {
-          console.log("Invalid data format:", userData);
-          window.location.reload();
-        }
-      })
-      .catch((error) => {
-        console.log("Error loading data:", error);
-      });
-  }, [currentPage]);
+    const fetchDataAndUpdateState = async () => {
+      try {
+        const userData = await getUser(token);
+        setData(userData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchDataAndUpdateState();
+  }, [token, currentPage]);
 
   const handleEditUser = (userId) => {
     setEditingUserId(userId);

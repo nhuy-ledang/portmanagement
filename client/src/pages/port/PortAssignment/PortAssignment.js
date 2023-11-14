@@ -15,20 +15,21 @@ function PortAssignment() {
     setCurrentPage(selected);
   };
 
+  const token = localStorage.token
+    ? JSON.parse(localStorage.token)?.token
+    : null;
+
   useEffect(() => {
-    getPort()
-      .then((portData) => {
-        if (Array.isArray(portData)) {
-          setData(portData);
-        } else {
-          console.log("Invalid data format:", portData);
-          window.location.reload();
-        }
-      })
-      .catch((error) => {
-        console.log("Error loading data:", error);
-      });
-  }, [currentPage]);
+    const fetchDataAndUpdateState = async () => {
+      try {
+        const portData = await getPort(token);
+        setData(portData);
+      } catch (error) {
+        console.error("Error fetching port data:", error);
+      }
+    };
+    fetchDataAndUpdateState();
+  }, [token, currentPage]);
 
   return (
     <>

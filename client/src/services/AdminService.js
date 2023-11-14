@@ -4,23 +4,25 @@ const headers = {
   Authorization: token,
 };
 const api_admin_url = `${process.env.REACT_APP_API_URL}/admin`;
+const api_admin_change_pass_url = `${api_admin_url}?password=true`;
 
-export const getAdmin = async () => {
+export const getAdmin = async (token) => {
   try {
-    const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
-
     if (!token) {
-      console.error(">> Token is missing or invalid. Please log in.");
-      return;
+      console.error("Token is missing or invalid. Please log in.");
+      return null;
     }
-
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
     const response = await fetch(api_admin_url, {
       headers,
     });
-    const jsonData = await response.json();
-    return jsonData;
+    return await response.json();
   } catch (error) {
     console.error("Error:", error);
+    return null;
   }
 };
 
@@ -33,8 +35,6 @@ export const postAdmin = async (
 ) => {
   const data = { adminname, email, password, confirmpassword, fullname };
   try {
-    const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
-
     if (!token) {
       console.error("Token is missing or invalid. Please log in.");
       return;
@@ -86,11 +86,6 @@ export const patchAdmin = async (adminname, email, fullname) => {
 };
 
 export const deleteAdmin = (selectedItems) => {
-  if (!token) {
-    console.error("Token is missing or invalid. Please log in.");
-    return;
-  }
-
   const deletePromises = selectedItems.map((admin) => {
     const requestOptions = {
       method: "DELETE",
@@ -120,32 +115,8 @@ export const deleteAdmin = (selectedItems) => {
   return Promise.all(deletePromises);
 };
 
-
-// export const changePassAdmin = async (password, confirmpassword) => {
-//   const data = { password, confirmpassword };
-//   try {
-//     const response = await fetch(api_admin_url, {
-//       method: "PATCH",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: JSON.parse(localStorage.token).token,
-//       },
-//       body: JSON.stringify(data),
-//     });
-//     if (!response.ok) {
-//       throw new Error("Request failed with status code " + response.status);
-//     }
-//     const responseData = await response.text();
-//     return responseData;
-//   } catch (error) {
-//     console.error("Error:", error);
-//     throw error;
-//   }
-// };
-
 export const changePassAdmin = async (password, confirmpassword) => {
   const data = { password, confirmpassword };
-  const api_admin_change_pass_url = `${api_admin_url}?password=true`;
   try {
     const response = await fetch(api_admin_change_pass_url, {
       method: "PATCH",
@@ -156,7 +127,6 @@ export const changePassAdmin = async (password, confirmpassword) => {
     if (!response.ok) {
       throw new Error("Request failed with status code " + response.status);
     }
-
     const responseData = await response.text();
 
     if (responseData === "Edit password done") {

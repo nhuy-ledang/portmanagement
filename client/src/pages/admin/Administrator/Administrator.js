@@ -19,22 +19,29 @@ function Administrator() {
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
+  const token = localStorage.token
+    ? JSON.parse(localStorage.token)?.token
+    : null;
 
-useEffect(() => {
-  getAdmin()
-    .then((adminData) => {
-      if (Array.isArray(adminData)) {
+  useEffect(() => {
+    const fetchDataAndUpdateState = async () => {
+      try {
+        const adminData = await getAdmin(token);
         setData(adminData);
-      } else {
-        console.log("Invalid data format:", adminData);
-        window.location.reload();
+      } catch (error) {
+        console.error("Error fetching admin data:", error);
       }
-    })
-    .catch((error) => {
-      console.log("Error loading data:", error);
-    });
-}, [currentPage]);
+    };
+    fetchDataAndUpdateState();
+  }, [token, currentPage]);
 
+  // useEffect(() => {
+  //   const fetchDataAndUpdateState = async () => {
+  //     const adminData = await getAdmin(token);
+  //     setData(adminData);
+  //   };
+  //   fetchDataAndUpdateState();
+  // }, []);
 
   const handleEditAdmin = (adminId) => {
     setEditingAdminId(adminId);
@@ -98,9 +105,6 @@ useEffect(() => {
               <CreateAdministrator handleUpdateTable={handleUpdateTable} />
             </div>
           </div>
-          {/* <button className="btn btn-success d-flex align-items-center">
-            <MdCreateNewFolder />
-          </button> */}
         </div>
         {data ? (
           <>

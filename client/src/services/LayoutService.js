@@ -5,20 +5,23 @@ const headers = {
 };
 const api_layout_url = `${process.env.REACT_APP_API_URL}/layout`;
 
-export const getLayout = async () => {
+export const getLayout = async (token) => {
   try {
     if (!token) {
-      console.error(">> Token is missing or invalid. Please log in.");
-      return;
+      console.error("Token is missing or invalid. Please log in.");
+      return null;
     }
-
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
     const response = await fetch(api_layout_url, {
       headers,
     });
-    const jsonData = await response.json();
-    return jsonData;
+    return await response.json();
   } catch (error) {
     console.error("Error:", error);
+    return null;
   }
 };
 

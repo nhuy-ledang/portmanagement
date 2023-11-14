@@ -1,5 +1,4 @@
-const token = localStorage.token ? JSON.parse(localStorage.token).token : null;
-
+const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
 const headers = {
   "Content-Type": "application/json",
   Authorization: token,
@@ -7,23 +6,25 @@ const headers = {
 const api_user_url = `${process.env.REACT_APP_API_URL}/user`;
 const api_user_right_url = `${process.env.REACT_APP_API_URL}/right`;
 // const api_import_user_url = `${process.env.REACT_APP_API_URL}/user?csv=true`;
+const apiUrlWithRightParam = `${api_user_url}?right=true`;
 
-export const getUser = async () => {
+export const getUser = async (token) => {
   try {
-    const token = localStorage.token ? JSON.parse(localStorage.token).token : null;
     if (!token) {
       console.error("Token is missing or invalid. Please log in.");
-      return;
+      return null;
     }
-
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
     const response = await fetch(api_user_url, {
       headers,
     });
-    const jsonData = await response.json();
-    return jsonData;
+    return await response.json();
   } catch (error) {
     console.error("Error:", error);
-    throw error;
+    return null;
   }
 };
 
@@ -113,22 +114,42 @@ export const deleteUser = async (selectedItems) => {
   }
 };
 
-export const getUserRight = async () => {
+// export const getUserRight = async () => {
+//   try {
+//     if (!token) {
+//       console.error("Token is missing or invalid. Please log in.");
+//       return;
+//     }
+    
+
+//     const response = await fetch(apiUrlWithRightParam, {
+//       headers,
+//     });
+//     const jsonData = await response.json();
+//     return jsonData;
+//   } catch (error) {
+//     console.error("Error:", error);
+//     throw error;
+//   }
+// };
+
+export const getUserRight = async (token) => {
   try {
     if (!token) {
       console.error("Token is missing or invalid. Please log in.");
-      return;
+      return null;
     }
-    const apiUrlWithRightParam = `${api_user_url}?right=true`;
-
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
     const response = await fetch(apiUrlWithRightParam, {
       headers,
     });
-    const jsonData = await response.json();
-    return jsonData;
+    return await response.json();
   } catch (error) {
     console.error("Error:", error);
-    throw error;
+    return null;
   }
 };
 

@@ -42,7 +42,7 @@ function App() {
           <Route path='/device-detection' element={<DeviceDetection />} />
           <Route path='/report' element={<Report />} />
           <Route path='/change-password' element={<ChangePassword />} />
-          <Route path='/login' element={<Login />} />
+          <Route path='/login' element={<Login setToken={setToken} />} />
 
           <Route path='/create-administrator' element={<CreateAdministrator />} />
         </Routes>
