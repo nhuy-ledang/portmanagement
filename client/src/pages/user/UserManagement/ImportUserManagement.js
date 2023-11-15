@@ -66,9 +66,9 @@ export default function ImportUserManagement(props) {
 
   return (
     <>
-      <Button variant="warning" onClick={handleShow}>
+      <Button variant="warning" onClick={handleShow} className="text-white d-flex align-items-center gap-2">
         <MdCreateNewFolder />
-        Import
+        <span className="">Import</span>
       </Button>
       <Modal show={show} onHide={handleClose} className="modal-create-admin">
         <Modal.Header closeButton>

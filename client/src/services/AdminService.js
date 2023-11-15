@@ -125,17 +125,19 @@ export const changePassAdmin = async (password, confirmpassword) => {
     });
 
     if (!response.ok) {
-      throw new Error("Request failed with status code " + response.status);
+      // throw new Error("Request failed with status code " + response.status);
+      console.error("Request failed with status code " + response.status);
     }
     const responseData = await response.text();
 
     if (responseData === "Edit password done") {
       return "Edit successfully"; 
     } else {
-      throw new Error("Edit failed: " + responseData);
+      // throw new Error("Edit failed: " + responseData);
+      return new Error(responseData);
     }
   } catch (error) {
     console.error("Error:", error);
-    throw error;
+    // throw error;
   }
 };

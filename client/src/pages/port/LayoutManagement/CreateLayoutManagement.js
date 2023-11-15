@@ -49,6 +49,7 @@ export default function CreateLayoutManagement(props) {
               layoutname,
               layoutdir: image.name,
             });
+            window.location.reload();
           } else if (res === "Layout already") {
             toast.error("Layout already exists");
           } else {
