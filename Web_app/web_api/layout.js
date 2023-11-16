@@ -60,7 +60,10 @@ module.exports = {
 			layoutname: req.body.layoutname
 		}).then(function(layout){
 			// console.log(layout);
-			fs.promises.unlink(process.env.UPLOAD_DIR_LAYOUT_IMAGE + layout.layoutdir);
+			try{
+				fs.promises.unlink(process.env.UPLOAD_DIR_LAYOUT_IMAGE + layout.layoutdir);
+			}
+			catch(error){}
 			return res.send("Layout removed")
 		})
 	}

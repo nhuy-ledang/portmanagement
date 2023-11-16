@@ -4,14 +4,18 @@ const mongoose = require("mongoose")
 const Schema = mongoose.Schema;
 const portSchema = new Schema({
 	portid:{
-  	type: Number,
-  	unique: true
-  },
+	  	type: Number,
+	  	unique: true
+  	},
 	portname:{
-    type: String,
-    require: true
+	    type: String,
+	    require: true
 	},
 	right:[{ type: Schema.Types.ObjectId, ref: 'Right' }],
+	layoutid:{
+		type: Number,
+		require: true
+	},
 	layout: [{ type: Schema.Types.ObjectId, ref: 'Layout' }],
 	switch: [{ type: Schema.Types.ObjectId, ref: 'Switch' }],
 	user: [{ type: Schema.Types.ObjectId, ref: 'User' }],

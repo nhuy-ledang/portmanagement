@@ -54,7 +54,10 @@ module.exports = {
 
 	addScheduler: function(req, res, next){
 		const {
-		    datetime,
+		    month,
+		    day,
+		    hour,
+		    minute,
 		    portname,
 		    status
 		  } = req.body;

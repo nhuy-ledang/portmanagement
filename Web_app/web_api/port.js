@@ -7,16 +7,10 @@ const UserModel = require("../models/user");
 
 module.exports = {
 	listPort: function(req, res, next){
-		if(req.query.filter=='true'){
-			const result = [];
-			return res.send("ok");
-		}
-		else{
-			PortModel.find({}, '-_id -__v -switch').populate([{path:"user", select:"username email"},{path:"right", select:"right"},{path:"layout", select:"layoutname"}]).then(function(port){
-				console.log(port);
-				return res.send(port);
-			})
-		}
+		PortModel.find({}, '-_id -__v -switch').sort("layoutid").populate([{path:"user", select:"username email"},{path:"right", select:"right"},{path:"layout", select:"layoutname"}]).then(function(port){
+			console.log(port);
+			return res.send(port);
+		})
 	},
 
 	addPort: function(req, res, next){
@@ -28,24 +22,26 @@ module.exports = {
 			switchid
 		} = req.body;
 		RightModel.findOne({ id:rightid }).then(function(right){
-			LayoutModel.findOne({ id: layoutid }).then(function(layout){
-				SwitchModel.findOne({ id: switchid}).then(function(switch_info){
-					UserModel.findOne({ username: "Nobody"}).then(function(user){
-						const PortData = new PortModel({
-							portid: portid,
-							portname: portname,
-							right: right._id,
-							layout: layout._id,
-							switch: switch_info._id,
-							user: user._id,
-							status: "DOWN"
-						})
+			SwitchModel.findOne({ id: switchid}).then(function(switch_info){
+				UserModel.findOne({ username: "Nobody"}).then(function(user){
+					const PortData = new PortModel({
+						portid: portid,
+						portname: portname,
+						right: right._id,
+						layoutid: layoutid,
+						switch: switch_info._id,
+						user: user._id,
+						status: "DOWN"
+					})
+					LayoutModel.findOne({ id: layoutid}).then(function(layout){
+						if(layout){
+							PortData.layout = layout._id
+							layout.portlist.push(PortData._id)
+							layout.save()
+						}
 						PortData.save({
 							alo: console.log(PortData)
 						})
-						layout.portlist.push(PortData._id);
-						layout.save();
-						console.log(layout)
 					})
 				})
 			})	
@@ -63,11 +59,25 @@ module.exports = {
 		LayoutModel.findOne({ layoutname: layoutname }).then(function(layout){
 			UserModel.findOne({ username: username }).then(function(user){
 				PortModel.findOne({ portname:portname }).then(function(port){
-					port.right = user.right._id;
-					port.layout = layout._id;
-					port.user = user._id;
-					port.status = status;
-					port.save();
+					LayoutModel.findById(port.layout).then(async function(old_layout){
+						port.right = user.right._id;
+						console.log(port._id)
+						old_layout.portlist = old_layout.portlist.filter(await function(port_id){
+							console.log(port_id)
+							console.log(port._id)
+							console.log(!(port._id.equals(port_id)))
+							return !(port._id.equals(port_id));
+						})
+						console.log(old_layout.portlist)
+						old_layout.save()
+						port.layout = layout._id;
+						port.layoutid = layout.id;
+						layout.portlist.push(port._id)
+						layout.save()
+						port.user = user._id;
+						port.status = status;
+						port.save();
+					})
 				})
 			})
 		})
