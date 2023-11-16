@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-// import { AiFillEdit } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { changePassAdmin } from "../../../services/AdminService";
 import { isFormChangePassValid } from "../../../validations/AdminValidation";
+
 export default function ChangePasswordAdmin(props) {
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmpassword] = useState("");
@@ -19,7 +19,7 @@ export default function ChangePasswordAdmin(props) {
       toast.error("Password and Confirm Password must match");
     } else {
       const response = await changePassAdmin(password, confirmpassword);
-      if (response && response.adminname) {
+      if (response && response.id) {
         handleUpdateAdminFromModal({
           password: password,
           id: dataAdminEdit.id,
@@ -28,16 +28,15 @@ export default function ChangePasswordAdmin(props) {
       }
       toast.success("Admin edited successfully!");
       console.log(response);
+      handleClose();
+      delete localStorage.token;
       window.location.reload();
     }
   };
 
   return (
     <>
-      <div onClick={handleShow}>
-        {/* <AiFillEdit /> */}
-        Change Password
-      </div>
+      <div onClick={handleShow}>Change Password</div>
       <Modal show={show} onHide={handleClose} className="modal-create-admin">
         <Modal.Header closeButton>
           <Modal.Title>Change Password</Modal.Title>
@@ -45,18 +44,18 @@ export default function ChangePasswordAdmin(props) {
         <Modal.Body>
           <Form>
             <div className="mb-3">
-              <label className="form-label">Password</label>
+              <label className="form-label">New Password</label>
               <input
-                type="password"
+                type="text"
                 className="form-control"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div className="mb-3">
-              <label className="form-label">Confirm Password</label>
+              <label className="form-label">Confirm New Password</label>
               <input
-                type="password"
+                type="text"
                 className="form-control"
                 value={confirmpassword}
                 onChange={(e) => setConfirmpassword(e.target.value)}

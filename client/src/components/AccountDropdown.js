@@ -14,7 +14,7 @@ export default function AccountDropdown({ setToken }) {
     if (localStorage && localStorage.token) {
       delete localStorage.token; // Xóa thuộc tính 'token' trong localStorage
     }
-    window.location.reload(); // Tải lại trang
+    window.location.reload(); 
   };
 
   return (
@@ -27,9 +27,9 @@ export default function AccountDropdown({ setToken }) {
           <ChangePasswordAdmin />
         </li>
         <li>
-          <button type="button" className="nav-link" onClick={handleLogout}>
+          <div className="nav-link" onClick={handleLogout}>
             Logout
-          </button>
+          </div>
         </li>
       </ul>
     </div>

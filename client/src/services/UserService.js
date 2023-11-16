@@ -11,7 +11,7 @@ const apiUrlWithRightParam = `${api_user_url}?right=true`;
 export const getUser = async (token) => {
   try {
     if (!token) {
-      console.error("Token is missing or invalid. Please log in.");
+      // console.error("Token is missing or invalid. Please log in.");
       return null;
     }
     const headers = {

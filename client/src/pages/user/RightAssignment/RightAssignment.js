@@ -48,7 +48,7 @@ function RightAssignment() {
             <table>
               <thead>
                 <tr>
-                  <th className="col-3">USER NAME</th>
+                  <th className="col-3 name-col">USER NAME</th>
                   <th className="col-4 name-col">EMAIL</th>
                   <th className="col-3 name-col">GROUP</th>
                   <th className="col-2 name-col">RIGHT</th>
