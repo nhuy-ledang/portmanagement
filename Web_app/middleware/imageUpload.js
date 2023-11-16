@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
   },
   filename: async (req, file, callback) => {
     const maxIdLayout = await LayoutModel.findOne({}, { id: 1 }).sort({ id: -1 });
-      file.originalname = maxIdLayout + "_" + file.originalname;
+      file.originalname = maxIdLayout.id + "_" + file.originalname;
       callback(null, `${file.originalname}`);
       console.log("Saved");
   },
