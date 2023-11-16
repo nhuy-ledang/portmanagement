@@ -37,12 +37,14 @@ module.exports = {
 		})
 	},
 	
-	editLayout: function(req, res, next){
-		LayoutModel.findOne({
-			layoutname: req.body.layoutname
-		}).then(function(layout){
-			var created = DateTime.now().toString();
-			// layout.layoutname = layoutname;
+	 editLayout: function(req, res, next){
+                LayoutModel.findOne({
+                        id: req.body.id
+                }).then(function(layout){
+                        var created = DateTime.now().toString();
+                        if(req.body.layoutname){
+                            layout.layoutname = layoutname;
+                        }
 			console.log(req)
 			if(req.file){
 				if(layout.layoutdir != req.file.originalname){

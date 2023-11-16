@@ -322,8 +322,9 @@
 			myHeaders.append("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiIiwiaWF0IjoxNjk5MTY2MzE3LCJleHAiOjE2OTkyMDIzMTd9.z2yV6qBUPAyBLOYF7xTFl8klgLFVe4utjWAfek2FQZM");
 
 			var formdata = new FormData();
-			formdata.append("layoutname", "phòng 3");
-			formdata.append("file", fileInput.files[0], "file");
+			formdata.append("id", "3");
+			formdata.append("layoutname", "phòng 3");		//New layout name (optional)
+			formdata.append("file", fileInput.files[0], "file");	//New layout file (optional)
 
 			var requestOptions = {
 			  method: 'POST',
