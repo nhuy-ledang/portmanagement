@@ -177,7 +177,7 @@ export default function AssignPort(props) {
   const { dataPortEdit, handleUpdatePortFromModal } = props;
   const [layoutOptions, setLayoutOptions] = useState([]);
   const [userOptions, setUserOptions] = useState([]);
-  const [userRights, setUserRights] = useState({}); // State mới để lưu trữ thông tin right của từng user
+  const [userRights, setUserRights] = useState({}); 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
@@ -188,8 +188,6 @@ export default function AssignPort(props) {
         setPortname(dataPortEdit.portname);
         setLayoutOptions(layoutOptionsData);
         setUserOptions(userOptionsData);
-  
-        // Check if dataPortEdit.right is defined and has elements before accessing its properties
         if (dataPortEdit.right && dataPortEdit.right.length > 0) {
           setRight(dataPortEdit.right[0]?.right);
         }
@@ -203,9 +201,7 @@ export default function AssignPort(props) {
     fetchOptions();
   }, [dataPortEdit]);
   
-
   useEffect(() => {
-    // Cập nhật giá trị right khi username thay đổi
     if (username && userRights[username]) {
       setRight(userRights[username]);
     }
@@ -219,7 +215,7 @@ export default function AssignPort(props) {
         id: dataPortEdit.portid,
         layoutname: layoutname,
         username: username,
-        right: right, // Giữ nguyên giá trị right
+        right: right, 
         status: status,
       });
     }
@@ -232,19 +228,17 @@ export default function AssignPort(props) {
   const handleUsernameChange = (selectedUsername) => {
     setUsername(selectedUsername);
   
-    // Lấy thông tin right tương ứng với username được chọn
     const selectedUser = userOptions.find((user) => user.username === selectedUsername);
   
-    // Check if selectedUser and selectedUser.right are defined before accessing their properties
     if (selectedUser && selectedUser.right && selectedUser.right.length > 0) {
       setUserRights((prevRights) => ({
         ...prevRights,
-        [selectedUsername]: selectedUser.right[0].right || "", // Lấy giá trị right của user
+        [selectedUsername]: selectedUser.right[0].right || "", 
       }));
     } else {
       setUserRights((prevRights) => ({
         ...prevRights,
-        [selectedUsername]: "", // Set empty string if right is not available
+        [selectedUsername]: "", 
       }));
     }
   };
