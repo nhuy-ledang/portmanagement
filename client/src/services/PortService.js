@@ -6,6 +6,9 @@
 const api_port_url = `${process.env.REACT_APP_API_URL}/port`;
 const api_user_url = `${process.env.REACT_APP_API_URL}/user`;
 const api_layout_url = `${process.env.REACT_APP_API_URL}/layout`;
+// const api_user_right_url = `${process.env.REACT_APP_API_URL}/right`;
+const apiUrlWithRightParam = `${api_user_url}?right=true`;
+
 
 export const getPort = async (token) => {
   try {
@@ -80,7 +83,7 @@ export function getLayoutOptions() {
 
 export function getUserOptions() {
   const token = localStorage.token ? JSON.parse(localStorage.token).token : null;
-  return fetch(api_user_url, {
+  return fetch(apiUrlWithRightParam, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: token,
@@ -99,6 +102,7 @@ export function getUserOptions() {
       return data.map((item) => ({
         id: item.id,
         username: item.username,
+        right: item.right
       }));
     })
     .catch((error) => {
@@ -106,3 +110,4 @@ export function getUserOptions() {
       throw error;
     });
 }
+
