@@ -26,8 +26,7 @@ export default function AssignRight(props) {
       setRight(dataUserRightEdit.right);
     }
   }, [dataUserRightEdit, show]);
-
-  
+ 
     useEffect(() => {
         getOptions()
         .then((options) => {

@@ -59,8 +59,8 @@ export default function EditLayoutManagement(props) {
       const token = localStorage.token
         ? JSON.parse(localStorage.token)?.token
         : null;
-
-      patchLayout(layoutname, image, token)
+  
+      patchLayout(dataLayoutEdit.id, layoutname, image, token)
         .then((res) => {
           console.log(">>> Response edit Layout: ", res);
           if (res === "Edit layout done") {

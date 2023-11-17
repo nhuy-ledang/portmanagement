@@ -48,26 +48,25 @@ export const postLayout = (layoutname, image, token) => {
 
 
 
-export const patchLayout = (layoutname, image, token) => {
+export const patchLayout = (id, layoutname, image, token) => {
   const formData = new FormData();
+  formData.append("id", id);
   formData.append("layoutname", layoutname);
   formData.append("file", image);
 
-  return fetch(api_layout_url, {
+  return fetch(`${process.env.REACT_APP_API_URL}/layout`, {
     method: "PATCH",
     headers: {
       Authorization: token,
     },
     body: formData,
   })
-    .then((response) => response.text())
-    .then((res) => res)
+    .then((response) => response.json())
     .catch((error) => {
       console.error(">> Error:", error);
       throw error;
     });
 };
-
 export const deleteLayout = (selectedItems) => {
   if (!token) {
     console.error("Token is missing or invalid. Please log in.");

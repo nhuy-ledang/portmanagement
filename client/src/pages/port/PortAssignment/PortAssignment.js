@@ -4,12 +4,12 @@ import ReactPaginate from "react-paginate";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getPort } from "../../../services/PortService";
-
+import AssignPort from "./AssignPort";
 function PortAssignment() {
   const [data, setData] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 8;
-
+  const [editingPortId, setEditingPortId] = useState(null);
   const pageCount = data ? Math.ceil(data.length / itemsPerPage) : 0;
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
@@ -31,6 +31,14 @@ function PortAssignment() {
     fetchDataAndUpdateState();
   }, [token, currentPage]);
 
+  const handleEditPort = (portId) => {
+    setEditingPortId((prevPortId) => (prevPortId === portId ? null : portId));
+  };
+
+  const handleUpdatePortFromModal = (port) => {
+    console.error(">> Check handleUpdatePortFromModal", port);
+  };
+
   return (
     <>
       <div className="administrator-table">
@@ -41,11 +49,11 @@ function PortAssignment() {
             <table>
               <thead>
                 <tr>
-                  <th className="col-3 name-col">PORT NAME</th>
+                  <th className="col-4 name-col">PORT NAME</th>
                   <th className="col-3 name-col">LAYOUT NAME</th>
                   <th className="col-3 name-col">USER</th>
                   <th className="col-3 name-col">RIGHT</th>
-                  <th className="col-3 name-col">STATUS</th>
+                  <th className="col-2 name-col">STATUS</th>
                 </tr>
               </thead>
               <tbody>
@@ -56,7 +64,28 @@ function PortAssignment() {
                   )
                   .map((port) => (
                     <tr key={port.portid}>
-                      <td className="table-data">{port.portname}</td>
+                      <td className="table-data adminname-item">
+                        {editingPortId === port.portid ? (
+                          <>
+                            <span onClick={() => handleEditPort(port.portid)}>
+                              {port.portname}
+                            </span>
+                            <div>
+                              <AssignPort
+                                handleUpdatePortFromModal={
+                                  handleUpdatePortFromModal
+                                }
+                                dataPortEdit={port}
+                              />
+                            </div>
+                          </>
+                        ) : (
+                          <span onClick={() => handleEditPort(port.portid)}>
+                            {port.portname}
+                          </span>
+                        )}
+                      </td>
+                      
                       <td className="table-data">
                         {port.layout[0]?.layoutname}
                       </td>
