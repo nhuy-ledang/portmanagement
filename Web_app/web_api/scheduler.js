@@ -39,11 +39,10 @@ const task = cron.schedule('* * * * *', ()=>{
 module.exports = {
 
 	listScheduler: function(req, res, next){
-		SchedulerModel.find({},'-_id').populate({path:'port', select:'-_id layout portname user', 
-			populate: {path:'user', select:'username'}, 
-			populate: {path:'layout', select:'layoutname'}})
+		SchedulerModel.find({},'-_id').populate({path:'port', select:'-_id layout portname user',  
+			populate: [{path:'layout', select:'-_id layoutname'}, {path:'user', select:'-_id username'}]})
 		.then(function(scheduler){
-			// console.log(scheduler);
+			// console.log(scheduler[0].port);
 			if(!scheduler.length){
 				console.log("Stop cron")
 				task.stop();
@@ -91,7 +90,7 @@ module.exports = {
 		SchedulerModel.deleteOne({
 			id: req.body.id
 		}).then(function(){
-			SchedulerModel.findOne({id:id}).then(function(scheduler){
+			SchedulerModel.find().then(function(scheduler){
 				console.log(scheduler)
 				if(!scheduler.length){
 					console.log("Stop cron")
