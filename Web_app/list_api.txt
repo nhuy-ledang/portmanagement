@@ -322,9 +322,8 @@
 			myHeaders.append("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiIiwiaWF0IjoxNjk5MTY2MzE3LCJleHAiOjE2OTkyMDIzMTd9.z2yV6qBUPAyBLOYF7xTFl8klgLFVe4utjWAfek2FQZM");
 
 			var formdata = new FormData();
-			formdata.append("id", "3");
-			formdata.append("layoutname", "phòng 3");		//New layout name (optional)
-			formdata.append("file", fileInput.files[0], "file");	//New layout file (optional)
+			formdata.append("layoutname", "phòng 3");
+			formdata.append("file", fileInput.files[0], "file");
 
 			var requestOptions = {
 			  method: 'POST',
@@ -464,4 +463,32 @@
 		res: //json list scheduler
 
 	POST: 
+		req:
+			headers = {
+				"Content-Type": 'application/json',
+	            "Authorization": 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZW1haWwiOiIiLCJpYXQiOjE2OTg1NzQ2OTYsImV4cCI6MTY5ODU3.......'			
+           	}
+           	body = {
+			    "year": 2023,
+			    "month": 11,
+			    "day": 17,
+			    "hours": 17,
+			    "minutes":40,
+			    "portname":"switch1-port3",
+			    "status":"UP"
+			}
+        res: //string message 
+        	Add scheduler succeed
 
+
+	DELETE:
+    	req:
+			headers = {
+				"Content-Type": 'application/json',
+	            "Authorization": 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZW1haWwiOiIiLCJpYXQiOjE2OTg1NzQ2OTYsImV4cCI6MTY5ODU3.......'			
+           	}
+           	body = {
+			    "id": 0
+			}
+        res: //string message 
+        	Scheduler removed

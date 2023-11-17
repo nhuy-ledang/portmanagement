@@ -54,10 +54,11 @@ module.exports = {
 
 	addScheduler: function(req, res, next){
 		const {
+			year,
 		    month,
 		    day,
-		    hour,
-		    minute,
+		    hours,
+		    minutes,
 		    portname,
 		    status
 		  } = req.body;
@@ -74,11 +75,11 @@ module.exports = {
 				port.save();
 				const SchedulerData = new SchedulerModel({
 					id: nextid,
-					datetime: DateTime.local().toLocaleString(DateTime.DATETIME_FULL),
+					datetime: DateTime.local(year,month,day,hours,minutes).toLocaleString(DateTime.DATETIME_FULL),
 				    port: port._id
 				});
 				SchedulerData.save({
-				alo: console.log("User save done")
+				alo: console.log("Scheduler save done")
 				})
 				task.start();
 				return res.send("Add scheduler succeed");

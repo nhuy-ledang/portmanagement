@@ -60,8 +60,11 @@ module.exports = {
 			UserModel.findOne({ username: username }).then(function(user){
 				PortModel.findOne({ portname:portname }).then(function(port){
 					LayoutModel.findById(port.layout).then(async function(old_layout){
+						console.log(req.body)
+						console.log(user)
 						port.right = user.right._id;
-						console.log(port._id)
+						console.log(layoutname)
+						console.log(layout)
 						old_layout.portlist = old_layout.portlist.filter(await function(port_id){
 							console.log(port_id)
 							console.log(port._id)
