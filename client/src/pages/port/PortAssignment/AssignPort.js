@@ -17,13 +17,10 @@ export default function AssignPort(props) {
   const [portname, setPortname] = useState("");
   const [layoutname, setLayoutname] = useState(dataPortEdit.layoutname || "");
   const [username, setUsername] = useState(dataPortEdit.username || "");
-  const [right, setRight] = useState("");
   const [status, setStatus] = useState("");
   const [show, setShow] = useState(false);
   const [layoutOptions, setLayoutOptions] = useState([]);
   const [userOptions, setUserOptions] = useState([]);
-  const [selectedUsername, setSelectedUsername] = useState("");
-  const [selectedRight, setSelectedRight] = useState("");
 
   useEffect(() => {
     const fetchOptions = async () => {
@@ -35,9 +32,7 @@ export default function AssignPort(props) {
         setUsername(dataPortEdit.username);
         setLayoutOptions(layoutOptionsData);
         setUserOptions(userOptionsData);
-        setRight(dataPortEdit.right[0]?.right);
         setStatus(dataPortEdit.status);
-        setSelectedRight(dataPortEdit.right[0]?.right);
       } catch (error) {
         console.error("Error fetching options:", error);
       }
@@ -45,83 +40,93 @@ export default function AssignPort(props) {
     fetchOptions();
   }, [dataPortEdit]);
 
-  const handleEditPort = async () => {
-    console.log("Port Name:", portname);
-    console.log("Layout Name:", layoutname);
-    console.log("User Name:", username);
-    console.log("Right:", selectedRight);
-    console.log("Status:", status);
-    console.log("              ");
-  
-    const response = patchPort(
-      portname,
-      layoutname,
-      username,
-      status
-    );
-  
-    if (response && response.portname) {
-      // Fetch the updated options for the specific user
-      try {
-        const updatedOptions = await getUserOptions(username);
-        const selectedOption = updatedOptions.find(
-          (option) => option.username === username
-        );
-        if (selectedOption) {
-          const updatedRight = selectedOption.right[0]?.right;
-          setSelectedRight(updatedRight);
-        }
-      } catch (error) {
-        console.error("Error fetching updated right:", error);
-      }
-  
-      handleUpdatePortFromModal({
-        portname: portname,
-        id: dataPortEdit.portid,
-        layoutname: layoutname,
-        username: username,
-        status: status,
-      });
-    }
-  
-    toast.success("Port edited successfully!");
-    handleClose();
-    console.log(response);
-  };
 
-  useEffect(() => {
-    if (selectedUsername) {
-      getUserOptions()
-        .then((options) => {
-          const selectedOption = options.find(
-            (option) => option.username === selectedUsername
-          );
-          if (selectedOption) {
-            const right = selectedOption.right[0]?.right;
-            setSelectedRight(right);
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    }
-  }, [selectedUsername]);
 
-  const handleUsernameSelect = async (event) => {
-    const { value } = event.target;
-    setSelectedUsername(value);
-    setUsername(value);
-    try {
-      const options = await getUserOptions();
-      const selectedOption = options.find(
-        (option) => option.username === value
-      );
-      if (selectedOption) {
-        const right = selectedOption.right[0]?.right;
-        setSelectedRight(right);
+
+
+  // const handleEditPort = () => {
+  //   console.log(portname);
+  //   console.log(layoutname);
+  //   console.log(username);
+  //   console.log(status);
+  //   const token = localStorage.token
+  //   ? JSON.parse(localStorage.token)?.token
+  //   : null;
+
+  //   if (!layoutname) {
+  //     if (!username) {
+  //       console.log("No layoutname & No username");
+  //     } else {
+  //       console.log("No layoutname");
+  //     }
+  //     } else {
+  //       console.log("OK");
+  //     }
+
+  // };
+
+  const handleEditPort = () => {
+    const token = localStorage.token
+      ? JSON.parse(localStorage.token)?.token
+      : null;
+    console.log(portname);
+    console.log(layoutname);
+    console.log(username);
+    console.log(status);
+
+    if (layoutname) {
+      console.log(">> layoutname: ", layoutname);
+      if (username) {
+        patchPort(portname, layoutname, username, status, token)
+          .then((res) => {
+            console.log(">>> Response edit Port: ", res);
+            if (res === "Edit port done") {
+              handleUpdatePortFromModal({
+                portname: portname,
+                layoutname: layoutname,
+                username: username,
+                status: status,
+                id: dataPortEdit.id,
+              });
+              toast.success("Port edited successfully!");
+              handleClose();
+              // window.location.reload();
+            } else {
+              console.error("Unexpected response:", res);
+              toast.error("Error! Unexpected response");
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            toast.error("Error! Check console for details");
+          });
+      } else {
+        // Khong co username
+        patchPort(portname, layoutname, username, status, token)
+          .then((res) => {
+            console.log(">>> Response edit Port: ", res);
+            if (res === "Edit port done") {
+              handleUpdatePortFromModal({
+                portname: portname,
+                layoutname: layoutname,
+                username: null,
+                status: status,
+                id: dataPortEdit.id,
+              });
+              toast.success("Port edited successfully!");
+              handleClose();
+              // window.location.reload();
+            } else {
+              console.error("Unexpected response:", res);
+              toast.error("Error! Unexpected response");
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            toast.error("Error! Check console for details");
+          });
       }
-    } catch (error) {
-      console.error("Error:", error);
+    } else {
     }
   };
 
@@ -162,8 +167,7 @@ export default function AssignPort(props) {
               <label className="form-label">User Name</label>
               <select
                 className="form-select"
-                value={selectedUsername}
-                onChange={handleUsernameSelect}
+                value={username}
               >
                 {userOptions.map((option) => (
                   <option key={option.id} value={option.username}>
@@ -171,15 +175,6 @@ export default function AssignPort(props) {
                   </option>
                 ))}
               </select>
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Right</label>
-              <input
-                type="text"
-                className="form-control"
-                value={selectedRight}
-                disabled
-              />
             </div>
             <div className="mb-3">
               <label className="form-label">Status</label>
