@@ -11,6 +11,10 @@ const schedulerSchema = new Schema({
 		require:true
 	},
   	port:[{ type: Schema.Types.ObjectId, ref: 'Port' }],
+  	changeto:{
+  		type: String,
+  		require:true
+  	}
 })
 
 const SchedulerMongoose = mongoose.model("Scheduler", schedulerSchema);

@@ -70,12 +70,11 @@ module.exports = {
 				nextid = 1;
 			}
 			PortModel.findOne({ portname:portname }).then(function(port){
-				port.status = status;
-				port.save();
 				const SchedulerData = new SchedulerModel({
 					id: nextid,
 					datetime: DateTime.local(year,month,day,hours,minutes).toLocaleString(DateTime.DATETIME_FULL),
-				    port: port._id
+				    port: port._id,
+				    changeto: status
 				});
 				SchedulerData.save({
 				alo: console.log("Scheduler save done")

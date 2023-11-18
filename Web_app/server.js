@@ -54,10 +54,10 @@ app.use('/images',express.static(imageDir));
 //     console.log("Đã xóa " + result.deletedCount + " tài liệu trong collection.");
 // });
 
-LayoutModel.deleteMany({}).then(function(result) {
-    // if (err) throw err;
-    console.log("Đã xóa " + result.deletedCount + " tài liệu trong collection.");
-});
+// LayoutModel.deleteMany({}).then(function(result) {
+//     // if (err) throw err;
+//     console.log("Đã xóa " + result.deletedCount + " tài liệu trong collection.");
+// });
 
 // RightModel.deleteMany({}).then(function(result) {
 //     // if (err) throw err;
@@ -69,10 +69,10 @@ LayoutModel.deleteMany({}).then(function(result) {
 //     console.log("Đã xóa " + result.deletedCount + " tài liệu trong collection.");
 // });
 
-PortModel.deleteMany({}).then(function(result) {
-    // if (err) throw err;
-    console.log("Đã xóa " + result.deletedCount + " tài liệu trong collection.");
-});
+// PortModel.deleteMany({}).then(function(result) {
+//     // if (err) throw err;
+//     console.log("Đã xóa " + result.deletedCount + " tài liệu trong collection.");
+// });
 
 // AdminModel.findOne({
 //   adminname: "admin"
@@ -160,113 +160,113 @@ UserModel.findOne({
 
 
 
-var raw = JSON.stringify({
-    "portid": 1,
-    "portname": "switch1-port1",
-    "rightid": 1,
-    "layoutid": 1,
-    "switchid": 1
-});
-var myHeaders = new Headers();
-myHeaders.append("Authorization", process.env.LOCAL_TOKEN);
-myHeaders.append("Content-Type", "application/json");
-var requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  body: raw,
-  redirect: 'follow'
-};
-fetch("http://"+process.env.SERVER_IP+":"+process.env.SERVER_PORT+"/api/port", requestOptions)
+// var raw = JSON.stringify({
+//     "portid": 1,
+//     "portname": "switch1-port1",
+//     "rightid": 1,
+//     "layoutid": 1,
+//     "switchid": 1
+// });
+// var myHeaders = new Headers();
+// myHeaders.append("Authorization", process.env.LOCAL_TOKEN);
+// myHeaders.append("Content-Type", "application/json");
+// var requestOptions = {
+//   method: 'POST',
+//   headers: myHeaders,
+//   body: raw,
+//   redirect: 'follow'
+// };
+// fetch("http://"+process.env.SERVER_IP+":"+process.env.SERVER_PORT+"/api/port", requestOptions)
 
-var raw = JSON.stringify({
-    "portid": 2,
-    "portname": "switch1-port2",
-    "rightid": 1,
-    "layoutid": 1,
-    "switchid": 1
-});
-var myHeaders = new Headers();
-myHeaders.append("Authorization", process.env.LOCAL_TOKEN);
-myHeaders.append("Content-Type", "application/json");
-var requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  body: raw,
-  redirect: 'follow'
-};
-fetch("http://"+process.env.SERVER_IP+":"+process.env.SERVER_PORT+"/api/port", requestOptions)
+// var raw = JSON.stringify({
+//     "portid": 2,
+//     "portname": "switch1-port2",
+//     "rightid": 1,
+//     "layoutid": 1,
+//     "switchid": 1
+// });
+// var myHeaders = new Headers();
+// myHeaders.append("Authorization", process.env.LOCAL_TOKEN);
+// myHeaders.append("Content-Type", "application/json");
+// var requestOptions = {
+//   method: 'POST',
+//   headers: myHeaders,
+//   body: raw,
+//   redirect: 'follow'
+// };
+// fetch("http://"+process.env.SERVER_IP+":"+process.env.SERVER_PORT+"/api/port", requestOptions)
 
-var raw = JSON.stringify({
-    "portid": 3,
-    "portname": "switch1-port3",
-    "rightid": 1,
-    "layoutid": 1,
-    "switchid": 1
-});
-var myHeaders = new Headers();
-myHeaders.append("Authorization", process.env.LOCAL_TOKEN);
-myHeaders.append("Content-Type", "application/json");
-var requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  body: raw,
-  redirect: 'follow'
-};
-fetch("http://"+process.env.SERVER_IP+":"+process.env.SERVER_PORT+"/api/port", requestOptions)
+// var raw = JSON.stringify({
+//     "portid": 3,
+//     "portname": "switch1-port3",
+//     "rightid": 1,
+//     "layoutid": 1,
+//     "switchid": 1
+// });
+// var myHeaders = new Headers();
+// myHeaders.append("Authorization", process.env.LOCAL_TOKEN);
+// myHeaders.append("Content-Type", "application/json");
+// var requestOptions = {
+//   method: 'POST',
+//   headers: myHeaders,
+//   body: raw,
+//   redirect: 'follow'
+// };
+// fetch("http://"+process.env.SERVER_IP+":"+process.env.SERVER_PORT+"/api/port", requestOptions)
 
-var raw = JSON.stringify({
-    "portid": 4,
-    "portname": "switch2-port1",
-    "rightid": 1,
-    "layoutid": 2,
-    "switchid": 1
-});
-var myHeaders = new Headers();
-myHeaders.append("Authorization", process.env.LOCAL_TOKEN);
-myHeaders.append("Content-Type", "application/json");
-var requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  body: raw,
-  redirect: 'follow'
-};
-fetch("http://"+process.env.SERVER_IP+":"+process.env.SERVER_PORT+"/api/port", requestOptions)
+// var raw = JSON.stringify({
+//     "portid": 4,
+//     "portname": "switch2-port1",
+//     "rightid": 1,
+//     "layoutid": 2,
+//     "switchid": 1
+// });
+// var myHeaders = new Headers();
+// myHeaders.append("Authorization", process.env.LOCAL_TOKEN);
+// myHeaders.append("Content-Type", "application/json");
+// var requestOptions = {
+//   method: 'POST',
+//   headers: myHeaders,
+//   body: raw,
+//   redirect: 'follow'
+// };
+// fetch("http://"+process.env.SERVER_IP+":"+process.env.SERVER_PORT+"/api/port", requestOptions)
 
-var raw = JSON.stringify({
-    "portid": 5,
-    "portname": "switch2-port2",
-    "rightid": 1,
-    "layoutid": 2,
-    "switchid": 1
-});
-var myHeaders = new Headers();
-myHeaders.append("Authorization", process.env.LOCAL_TOKEN);
-myHeaders.append("Content-Type", "application/json");
-var requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  body: raw,
-  redirect: 'follow'
-};
-fetch("http://"+process.env.SERVER_IP+":"+process.env.SERVER_PORT+"/api/port", requestOptions)
+// var raw = JSON.stringify({
+//     "portid": 5,
+//     "portname": "switch2-port2",
+//     "rightid": 1,
+//     "layoutid": 2,
+//     "switchid": 1
+// });
+// var myHeaders = new Headers();
+// myHeaders.append("Authorization", process.env.LOCAL_TOKEN);
+// myHeaders.append("Content-Type", "application/json");
+// var requestOptions = {
+//   method: 'POST',
+//   headers: myHeaders,
+//   body: raw,
+//   redirect: 'follow'
+// };
+// fetch("http://"+process.env.SERVER_IP+":"+process.env.SERVER_PORT+"/api/port", requestOptions)
 
-var raw = JSON.stringify({
-    "portid": 6,
-    "portname": "switch2-port3",
-    "rightid": 1,
-    "layoutid": 2,
-    "switchid": 1
-});
-var myHeaders = new Headers();
-myHeaders.append("Authorization", process.env.LOCAL_TOKEN);
-myHeaders.append("Content-Type", "application/json");
-var requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  body: raw,
-  redirect: 'follow'
-};
-fetch("http://"+process.env.SERVER_IP+":"+process.env.SERVER_PORT+"/api/port", requestOptions)
+// var raw = JSON.stringify({
+//     "portid": 6,
+//     "portname": "switch2-port3",
+//     "rightid": 1,
+//     "layoutid": 2,
+//     "switchid": 1
+// });
+// var myHeaders = new Headers();
+// myHeaders.append("Authorization", process.env.LOCAL_TOKEN);
+// myHeaders.append("Content-Type", "application/json");
+// var requestOptions = {
+//   method: 'POST',
+//   headers: myHeaders,
+//   body: raw,
+//   redirect: 'follow'
+// };
+// fetch("http://"+process.env.SERVER_IP+":"+process.env.SERVER_PORT+"/api/port", requestOptions)
 
 
 app.listen(process.env.SERVER_PORT, process.env.SERVER_IP, () => {
