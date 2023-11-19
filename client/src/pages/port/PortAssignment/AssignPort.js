@@ -3,131 +3,75 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { AiFillEdit } from "react-icons/ai";
-import { patchPort } from "../../../services/PortService";
-import { toast } from "react-toastify";
 import {
+  patchPort, 
   getLayoutOptions,
   getUserOptions,
 } from "../../../services/PortService";
 
 export default function AssignPort(props) {
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const { dataPortEdit, handleUpdatePortFromModal } = props;
   const [portname, setPortname] = useState("");
-  const [layoutname, setLayoutname] = useState(dataPortEdit.layoutname || "");
-  const [username, setUsername] = useState(dataPortEdit.username || "");
+  const [layoutname, setLayoutname] = useState("");
+  const [username, setUsername] = useState("");
   const [status, setStatus] = useState("");
   const [show, setShow] = useState(false);
   const [layoutOptions, setLayoutOptions] = useState([]);
   const [userOptions, setUserOptions] = useState([]);
+  const { dataPortEdit, handleUpdatePortFromModal } = props;
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   useEffect(() => {
-    const fetchOptions = async () => {
+    if (show && dataPortEdit) {
+      setPortname(dataPortEdit.portname);
+      setLayoutname(dataPortEdit.layout[0].layoutname);
+      setUsername(dataPortEdit.user[0].username);
+      setStatus(dataPortEdit.status);
+    }
+  }, [dataPortEdit, show]);
+
+  useEffect(() => {
+    async function fetchOptions() {
       try {
-        const layoutOptionsData = await getLayoutOptions();
-        const userOptionsData = await getUserOptions();
-        setPortname(dataPortEdit.portname);
-        setLayoutname(dataPortEdit.layoutname);
-        setUsername(dataPortEdit.username);
-        setLayoutOptions(layoutOptionsData);
-        setUserOptions(userOptionsData);
-        setStatus(dataPortEdit.status);
+        const layoutOptions = await getLayoutOptions();
+        const userOptions = await getUserOptions();
+        setLayoutOptions(layoutOptions);
+        setUserOptions(userOptions);
       } catch (error) {
         console.error("Error fetching options:", error);
       }
-    };
+    }
     fetchOptions();
-  }, [dataPortEdit]);
+  }, []);
 
+  const handleEditUser = async () => {
+    console.log("portname: ", portname);
+    console.log("layoutname: ", layoutname);
+    console.log("username: ", username);
+    console.log("status: ", status);
 
-
-
-
-  // const handleEditPort = () => {
-  //   console.log(portname);
-  //   console.log(layoutname);
-  //   console.log(username);
-  //   console.log(status);
-  //   const token = localStorage.token
-  //   ? JSON.parse(localStorage.token)?.token
-  //   : null;
-
-  //   if (!layoutname) {
-  //     if (!username) {
-  //       console.log("No layoutname & No username");
-  //     } else {
-  //       console.log("No layoutname");
-  //     }
-  //     } else {
-  //       console.log("OK");
-  //     }
-
-  // };
-
-  const handleEditPort = () => {
     const token = localStorage.token
       ? JSON.parse(localStorage.token)?.token
       : null;
-    console.log(portname);
-    console.log(layoutname);
-    console.log(username);
-    console.log(status);
-
-    if (layoutname) {
-      console.log(">> layoutname: ", layoutname);
-      if (username) {
-        patchPort(portname, layoutname, username, status, token)
-          .then((res) => {
-            console.log(">>> Response edit Port: ", res);
-            if (res === "Edit port done") {
-              handleUpdatePortFromModal({
-                portname: portname,
-                layoutname: layoutname,
-                username: username,
-                status: status,
-                id: dataPortEdit.id,
-              });
-              toast.success("Port edited successfully!");
-              handleClose();
-              // window.location.reload();
-            } else {
-              console.error("Unexpected response:", res);
-              toast.error("Error! Unexpected response");
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-            toast.error("Error! Check console for details");
-          });
-      } else {
-        // Khong co username
-        patchPort(portname, layoutname, username, status, token)
-          .then((res) => {
-            console.log(">>> Response edit Port: ", res);
-            if (res === "Edit port done") {
-              handleUpdatePortFromModal({
-                portname: portname,
-                layoutname: layoutname,
-                username: null,
-                status: status,
-                id: dataPortEdit.id,
-              });
-              toast.success("Port edited successfully!");
-              handleClose();
-              // window.location.reload();
-            } else {
-              console.error("Unexpected response:", res);
-              toast.error("Error! Unexpected response");
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-            toast.error("Error! Check console for details");
-          });
-      }
-    } else {
+    const response = await patchPort(
+      portname,
+      layoutname,
+      username,
+      status,
+      token
+    );
+    if (response && response.username) {
+      handleUpdatePortFromModal({
+        portname: portname,
+        layoutname: layoutname,
+        username: username,
+        id: dataPortEdit._id,
+        status: status,
+      });
     }
+    console.log(response);
+    handleClose();
+    // window.location.reload();
   };
 
   return (
@@ -168,6 +112,7 @@ export default function AssignPort(props) {
               <select
                 className="form-select"
                 value={username}
+                onChange={(e) => setUsername(e.target.value)}
               >
                 {userOptions.map((option) => (
                   <option key={option.id} value={option.username}>
@@ -203,7 +148,7 @@ export default function AssignPort(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleEditPort}>
+          <Button variant="primary" onClick={handleEditUser}>
             Update
           </Button>
         </Modal.Footer>

@@ -58,6 +58,7 @@ export default function SetSchedule(props) {
         handleClose();
         toast.success("Scheduler created successfully!");
         await handleUpdateTable(requestData);
+        window.location.reload(); 
       } else {
         toast.error("Error!");
       }
@@ -81,7 +82,7 @@ export default function SetSchedule(props) {
       );
       if (selectedLayout) {
         setPortnames(selectedLayout.portnames);
-        setPortname(""); // Reset the portname when the layout changes
+        setPortname("");
       } else {
         setPortnames([]);
         setPortname("");
@@ -120,9 +121,9 @@ export default function SetSchedule(props) {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <div className="mb-3">
+            <div className="mb-3 d-flex">
               <label className="form-label">Date Time</label>
-              <div>
+              <div className="mx-3">
                 <DateTimePicker
                   onChange={handleDateChange}
                   value={selectedDateTime}

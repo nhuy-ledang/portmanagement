@@ -4,7 +4,6 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import { MdCreateNewFolder } from "react-icons/md";
-// import Papa from "papaparse";
 import { getUser } from "../../../services/UserService";
 export default function ImportUserManagement(props) {
   const [show, setShow] = useState(false);
@@ -34,6 +33,7 @@ export default function ImportUserManagement(props) {
     const formData = new FormData();
     formData.append("file", selectedFile);
     console.log(selectedFile);
+    console.log(file);
 
     const options = {
       method: "POST",

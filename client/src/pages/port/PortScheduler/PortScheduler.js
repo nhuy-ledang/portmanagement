@@ -5,11 +5,13 @@ import ReactPaginate from "react-paginate";
 import { AiFillDelete } from "react-icons/ai";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getPortScheduler, deletePortScheduler } from "../../../services/PortSchedulerSevice";
+import {
+  getPortScheduler,
+  deletePortScheduler,
+} from "../../../services/PortSchedulerSevice";
 import { toast } from "react-toastify";
 
 export default function PortScheduler() {
-  
   const [data, setData] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 8;
@@ -110,33 +112,38 @@ export default function PortScheduler() {
                 </tr>
               </thead>
               <tbody>
-                {data
-                  .slice(
-                    currentPage * itemsPerPage,
-                    (currentPage + 1) * itemsPerPage
-                  )
-                  .map((scheduler) => (
-                    <tr key={scheduler.id}>
-                      <td className="table-data">
-                        <input
-                          type="checkbox"
-                          checked={selectedItems.includes(scheduler)}
-                          onChange={() => handleSelect(scheduler)}
-                        />
-                      </td>
-                      <td className="table-data">{scheduler.datetime}</td>
-                      <td className="table-data">
-                        {scheduler.port[0]?.layout[0]?.layoutname}
-                      </td>
-                      <td className="table-data">
-                        {scheduler.port[0]?.portname}
-                      </td>
-                      <td className="table-data">
-                        {scheduler.port[0]?.user[0]?.username}
-                      </td>
-                      <td className="table-data">{scheduler.changeto}</td>
-                    </tr>
-                  ))}
+                {data &&
+                  data
+                    .slice(
+                      currentPage * itemsPerPage,
+                      (currentPage + 1) * itemsPerPage
+                    )
+                    .map((scheduler) => (
+                      <tr key={scheduler.id}>
+                        <td className="table-data">
+                          <input
+                            type="checkbox"
+                            checked={selectedItems.includes(scheduler)}
+                            onChange={() => handleSelect(scheduler)}
+                          />
+                        </td>
+                        <td className="table-data">{scheduler.datetime}</td>
+                        <td className="table-data">
+                          {scheduler.port?.[0]?.layout?.[0]?.layoutname}
+                        </td>
+                        <td className="table-data">
+                          {scheduler.port?.[0]?.portname || ""}
+                        </td>
+                        <td className="table-data">
+                          {scheduler.port?.[0]?.user?.[0]?.username || ""}
+                        </td>
+                        <td className="table-data">
+                          {scheduler.changeto !== undefined
+                            ? scheduler.changeto
+                            : " "}
+                        </td>
+                      </tr>
+                    ))}
               </tbody>
             </table>
             <ReactPaginate

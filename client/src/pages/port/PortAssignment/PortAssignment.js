@@ -36,7 +36,7 @@ function PortAssignment() {
   };
 
   const handleUpdatePortFromModal = (port) => {
-    console.error(">> Check handleUpdatePortFromModal", port);
+    console.log(">> Check handleUpdatePortFromModal", port);
   };
 
   return (
