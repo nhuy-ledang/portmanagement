@@ -81,7 +81,7 @@ export default function EditLayoutManagement(props) {
               });
               toast.success("Layout edited successfully!");
               handleClose();
-              window.location.reload(); 
+              window.location.reload();
             } else {
               console.error("Unexpected response:", res);
               toast.error("Error! Unexpected response");
@@ -102,7 +102,7 @@ export default function EditLayoutManagement(props) {
               });
               toast.success("Layout edited successfully!");
               handleClose();
-              window.location.reload(); 
+              window.location.reload();
             } else {
               console.error("Unexpected response:", res);
               toast.error("Error! Unexpected response");

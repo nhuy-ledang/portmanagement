@@ -4,14 +4,12 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import { IoMdCreate } from "react-icons/io";
-import DateTimePicker from "react-datetime-picker";
-import "react-datetime-picker/dist/DateTimePicker.css";
-import "react-calendar/dist/Calendar.css";
-import "react-clock/dist/Clock.css";
 import {
   postPortScheduler,
   getLayoutOptions,
 } from "../../../services/PortSchedulerSevice";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function SetSchedule(props) {
   const [selectedDateTime, setSelectedDateTime] = useState(new Date());
@@ -21,7 +19,7 @@ export default function SetSchedule(props) {
   const [portname, setPortname] = useState("");
   const [status, setStatus] = useState("");
   const [show, setShow] = useState(false);
-
+  const [startDate, setStartDate] = useState(new Date());
   const { handleUpdateTable } = props;
 
   const handleClose = () => {
@@ -58,17 +56,13 @@ export default function SetSchedule(props) {
         handleClose();
         toast.success("Scheduler created successfully!");
         await handleUpdateTable(requestData);
-        window.location.reload(); 
+        window.location.reload();
       } else {
         toast.error("Error!");
       }
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const handleDateChange = (date) => {
-    setSelectedDateTime(date);
   };
 
   const handleLayoutnameChange = async (e) => {
@@ -110,6 +104,8 @@ export default function SetSchedule(props) {
     fetchLayoutnames();
   }, []);
 
+  
+
   return (
     <>
       <Button variant="success" onClick={handleShow}>
@@ -121,13 +117,16 @@ export default function SetSchedule(props) {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <div className="mb-3 d-flex">
+            <div className="mb-3">
               <label className="form-label">Date Time</label>
-              <div className="mx-3">
-                <DateTimePicker
-                  onChange={handleDateChange}
-                  value={selectedDateTime}
-                  clearIcon={null}
+              <div>
+                <DatePicker
+                  className="form-control"
+                  selected={startDate}
+                  onChange={(date) => setStartDate(date)}
+                  timeInputLabel="Time:"
+                  dateFormat="MM/dd/yyyy h:mm aa"
+                  showTimeInput
                 />
               </div>
             </div>

@@ -11,7 +11,9 @@ export default function CreateLayoutManagement(props) {
   const [image, setImage] = useState(null);
   const [show, setShow] = useState(false);
   const { handleUpdateTable } = props;
-  const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
+  const token = localStorage.token
+    ? JSON.parse(localStorage.token)?.token
+    : null;
 
   const handleClose = () => {
     setShow(false);

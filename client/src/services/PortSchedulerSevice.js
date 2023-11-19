@@ -6,7 +6,6 @@ const headers = {
 const api_port_scheduler_url = `${process.env.REACT_APP_API_URL}/scheduler`;
 const api_port_layout_url = `${process.env.REACT_APP_API_URL}/layout`;
 
-
 export const getPortScheduler = async (token) => {
   try {
     if (!token) {
@@ -26,7 +25,6 @@ export const getPortScheduler = async (token) => {
     return null;
   }
 };
-
 
 export const postPortScheduler = async (requestData) => {
   try {
@@ -90,10 +88,12 @@ export const deletePortScheduler = (selectedItems) => {
 };
 
 export function getLayoutOptions() {
-  const token = localStorage.token ? JSON.parse(localStorage.token).token : null;
+  const token = localStorage.token
+    ? JSON.parse(localStorage.token).token
+    : null;
   return fetch(api_port_layout_url, {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: token,
     },
   })

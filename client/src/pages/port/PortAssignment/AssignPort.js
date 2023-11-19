@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { AiFillEdit } from "react-icons/ai";
 import {
-  patchPort, 
+  patchPort,
   getLayoutOptions,
   getUserOptions,
 } from "../../../services/PortService";

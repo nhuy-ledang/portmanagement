@@ -120,7 +120,7 @@ export const changePassAdmin = async (password, confirmpassword) => {
   try {
     const response = await fetch(api_admin_change_pass_url, {
       method: "PATCH",
-      headers, 
+      headers,
       body: JSON.stringify(data),
     });
 
@@ -131,7 +131,7 @@ export const changePassAdmin = async (password, confirmpassword) => {
     const responseData = await response.text();
 
     if (responseData === "Edit password done") {
-      return "Edit successfully"; 
+      return "Edit successfully";
     } else {
       // throw new Error("Edit failed: " + responseData);
       return new Error(responseData);

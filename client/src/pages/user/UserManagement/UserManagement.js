@@ -7,10 +7,7 @@ import ReactPaginate from "react-paginate";
 import { AiFillDelete } from "react-icons/ai";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  getUser,
-  deleteUser,
-} from "../../../services/UserService";
+import { getUser, deleteUser } from "../../../services/UserService";
 import { toast } from "react-toastify";
 
 function UserManagement() {
@@ -71,7 +68,6 @@ function UserManagement() {
     }
   };
 
-
   const deleteSelectedUser = () => {
     deleteUser(selectedItems)
       .then(() => {
@@ -85,8 +81,6 @@ function UserManagement() {
         console.error("Error deleting admins:", error);
       });
   };
-
-  
 
   return (
     <>

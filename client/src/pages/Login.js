@@ -42,19 +42,18 @@ export default function Login({ setToken }) {
       const token = await loginUser({
         adminname,
         password,
-      })
+      });
       if (token === null || token === undefined) {
         toast.error("Invalid response from the server.");
       } else if (token === "Wrong adminname or password") {
         toast.error("Incorrect Administrator or Password.");
       } else {
-        toast.success("Login successful!");       
-        localStorage.setItem("token", token);               
+        toast.success("Login successful!");
+        localStorage.setItem("token", token);
         setToken(token);
-        setTimeout(() => {}, 3000);       
+        setTimeout(() => {}, 3000);
       }
-    }
-    catch (error){
+    } catch (error) {
       toast.error(error.message);
     }
   };

@@ -142,7 +142,9 @@ function LayoutManagement() {
                             </span>
                             <div>
                               <EditLayoutManagement
-                                handleUpdateAdminFromModal={handleUpdateAdminFromModal}
+                                handleUpdateAdminFromModal={
+                                  handleUpdateAdminFromModal
+                                }
                                 dataLayoutEdit={layout}
                               />
                             </div>
@@ -154,7 +156,8 @@ function LayoutManagement() {
                         )}
                       </td>
                       <td className="table-data">
-                        <img className="img-layout"
+                        <img
+                          className="img-layout"
                           src={`http://localhost:8080/images/${layout.layoutdir}`}
                           alt={layout.layoutname}
                         />

@@ -25,7 +25,6 @@ export const getLayout = async (token) => {
   }
 };
 
-
 export const postLayout = (layoutname, image, token) => {
   const formData = new FormData();
   formData.append("layoutname", layoutname);
@@ -45,8 +44,6 @@ export const postLayout = (layoutname, image, token) => {
       throw error;
     });
 };
-
-
 
 // export const patchLayout = (id, layoutname, image, token) => {
 //   const formData = new FormData();

@@ -85,7 +85,7 @@ function PortAssignment() {
                           </span>
                         )}
                       </td>
-                      
+
                       <td className="table-data">
                         {port.layout[0]?.layoutname}
                       </td>

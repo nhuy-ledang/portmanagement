@@ -27,7 +27,13 @@ export const getPort = async (token) => {
   }
 };
 
-export const patchPort = async (portname, layoutname, username, status, token) => {
+export const patchPort = async (
+  portname,
+  layoutname,
+  username,
+  status,
+  token
+) => {
   const data = { portname, layoutname, username, status };
   try {
     const response = await fetch(api_port_url, {
@@ -49,12 +55,13 @@ export const patchPort = async (portname, layoutname, username, status, token) =
   }
 };
 
-
 export function getLayoutOptions() {
-  const token = localStorage.token ? JSON.parse(localStorage.token).token : null;
+  const token = localStorage.token
+    ? JSON.parse(localStorage.token).token
+    : null;
   return fetch(api_layout_url, {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: token,
     },
   })
@@ -80,10 +87,12 @@ export function getLayoutOptions() {
 }
 
 export function getUserOptions() {
-  const token = localStorage.token ? JSON.parse(localStorage.token).token : null;
+  const token = localStorage.token
+    ? JSON.parse(localStorage.token).token
+    : null;
   return fetch(api_user_url, {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: token,
     },
   })
@@ -107,4 +116,3 @@ export function getUserOptions() {
       throw error;
     });
 }
-

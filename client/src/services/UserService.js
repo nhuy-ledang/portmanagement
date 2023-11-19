@@ -120,7 +120,6 @@ export const deleteUser = async (selectedItems) => {
 //       console.error("Token is missing or invalid. Please log in.");
 //       return;
 //     }
-    
 
 //     const response = await fetch(apiUrlWithRightParam, {
 //       headers,
@@ -159,7 +158,7 @@ export const patchUserRight = async (username, email, group, right) => {
   try {
     const response = await fetch(apiUrlWithRightParam, {
       method: "PATCH",
-      headers, 
+      headers,
       body: JSON.stringify(data),
     });
 
@@ -170,7 +169,7 @@ export const patchUserRight = async (username, email, group, right) => {
     const responseData = await response.text();
 
     if (responseData === "Edit right done") {
-      return "Edit successfully"; 
+      return "Edit successfully";
     } else {
       throw new Error("Edit failed: " + responseData);
     }
@@ -180,14 +179,13 @@ export const patchUserRight = async (username, email, group, right) => {
   }
 };
 
-
-
-
 export function getOptions() {
-  const token = localStorage.token ? JSON.parse(localStorage.token).token : null;
+  const token = localStorage.token
+    ? JSON.parse(localStorage.token).token
+    : null;
   return fetch(api_user_right_url, {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: token,
     },
   })
@@ -212,4 +210,3 @@ export function getOptions() {
       throw error;
     });
 }
-

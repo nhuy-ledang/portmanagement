@@ -53,8 +53,7 @@ export default function ImportUserManagement(props) {
           handleUpdateTable();
           handleClose();
           window.location.reload();
-        }
-        else {
+        } else {
           toast.error("Import failed. Please try again.");
         }
       })
@@ -66,7 +65,11 @@ export default function ImportUserManagement(props) {
 
   return (
     <>
-      <Button variant="warning" onClick={handleShow} className="text-white d-flex align-items-center gap-2">
+      <Button
+        variant="warning"
+        onClick={handleShow}
+        className="text-white d-flex align-items-center gap-2"
+      >
         <MdCreateNewFolder />
         <span className="">Import</span>
       </Button>

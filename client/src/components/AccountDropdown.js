@@ -14,7 +14,7 @@ export default function AccountDropdown({ setToken }) {
     if (localStorage && localStorage.token) {
       delete localStorage.token; // Xóa thuộc tính 'token' trong localStorage
     }
-    window.location.reload(); 
+    window.location.reload();
   };
 
   return (

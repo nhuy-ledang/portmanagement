@@ -66,7 +66,9 @@ function RightAssignment() {
                         {user && user.username ? (
                           editingUserRightId === user.id ? (
                             <>
-                              <span onClick={() => handleEditUserRight(user.id)}>
+                              <span
+                                onClick={() => handleEditUserRight(user.id)}
+                              >
                                 {user.username}
                               </span>
                               <div>
@@ -87,7 +89,9 @@ function RightAssignment() {
                       </td>
                       <td className="table-data">{user && user.email}</td>
                       <td className="table-data">{user && user.group}</td>
-                      <td className="table-data">{user && user.right ? user.right[0].right : null}</td>
+                      <td className="table-data">
+                        {user && user.right ? user.right[0].right : null}
+                      </td>
                     </tr>
                   ))}
               </tbody>

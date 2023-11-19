@@ -78,8 +78,6 @@ function Administrator() {
       });
   };
 
-  
-
   return (
     <>
       <div className="administrator-table">
