@@ -150,6 +150,7 @@ module.exports = {
     	if(req.query.right!='true'){
 		    const{
 		      username,
+		      newusername,
 		      email,
 		      group
 		    } = req.body;
@@ -159,6 +160,9 @@ module.exports = {
 		      var created = DateTime.now().toString();
 		      if (req.body.email == "" || req.body.fullname == "") {
 		          return res.send("Invailid input");
+		      }
+		      if(newusername){
+		      	user.username = newusername;
 		      }
 		      user.email = email;
 		      user.group = group;

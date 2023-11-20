@@ -253,6 +253,7 @@
            	}
            	body = {
 			    "username": "testuser1",
+			    "newusername": "testttt",		//optional
 		        "email": "testuser@example.com",
 		        "group": "Test"
 			}

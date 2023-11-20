@@ -43,7 +43,7 @@ module.exports = {
 		}).then(function(layout){
 			var created = DateTime.now().toString();
 			if(req.body.layoutname){
-			    layout.layoutname = layoutname;
+			    layout.layoutname = req.body.layoutname;
 			}
 			console.log(req)
 			if(req.file){

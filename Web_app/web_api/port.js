@@ -62,21 +62,24 @@ module.exports = {
 					LayoutModel.findById(port.layout).then(async function(old_layout){
 						console.log(req.body)
 						console.log(user)
-						port.right = user.right._id;
-						console.log(layoutname)
+						port.right = user.right;
+						console.log(user.right);
+						if(!layout._id.equals(old_layout._id)){
+							layout.portlist.push(port._id)
+							old_layout.portlist = old_layout.portlist.filter(await function(port_id){
+								console.log(port_id)
+								console.log(port._id)
+								console.log(!(port._id.equals(port_id)))
+								return !(port._id.equals(port_id));
+							})
+							console.log(old_layout.portlist)
+							old_layout.save()
+							layout.save()
+						}
+						// console.log(layoutname)
 						console.log(layout)
-						old_layout.portlist = old_layout.portlist.filter(await function(port_id){
-							console.log(port_id)
-							console.log(port._id)
-							console.log(!(port._id.equals(port_id)))
-							return !(port._id.equals(port_id));
-						})
-						console.log(old_layout.portlist)
-						old_layout.save()
 						port.layout = layout._id;
 						port.layoutid = layout.id;
-						layout.portlist.push(port._id)
-						layout.save()
 						port.user = user._id;
 						port.status = status;
 						port.save();

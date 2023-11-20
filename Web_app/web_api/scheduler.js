@@ -16,6 +16,17 @@ function scan(){
 	};
 	fetch(scanAPI, requestOptions)
 }
+function changeStatus(portid, status){
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	var requestOptions = {
+	  method: 'PUT',
+	  headers: myHeaders,
+	  body: {"status": status},
+	  redirect: 'follow'
+	};
+	fetch(process.env.SWITCHAPI+"/port/updatePortStatus/"+portid, requestOptions)
+}
 const task = cron.schedule('* * * * *', ()=>{
 	const time = DateTime.local().toLocaleString(DateTime.DATETIME_FULL);
 	console.log(time);
@@ -72,7 +83,7 @@ module.exports = {
 			PortModel.findOne({ portname:portname }).then(function(port){
 				const SchedulerData = new SchedulerModel({
 					id: nextid,
-					datetime: DateTime.local(year,month,day,hours,minutes).toLocaleString(DateTime.DATETIME_FULL),
+					datetime: DateTime.local(year,month,day,hours,minutes).toLocaleString(DateTime.DATETIME_FULL, {locale:'en'}),
 				    port: port._id,
 				    changeto: status
 				});
