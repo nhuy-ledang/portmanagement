@@ -10,6 +10,7 @@ import {
 } from "../../../services/PortSchedulerSevice";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import {isFormCreateValid} from "../../../validations/ScheduleValidation"
 
 export default function SetSchedule(props) {
   const [selectedDateTime, setSelectedDateTime] = useState(new Date());
@@ -104,14 +105,12 @@ export default function SetSchedule(props) {
     fetchLayoutnames();
   }, []);
 
-  
-
   return (
     <>
       <Button variant="success" onClick={handleShow}>
         <IoMdCreate />
       </Button>
-      <Modal show={show} onHide={handleClose} className="modal-create-admin">
+      <Modal show={show} onHide={handleClose} className="form-modal">
         <Modal.Header closeButton>
           <Modal.Title>Set Schedule</Modal.Title>
         </Modal.Header>
@@ -186,7 +185,11 @@ export default function SetSchedule(props) {
           <Button variant="secondary" onClick={handleClose}>
             Cancel
           </Button>
-          <Button variant="success" onClick={handleCreateScheduler}>
+          <Button variant="success" onClick={handleCreateScheduler} disabled={
+              !isFormCreateValid(
+                layoutname, portname, status
+              )
+            }>
             Save
           </Button>
         </Modal.Footer>

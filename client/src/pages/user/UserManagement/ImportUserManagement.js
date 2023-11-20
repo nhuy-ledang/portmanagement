@@ -73,7 +73,7 @@ export default function ImportUserManagement(props) {
         <MdCreateNewFolder />
         <span className="">Import</span>
       </Button>
-      <Modal show={show} onHide={handleClose} className="modal-create-admin">
+      <Modal show={show} onHide={handleClose} className="form-modal">
         <Modal.Header closeButton>
           <Modal.Title>Import User</Modal.Title>
         </Modal.Header>

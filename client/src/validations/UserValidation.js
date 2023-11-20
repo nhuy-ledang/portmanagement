@@ -15,6 +15,6 @@ export const isValidEmail = (email) => {
   return emailRegex.test(email);
 };
 
-export const isFormEditValid = (email, username, group) => {
+export const isFormEditValid = (username, email, group) => {
   return email && email.trim() !== "" && username && username.trim() !== "" && group && group.trim() !== "";
 };

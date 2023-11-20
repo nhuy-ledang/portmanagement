@@ -8,6 +8,7 @@ import {
   getLayoutOptions,
   getUserOptions,
 } from "../../../services/PortService";
+import {isFormCreateValid} from "../../../validations/PortValidation";
 
 export default function AssignPort(props) {
   const [portname, setPortname] = useState("");
@@ -53,6 +54,7 @@ export default function AssignPort(props) {
     const token = localStorage.token
       ? JSON.parse(localStorage.token)?.token
       : null;
+      
     const response = await patchPort(
       portname,
       layoutname,
@@ -77,7 +79,7 @@ export default function AssignPort(props) {
   return (
     <>
       <AiFillEdit onClick={handleShow} />
-      <Modal show={show} onHide={handleClose} className="modal-create-admin">
+      <Modal show={show} onHide={handleClose} className="form-modal">
         <Modal.Header closeButton>
           <Modal.Title>Assign Port</Modal.Title>
         </Modal.Header>
@@ -148,7 +150,11 @@ export default function AssignPort(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleEditUser}>
+          <Button variant="primary" onClick={handleEditUser} disabled={
+              !isFormCreateValid(
+                layoutname, username, status
+              )
+            }>
             Update
           </Button>
         </Modal.Footer>

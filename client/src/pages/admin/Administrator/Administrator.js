@@ -89,7 +89,7 @@ function Administrator() {
 
   return (
     <>
-      <div className="administrator-table">
+      <div className="data-table">
         <h2>Administrator Management</h2>
         <div className="button-action">
           <div className="btn-delete-add">

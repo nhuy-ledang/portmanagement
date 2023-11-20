@@ -80,7 +80,7 @@ export default function CreateAdministrator(props) {
       <Button variant="success" onClick={handleShow}>
         <IoMdCreate />
       </Button>
-      <Modal show={show} onHide={handleClose} className="modal-create-admin">
+      <Modal show={show} onHide={handleClose} className="form-modal">
         <Modal.Header closeButton>
           <Modal.Title>Create Administrator</Modal.Title>
         </Modal.Header>

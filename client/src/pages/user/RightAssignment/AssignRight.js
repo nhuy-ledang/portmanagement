@@ -4,9 +4,9 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import "react-toastify/dist/ReactToastify.css";
 import { AiFillEdit } from "react-icons/ai";
-import { patchUserRight, getOptions  } from "../../../services/UserService";
+import { patchUserRight, getOptions } from "../../../services/UserService";
 // import {isFormEditRightValid} from "../../../validations/RightValidation"
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 
 export default function AssignRight(props) {
   const [username, setUsername] = useState("");
@@ -25,7 +25,7 @@ export default function AssignRight(props) {
       setRight(dataUserRightEdit.right[0].right);
     }
   }, [dataUserRightEdit, show]);
- 
+
   const handleEditUser = async () => {
     try {
       const response = await patchUserRight(username, right);
@@ -61,7 +61,7 @@ export default function AssignRight(props) {
   return (
     <>
       <AiFillEdit onClick={handleShow} />
-      <Modal show={show} onHide={handleClose} className="modal-create-admin">
+      <Modal show={show} onHide={handleClose} className="form-modal">
         <Modal.Header closeButton>
           <Modal.Title>Assign Right</Modal.Title>
         </Modal.Header>
@@ -107,10 +107,7 @@ export default function AssignRight(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button
-            variant="primary"
-            onClick={handleEditUser}
-          >
+          <Button variant="primary" onClick={handleEditUser}>
             Update
           </Button>
         </Modal.Footer>

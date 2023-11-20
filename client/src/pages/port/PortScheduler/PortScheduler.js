@@ -72,7 +72,7 @@ export default function PortScheduler() {
 
   return (
     <>
-      <div className="administrator-table">
+      <div className="data-table">
         <h2>Port Scheduler</h2>
         <div className="button-action">
           <div className="btn-delete-add">

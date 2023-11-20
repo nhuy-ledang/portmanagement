@@ -5,9 +5,10 @@ import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import { IoMdCreate } from "react-icons/io";
 import { postLayout } from "../../../services/LayoutService";
-
+import { isFormCreateValid } from "../../../validations/LayoutValidation";
 export default function CreateLayoutManagement(props) {
   const [layoutname, setLayoutname] = useState("");
+  const [layoutdir, setLayoutdir] = useState("");
   const [image, setImage] = useState(null);
   const [show, setShow] = useState(false);
   const { handleUpdateTable } = props;
@@ -72,7 +73,7 @@ export default function CreateLayoutManagement(props) {
       <Button variant="success" onClick={handleShow}>
         <IoMdCreate />
       </Button>
-      <Modal show={show} onHide={handleClose} className="modal-create-admin">
+      <Modal show={show} onHide={handleClose} className="form-modal">
         <Modal.Header closeButton>
           <Modal.Title>Add Layout</Modal.Title>
         </Modal.Header>
@@ -103,7 +104,11 @@ export default function CreateLayoutManagement(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleCreateLayout}>
+          <Button
+            variant="primary"
+            onClick={handleCreateLayout}
+            disabled={!isFormCreateValid(layoutname)}
+          >
             OK
           </Button>
         </Modal.Footer>

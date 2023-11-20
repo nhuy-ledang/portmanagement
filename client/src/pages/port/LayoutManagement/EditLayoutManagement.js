@@ -121,7 +121,7 @@ export default function EditLayoutManagement(props) {
   return (
     <>
       <AiFillEdit onClick={handleShow} />
-      <Modal show={show} onHide={handleClose} className="modal-create-admin">
+      <Modal show={show} onHide={handleClose} className="form-modal">
         <Modal.Header closeButton>
           <Modal.Title>Edit Layout</Modal.Title>
         </Modal.Header>

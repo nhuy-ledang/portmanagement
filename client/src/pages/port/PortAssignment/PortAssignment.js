@@ -53,7 +53,7 @@ function PortAssignment() {
 
   return (
     <>
-      <div className="administrator-table">
+      <div className="data-table">
         <h2>Port Assignment</h2>
         <div className="button-action"></div>
         {data ? (

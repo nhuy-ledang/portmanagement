@@ -1,4 +1,4 @@
-.administrator-table {
+.data-table {
   text-align: center;
   width: 100%;
   display: flex;
@@ -14,7 +14,7 @@
     .btn-delete-add {
       display: flex;
       gap: 20px;
-    }  
+    }
   }
 
   .text-load {
@@ -83,7 +83,6 @@
   }
 }
 
-
 @media only screen and (max-width: 600px) {
   h2 {
     font-size: 24px;
@@ -98,13 +97,12 @@
       height: 33px;
     }
   }
-  .administrator-table {
+  .data-table {
     .button-action {
       width: 90%;
     }
   }
 }
-
 
 /* DateTimePickerCustom.css */
 

@@ -55,13 +55,13 @@ function UserRightistrator() {
 
   return (
     <>
-      <div className="administrator-table">
+      <div className="data-table">
         <h2>Right Assignment</h2>
         {data ? (
           <>
             <table>
               <thead>
-                <tr>                 
+                <tr>
                   <th className="col-3 name-col">USER NAME</th>
                   <th className="col-3 name-col">EMAIL</th>
                   <th className="col-3 name-col">GROUP</th>
@@ -75,7 +75,7 @@ function UserRightistrator() {
                     (currentPage + 1) * itemsPerPage
                   )
                   .map((user) => (
-                    <tr key={user.id}>                      
+                    <tr key={user.id}>
                       <td className="table-data adminname-item">
                         {editingUserRightId === user.id ? (
                           <>

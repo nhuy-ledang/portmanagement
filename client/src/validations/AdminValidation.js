@@ -1,4 +1,3 @@
-// formValidation.js
 export const isFormCreateValid = (
     adminname,
     email,

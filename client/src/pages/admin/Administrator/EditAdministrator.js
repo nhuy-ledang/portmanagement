@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import { AiFillEdit } from "react-icons/ai";
 import { isFormEditValid } from "../../../validations/AdminValidation";
 import { patchAdmin } from "../../../services/AdminService";
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 
 export default function EditAdministrator(props) {
   const [adminname, setAdminname] = useState("");
@@ -36,13 +36,13 @@ export default function EditAdministrator(props) {
     }
     handleClose();
     toast.success("Admin edited successfully!");
-    console.log(response);  
+    console.log(response);
   };
 
   return (
     <>
       <AiFillEdit onClick={handleShow} />
-      <Modal show={show} onHide={handleClose} className="modal-create-admin">
+      <Modal show={show} onHide={handleClose} className="form-modal">
         <Modal.Header closeButton>
           <Modal.Title>Edit Administrator</Modal.Title>
         </Modal.Header>

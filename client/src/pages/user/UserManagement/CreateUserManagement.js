@@ -24,9 +24,7 @@ export default function CreateUserManagement(props) {
 
   const handleCreateUser = async () => {
     if (isFormCreateValid(username, email, group) && isValidEmail(email)) {
-      const res = await postUser(
-        username, email, group
-      );
+      const res = await postUser(username, email, group);
       console.log(res);
       if (res === "User already") {
         toast.error("User already exists");
@@ -34,12 +32,13 @@ export default function CreateUserManagement(props) {
         handleClose();
         toast.success("User created successfully!");
         await handleUpdateTable({
-          username, email, group
+          username,
+          email,
+          group,
         });
       } else {
         toast.error("Error!");
       }
-      
     } else {
       toast.error("Please enter a valid email address");
     }
@@ -50,7 +49,7 @@ export default function CreateUserManagement(props) {
       <Button variant="success" onClick={handleShow}>
         <IoMdCreate />
       </Button>
-      <Modal show={show} onHide={handleClose} className="modal-create-admin">
+      <Modal show={show} onHide={handleClose} className="form-modal">
         <Modal.Header closeButton>
           <Modal.Title>Create User</Modal.Title>
         </Modal.Header>

@@ -37,7 +37,7 @@ export default function ChangePasswordAdmin(props) {
   return (
     <>
       <div onClick={handleShow}>Change Password</div>
-      <Modal show={show} onHide={handleClose} className="modal-create-admin">
+      <Modal show={show} onHide={handleClose} className="form-modal">
         <Modal.Header closeButton>
           <Modal.Title>Change Password</Modal.Title>
         </Modal.Header>
