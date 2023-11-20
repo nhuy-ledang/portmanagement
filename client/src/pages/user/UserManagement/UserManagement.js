@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getUser, deleteUser } from "../../../services/UserService";
 import { toast } from "react-toastify";
+import _ from "lodash";
 
 function UserManagement() {
   const [data, setData] = useState(null);
@@ -42,14 +43,25 @@ function UserManagement() {
     setEditingUserId(userId);
   };
 
-  const handleUpdateTable = () => {
+  const handleUpdateTable = (user) => {
+    setData([user, ...data]);
+  };
+
+  const handleUpdateImportTable = () => {
     getUser().then((userData) => {
       setData(userData);
     });
   };
 
   const handleUpdateUserFromModal = (user) => {
-    console.error(">> Check handleUpdateUserFromModal", user);
+    let cloneData = _.cloneDeep(data);
+    let index = cloneData.findIndex((item) => item.id === user.id);
+    if (index !== -1) {
+      cloneData[index].username = user.username;
+      cloneData[index].email = user.email;
+      cloneData[index].group = user.group;
+      setData(cloneData);
+    }
   };
 
   const handleSelect = (user) => {
@@ -103,7 +115,9 @@ function UserManagement() {
               <CreateUserManagement handleUpdateTable={handleUpdateTable} />
             </div>
           </div>
-          <ImportUserManagement handleUpdateTable={handleUpdateTable} />
+          <ImportUserManagement
+            handleUpdateImportTable={handleUpdateImportTable}
+          />
         </div>
         {data ? (
           <>

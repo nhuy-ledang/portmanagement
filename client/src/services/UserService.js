@@ -6,7 +6,7 @@ const headers = {
 const api_user_url = `${process.env.REACT_APP_API_URL}/user`;
 const api_user_right_url = `${process.env.REACT_APP_API_URL}/right`;
 // const api_import_user_url = `${process.env.REACT_APP_API_URL}/user?csv=true`;
-const apiUrlWithRightParam = `${api_user_url}?right=true`;
+const apiUrlWithRightParam = `${process.env.REACT_APP_API_URL}/user?right=true`;
 
 export const getUser = async (token) => {
   try {
@@ -30,6 +30,32 @@ export const getUser = async (token) => {
 
 export const postUser = async (username, email, group) => {
   const data = { username, email, group };
+  try {
+    if (!token) {
+      console.error("Token is missing or invalid. Please log in.");
+      return;
+    }
+
+    const response = await fetch(api_user_url, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error("Request failed with status code " + response.status);
+    }
+
+    const responseData = await response.text();
+    return responseData;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
+
+export const postImportUser = async () => {
+  const data = { };
   try {
     if (!token) {
       console.error("Token is missing or invalid. Please log in.");
@@ -114,23 +140,6 @@ export const deleteUser = async (selectedItems) => {
   }
 };
 
-// export const getUserRight = async () => {
-//   try {
-//     if (!token) {
-//       console.error("Token is missing or invalid. Please log in.");
-//       return;
-//     }
-
-//     const response = await fetch(apiUrlWithRightParam, {
-//       headers,
-//     });
-//     const jsonData = await response.json();
-//     return jsonData;
-//   } catch (error) {
-//     console.error("Error:", error);
-//     throw error;
-//   }
-// };
 
 export const getUserRight = async (token) => {
   try {
@@ -152,9 +161,36 @@ export const getUserRight = async (token) => {
   }
 };
 
-export const patchUserRight = async (username, email, group, right) => {
-  const data = { username, email, group, right };
-  const apiUrlWithRightParam = `${api_user_url}?right=true`;
+// export const patchUserRight = async (username, right) => {
+//   const data = { username, right };
+//   const apiUrlWithRightParam = `${api_user_url}?right=true`;
+//   try {
+//     const response = await fetch(apiUrlWithRightParam, {
+//       method: "PATCH",
+//       headers,
+//       body: JSON.stringify(data),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("Request failed with status code " + response.status);
+//     }
+
+//     const responseData = await response.text();
+
+//     if (responseData === "Edit right done") {
+//       return "Edit successfully";
+//     } else {
+//       throw new Error("Edit failed: " + responseData);
+//     }
+//   } catch (error) {
+//     console.error("Error:", error);
+//     throw error;
+//   }
+// };
+
+export const patchUserRight = async (username, right) => {
+  const data = { username, right };
+  
   try {
     const response = await fetch(apiUrlWithRightParam, {
       method: "PATCH",
@@ -167,17 +203,13 @@ export const patchUserRight = async (username, email, group, right) => {
     }
 
     const responseData = await response.text();
-
-    if (responseData === "Edit right done") {
-      return "Edit successfully";
-    } else {
-      throw new Error("Edit failed: " + responseData);
-    }
+    return responseData;
   } catch (error) {
     console.error("Error:", error);
     throw error;
   }
 };
+
 
 export function getOptions() {
   const token = localStorage.token

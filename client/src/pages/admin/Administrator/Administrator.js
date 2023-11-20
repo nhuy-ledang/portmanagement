@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getAdmin, deleteAdmin } from "../../../services/AdminService";
 import { toast } from "react-toastify";
+import _ from "lodash";
 
 function Administrator() {
   const [data, setData] = useState(null);
@@ -45,7 +46,15 @@ function Administrator() {
   };
 
   const handleUpdateAdminFromModal = (admin) => {
-    console.error(">> Check handleUpdateAdminFromModal", admin);
+    let cloneData = _.cloneDeep(data);
+    let index = data.findIndex((item) => item.id === admin.id);
+    cloneData[index].email = admin.email;
+    cloneData[index].fullname = admin.fullname;
+    setData(cloneData);
+    // console.log(">> Check handleUpdateAdminFromModal:", admin);
+    // console.log(">> Check data:", data);
+    // console.log(">> Check cloneData:", cloneData);
+    // console.log(">> Check index:", index);
   };
 
   const handleSelect = (admin) => {

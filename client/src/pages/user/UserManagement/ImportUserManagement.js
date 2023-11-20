@@ -7,7 +7,7 @@ import { MdCreateNewFolder } from "react-icons/md";
 import { getUser } from "../../../services/UserService";
 export default function ImportUserManagement(props) {
   const [show, setShow] = useState(false);
-  const { handleUpdateTable } = props;
+  const { handleUpdateImportTable } = props;
   const handleClose = () => {
     setShow(false);
   };
@@ -50,7 +50,7 @@ export default function ImportUserManagement(props) {
       .then((response) => {
         if (response.ok) {
           toast.success("Import successful!");
-          handleUpdateTable();
+          handleUpdateImportTable();
           handleClose();
           window.location.reload();
         } else {

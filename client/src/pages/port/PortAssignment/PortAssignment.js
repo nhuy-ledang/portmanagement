@@ -5,6 +5,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getPort } from "../../../services/PortService";
 import AssignPort from "./AssignPort";
+import _ from "lodash";
+
 function PortAssignment() {
   const [data, setData] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
@@ -36,7 +38,17 @@ function PortAssignment() {
   };
 
   const handleUpdatePortFromModal = (port) => {
-    console.log(">> Check handleUpdatePortFromModal", port);
+    let cloneData = _.cloneDeep(data);
+    let index = data.findIndex((item) => item.id === port.id);
+    cloneData[index].layoutname = port.layout[0]?.layoutname;
+    cloneData[index].username = port.user[0]?.username;
+    cloneData[index].right = port.right[0]?.right;
+    cloneData[index].status = port.status;
+    setData(cloneData);
+    // console.log(">> Check handleUpdateAdminFromModal:", admin);
+    // console.log(">> Check data:", data);
+    // console.log(">> Check cloneData:", cloneData);
+    // console.log(">> Check index:", index);
   };
 
   return (

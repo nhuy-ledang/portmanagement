@@ -26,7 +26,7 @@ export default function EditAdministrator(props) {
 
   const handleEditAdmin = async () => {
     const response = await patchAdmin(adminname, email, fullname);
-    if (response && response.adminname) {
+    if (response && response === "Edit admin done") {
       handleUpdateAdminFromModal({
         adminname: adminname,
         id: dataAdminEdit.id,
@@ -34,9 +34,9 @@ export default function EditAdministrator(props) {
         fullname: fullname,
       });
     }
+    handleClose();
     toast.success("Admin edited successfully!");
-    console.log(response);
-    window.location.reload();
+    console.log(response);  
   };
 
   return (

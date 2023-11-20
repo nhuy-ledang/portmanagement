@@ -6,16 +6,13 @@ const headers = {
 const api_admin_url = `${process.env.REACT_APP_API_URL}/admin`;
 const api_admin_change_pass_url = `${api_admin_url}?password=true`;
 
+
 export const getAdmin = async (token) => {
   try {
     if (!token) {
       console.error("Token is missing or invalid. Please log in.");
       return null;
     }
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: token,
-    };
     const response = await fetch(api_admin_url, {
       headers,
     });
@@ -39,12 +36,6 @@ export const postAdmin = async (
       console.error("Token is missing or invalid. Please log in.");
       return;
     }
-
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: token,
-    };
-
     const response = await fetch(api_admin_url, {
       method: "POST",
       headers,
@@ -54,7 +45,6 @@ export const postAdmin = async (
     if (!response.ok) {
       throw new Error("Request failed with status code " + response.status);
     }
-
     const responseData = await response.text();
     return responseData;
   } catch (error) {
@@ -63,15 +53,12 @@ export const postAdmin = async (
   }
 };
 
-export const patchAdmin = async (adminname, email, fullname) => {
+export const patchAdmin = async (adminname, email, fullname, token) => {
   const data = { adminname, email, fullname };
   try {
     const response = await fetch(api_admin_url, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: JSON.parse(localStorage.token).token,
-      },
+      headers,
       body: JSON.stringify(data),
     });
     if (!response.ok) {
@@ -89,7 +76,7 @@ export const deleteAdmin = (selectedItems) => {
   const deletePromises = selectedItems.map((admin) => {
     const requestOptions = {
       method: "DELETE",
-      headers: headers,
+      headers,
       body: JSON.stringify({
         adminname: admin.adminname,
       }),
@@ -100,7 +87,6 @@ export const deleteAdmin = (selectedItems) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-
         return response.text();
       })
       .then((text) => {
@@ -125,19 +111,15 @@ export const changePassAdmin = async (password, confirmpassword) => {
     });
 
     if (!response.ok) {
-      // throw new Error("Request failed with status code " + response.status);
       console.error("Request failed with status code " + response.status);
     }
     const responseData = await response.text();
-
     if (responseData === "Edit password done") {
       return "Edit successfully";
     } else {
-      // throw new Error("Edit failed: " + responseData);
       return new Error(responseData);
     }
   } catch (error) {
     console.error("Error:", error);
-    // throw error;
   }
 };

@@ -46,6 +46,7 @@ function LayoutManagement() {
 
   const handleUpdateAdminFromModal = (layout) => {
     console.log(">>> Check handleUpdateLayoutFromModal:", layout);
+    console.log(">> Check data: ", data);
   };
 
   const handleSelect = (layout) => {
