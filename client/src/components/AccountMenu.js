@@ -16,7 +16,7 @@ export default function AccountMenu() {
   };
 
   const { token, setToken } = useToken();
-  // console.log(token);
+  console.log(token);
 
   return (
     <>

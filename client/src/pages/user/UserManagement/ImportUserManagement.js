@@ -80,7 +80,7 @@ export default function ImportUserManagement(props) {
         <Modal.Body>
           <Form>
             <div className="mb-3">
-              <label className="form-label">File</label>
+              <label className="form-label">File Import</label>
               <input
                 type="file"
                 className="form-control"

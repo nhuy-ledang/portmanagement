@@ -159,7 +159,7 @@ function LayoutManagement() {
                       <td className="table-data">
                         <img
                           className="img-layout"
-                          src={`https://hpid.homethang.duckdns.org/images/${layout.layoutdir}`}
+                          src={`${process.env.REACT_APP_API_URL_IMAGE}/${layout.layoutdir}`}
                           alt={layout.layoutname}
                         />
                       </td>

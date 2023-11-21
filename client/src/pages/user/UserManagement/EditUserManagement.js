@@ -6,7 +6,6 @@ import { AiFillEdit } from "react-icons/ai";
 import { isFormEditValid } from "../../../validations/UserValidation";
 import { patchUser } from "../../../services/UserService";
 import { toast } from "react-toastify";
-import { MdContactSupport } from "react-icons/md";
 
 export default function EditUserManagement(props) {
   const [username, setUsername] = useState("");
@@ -26,23 +25,18 @@ export default function EditUserManagement(props) {
   }, [dataUserEdit, show]);
 
   const handleEditUser = async () => {
-    console.log(username);
-    console.log(email);
-    console.log(group);
-    
     const response = await patchUser(username, email, group);
+    if (response && response === "Edit user done") {
+      handleUpdateUserFromModal({
+        username: username,
+        id: dataUserEdit.id,
+        email: email,
+        group: group,
+      });
+    }
+    handleClose();
+    toast.success("User edited successfully!");
     console.log(response);
-    // if (response && response === "Edit user done") {
-    //   handleUpdateUserFromModal({
-    //     username: username,
-    //     id: dataUserEdit.id,
-    //     email: email,
-    //     group: group,
-    //   });
-    // }
-    // handleClose();
-    // toast.success("User edited successfully!");
-    // console.log(response);
   };
 
   return (

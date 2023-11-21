@@ -4,8 +4,6 @@
   "private": true,
   "dependencies": {
     "@blueprintjs/core": "^5.5.1",
-    "@coreui/coreui": "^4.3.2",
-    "@coreui/react": "^4.11.0",
     "@mui/material": "^5.14.15",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

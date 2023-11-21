@@ -8,7 +8,7 @@ import { postLayout } from "../../../services/LayoutService";
 import { isFormCreateValid } from "../../../validations/LayoutValidation";
 export default function CreateLayoutManagement(props) {
   const [layoutname, setLayoutname] = useState("");
-  const [layoutdir, setLayoutdir] = useState("");
+  // const [layoutdir, setLayoutdir] = useState("");
   const [image, setImage] = useState(null);
   const [show, setShow] = useState(false);
   const { handleUpdateTable } = props;

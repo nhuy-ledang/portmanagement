@@ -102,7 +102,8 @@ function PortAssignment() {
                         {port.layout[0]?.layoutname}
                       </td>
                       <td className="table-data">{port.user[0]?.username}</td>
-                      <td className="table-data">{port.right[0]?.right}</td>
+                      {/* <td className="table-data">{port.right[0]?.right}</td> */}
+                      <td className="table-data">{port.user[0]?.username ? port.right[0]?.right : ""}</td>
                       <td className="table-data">{port.status}</td>
                     </tr>
                   ))}
