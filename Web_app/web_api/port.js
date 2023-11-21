@@ -64,16 +64,22 @@ module.exports = {
 						console.log(user)
 						port.right = user.right;
 						console.log(user.right);
-						if(!layout._id.equals(old_layout._id)){
+						if(old_layout){
+							if(!layout._id.equals(old_layout._id)){
+								layout.portlist.push(port._id)
+								old_layout.portlist = old_layout.portlist.filter(await function(port_id){
+									console.log(port_id)
+									console.log(port._id)
+									console.log(!(port._id.equals(port_id)))
+									return !(port._id.equals(port_id));
+								})
+								console.log(old_layout.portlist)
+								old_layout.save()
+								layout.save()
+							}
+						}
+						else{
 							layout.portlist.push(port._id)
-							old_layout.portlist = old_layout.portlist.filter(await function(port_id){
-								console.log(port_id)
-								console.log(port._id)
-								console.log(!(port._id.equals(port_id)))
-								return !(port._id.equals(port_id));
-							})
-							console.log(old_layout.portlist)
-							old_layout.save()
 							layout.save()
 						}
 						// console.log(layoutname)
