@@ -83,17 +83,6 @@
   }
 }
 
-.home-table {
-  width: 80%;
-  .img-layout {
-    width: 200px;
-    height: auto;
-  }
-  table .table-data {
-    height: 0px;
-  }
-}
-
 @media only screen and (max-width: 600px) {
   h2 {
     font-size: 24px;
@@ -110,6 +99,9 @@
   }
   .data-table {
     .button-action {
+      width: 85%;
+    }
+    table {
       width: 90%;
     }
   }

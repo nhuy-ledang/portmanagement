@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../../../App.scss";
+import "./PortScheduler.scss";
 import SetSchedule from "./SetSchedule";
 import ReactPaginate from "react-paginate";
 import { AiFillDelete } from "react-icons/ai";
@@ -94,58 +94,60 @@ export default function PortScheduler() {
         </div>
         {data ? (
           <>
-            <table>
-              <thead>
-                <tr>
-                  <th className="col-1">
-                    <input
-                      type="checkbox"
-                      checked={selectedItems.length === data.length}
-                      onChange={handleSelectAll}
-                    />
-                  </th>
-                  <th className="col-3 name-col">DATE TIME</th>
-                  <th className="col-3 name-col">LAYOUT NAME</th>
-                  <th className="col-3 name-col">PORT</th>
-                  <th className="col-3 name-col">USER</th>
-                  <th className="col-3 name-col">CHANGE TO</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data &&
-                  data
-                    .slice(
-                      currentPage * itemsPerPage,
-                      (currentPage + 1) * itemsPerPage
-                    )
-                    .map((scheduler) => (
-                      <tr key={scheduler.id}>
-                        <td className="table-data">
-                          <input
-                            type="checkbox"
-                            checked={selectedItems.includes(scheduler)}
-                            onChange={() => handleSelect(scheduler)}
-                          />
-                        </td>
-                        <td className="table-data">{scheduler.datetime}</td>
-                        <td className="table-data">
-                          {scheduler.port?.[0]?.layout?.[0]?.layoutname}
-                        </td>
-                        <td className="table-data">
-                          {scheduler.port?.[0]?.portname || ""}
-                        </td>
-                        <td className="table-data">
-                          {scheduler.port?.[0]?.user?.[0]?.username || ""}
-                        </td>
-                        <td className="table-data">
-                          {scheduler.changeto !== undefined
-                            ? scheduler.changeto
-                            : " "}
-                        </td>
-                      </tr>
-                    ))}
-              </tbody>
-            </table>
+            <div className="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th className="col-1">
+                      <input
+                        type="checkbox"
+                        checked={selectedItems.length === data.length}
+                        onChange={handleSelectAll}
+                      />
+                    </th>
+                    <th className="col-3 name-col">DATE TIME</th>
+                    <th className="col-3 name-col">LAYOUT NAME</th>
+                    <th className="col-2 name-col">PORT</th>
+                    <th className="col-2 name-col">USER</th>
+                    <th className="col-1 name-col">CHANGE TO</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data &&
+                    data
+                      .slice(
+                        currentPage * itemsPerPage,
+                        (currentPage + 1) * itemsPerPage
+                      )
+                      .map((scheduler) => (
+                        <tr key={scheduler.id}>
+                          <td className="table-data">
+                            <input
+                              type="checkbox"
+                              checked={selectedItems.includes(scheduler)}
+                              onChange={() => handleSelect(scheduler)}
+                            />
+                          </td>
+                          <td className="table-data">{scheduler.datetime}</td>
+                          <td className="table-data">
+                            {scheduler.port?.[0]?.layout?.[0]?.layoutname}
+                          </td>
+                          <td className="table-data">
+                            {scheduler.port?.[0]?.portname || ""}
+                          </td>
+                          <td className="table-data">
+                            {scheduler.port?.[0]?.user?.[0]?.username || ""}
+                          </td>
+                          <td className="table-data">
+                            {scheduler.changeto !== undefined
+                              ? scheduler.changeto
+                              : " "}
+                          </td>
+                        </tr>
+                      ))}
+                </tbody>
+              </table>
+            </div>
             <ReactPaginate
               previousLabel={"<"}
               nextLabel={">"}

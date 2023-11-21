@@ -10,17 +10,17 @@ import {
 } from "../../../services/PortSchedulerSevice";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {isFormCreateValid} from "../../../validations/ScheduleValidation"
+import { isFormCreateValid } from "../../../validations/ScheduleValidation";
 
 export default function SetSchedule(props) {
-  const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date());
+  const [selectedDateTime, setSelectedDateTime] = useState(startDate);
   const [layoutnames, setLayoutnames] = useState([]);
   const [portnames, setPortnames] = useState([]);
   const [layoutname, setLayoutname] = useState("");
   const [portname, setPortname] = useState("");
   const [status, setStatus] = useState("");
   const [show, setShow] = useState(false);
-  const [startDate, setStartDate] = useState(new Date());
   const { handleUpdateTable } = props;
 
   const handleClose = () => {
@@ -49,6 +49,7 @@ export default function SetSchedule(props) {
     };
 
     console.log(">>Check requestData: ", requestData);
+    console.log(">>Check formattedDateTime: ", formattedDateTime);
 
     try {
       const res = await postPortScheduler(requestData);
@@ -121,8 +122,8 @@ export default function SetSchedule(props) {
               <div>
                 <DatePicker
                   className="form-control"
-                  selected={startDate}
-                  onChange={(date) => setStartDate(date)}
+                  selected={selectedDateTime}
+                  onChange={(date) => setSelectedDateTime(date)}
                   timeInputLabel="Time:"
                   dateFormat="MM/dd/yyyy h:mm aa"
                   showTimeInput
@@ -133,7 +134,7 @@ export default function SetSchedule(props) {
               <label className="form-label">Layout Name</label>
               {layoutnames.length > 0 && (
                 <select
-                  className="form-control"
+                  className="form-select"
                   value={layoutname}
                   onChange={handleLayoutnameChange}
                 >
@@ -148,9 +149,9 @@ export default function SetSchedule(props) {
             </div>
             <div className="mb-3">
               <label className="form-label">Port Name</label>
-              {portnames.length > 0 ? ( // Check if portnames is not empty or undefined
+              {portnames.length > 0 ? (
                 <select
-                  className="form-control"
+                  className="form-select"
                   value={portname}
                   onChange={handlePortnameChange}
                 >
@@ -162,7 +163,7 @@ export default function SetSchedule(props) {
                   ))}
                 </select>
               ) : (
-                <select className="form-control" disabled>
+                <select className="form-select" disabled>
                   <option value="">No ports available</option>
                 </select>
               )}
@@ -170,7 +171,7 @@ export default function SetSchedule(props) {
             <div className="mb-3">
               <label className="form-label">Status</label>
               <select
-                className="form-control"
+                className="form-select"
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
               >
@@ -183,14 +184,14 @@ export default function SetSchedule(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Cancel
+            CANCEL
           </Button>
-          <Button variant="success" onClick={handleCreateScheduler} disabled={
-              !isFormCreateValid(
-                layoutname, portname, status
-              )
-            }>
-            Save
+          <Button
+            variant="success"
+            onClick={handleCreateScheduler}
+            disabled={!isFormCreateValid(layoutname, portname, status)}
+          >
+            OK
           </Button>
         </Modal.Footer>
       </Modal>

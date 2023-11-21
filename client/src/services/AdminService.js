@@ -105,25 +105,31 @@ export const deleteAdmin = (selectedItems) => {
   return Promise.all(deletePromises);
 };
 
-export const changePassAdmin = async (password, confirmpassword) => {
-  const data = { password, confirmpassword };
+
+export const changePassAdmin = async (password) => {
+  const data = { password };
   try {
     const response = await fetch(api_admin_change_pass_url, {
       method: "PATCH",
-      headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
       body: JSON.stringify(data),
     });
 
     if (!response.ok) {
-      console.error("Request failed with status code " + response.status);
+      throw new Error("Request failed with status code " + response.status);
     }
+    
     const responseData = await response.text();
     if (responseData === "Edit password done") {
       return "Edit successfully";
     } else {
-      return new Error(responseData);
+      throw new Error(responseData);
     }
   } catch (error) {
     console.error("Error:", error);
+    throw error;
   }
 };

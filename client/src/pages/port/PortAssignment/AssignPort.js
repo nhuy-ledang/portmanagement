@@ -360,7 +360,7 @@ export default function AssignPort(props) {
             onClick={handleClose}
             className="btn btn-secondary"
           >
-            Close
+            CANCEL
           </Button>
           <Button
             variant="primary"
@@ -368,7 +368,7 @@ export default function AssignPort(props) {
             disabled={!isFormCreateValid(layoutname, username, status)}
             className="btn btn-primary"
           >
-            Save Changes
+            OK
           </Button>
         </Modal.Footer>
       </Modal>

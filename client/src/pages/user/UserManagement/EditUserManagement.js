@@ -79,14 +79,14 @@ export default function EditUserManagement(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Close
+            CANCEL
           </Button>
           <Button
             variant="primary"
             onClick={handleEditUser}
             disabled={!isFormEditValid(username, email, group)}
           >
-            Update
+            OK
           </Button>
         </Modal.Footer>
       </Modal>

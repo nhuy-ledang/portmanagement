@@ -92,7 +92,7 @@ export default function ImportUserManagement(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Close
+            CANCEL
           </Button>
           <Button variant="primary" onClick={handleFileUpload}>
             OK

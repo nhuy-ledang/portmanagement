@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./LayoutManagement.scss";
+// import "../../../App.scss";
 import CreateLayoutManagement from "./CreateLayoutManagement";
 import EditLayoutManagement from "./EditLayoutManagement";
 import ReactPaginate from "react-paginate";
@@ -81,7 +82,7 @@ function LayoutManagement() {
 
   return (
     <>
-      <div className="layout-table">
+      <div className="layout-table data-table">
         <h2>Layout Management</h2>
         <div className="button-action">
           <div className="btn-delete-add">

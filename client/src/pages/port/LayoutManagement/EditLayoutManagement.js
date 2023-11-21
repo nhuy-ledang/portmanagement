@@ -169,10 +169,10 @@ export default function EditLayoutManagement(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Close
+            CANCEL
           </Button>
           <Button variant="primary" onClick={handleEditLayout}>
-            Update
+            OK
           </Button>
         </Modal.Footer>
       </Modal>

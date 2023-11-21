@@ -51,7 +51,7 @@ export default function CreateUserManagement(props) {
       </Button>
       <Modal show={show} onHide={handleClose} className="form-modal">
         <Modal.Header closeButton>
-          <Modal.Title>Create User</Modal.Title>
+          <Modal.Title>Add User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -86,7 +86,7 @@ export default function CreateUserManagement(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Close
+            CANCEL
           </Button>
           <Button
             variant="primary"

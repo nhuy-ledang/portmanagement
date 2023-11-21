@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "../../../App.scss";
+// import "../../../App.scss";
+import "./PortAssignment.scss"
 import ReactPaginate from "react-paginate";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -58,13 +59,13 @@ function PortAssignment() {
         <div className="button-action"></div>
         {data ? (
           <>
-            <table>
+            <table className="port-table">
               <thead>
                 <tr>
-                  <th className="col-4 name-col">PORT NAME</th>
-                  <th className="col-3 name-col">LAYOUT NAME</th>
+                  <th className="col-3 name-col">PORT NAME</th>
+                  <th className="col-5 name-col">LAYOUT NAME</th>
                   <th className="col-3 name-col">USER</th>
-                  <th className="col-3 name-col">RIGHT</th>
+                  <th className="col-2 name-col">RIGHT</th>
                   <th className="col-2 name-col">STATUS</th>
                 </tr>
               </thead>

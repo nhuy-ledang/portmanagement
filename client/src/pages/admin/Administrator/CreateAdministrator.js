@@ -135,7 +135,7 @@ export default function CreateAdministrator(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Close
+            CANCEL
           </Button>
           <Button
             variant="primary"
