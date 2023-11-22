@@ -107,7 +107,8 @@ function LayoutManagement() {
         </div>
         {data ? (
           <>
-            <table>
+          <div className="table-container">
+          <table>
               <thead>
                 <tr>
                   <th className="col-1">
@@ -168,6 +169,8 @@ function LayoutManagement() {
                   ))}
               </tbody>
             </table>
+          </div>
+            
             <ReactPaginate
               previousLabel={"<"}
               nextLabel={">"}
