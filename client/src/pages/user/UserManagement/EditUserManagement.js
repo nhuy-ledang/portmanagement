@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 
 export default function EditUserManagement(props) {
   const [username, setUsername] = useState("");
+  const [newusername, setNewUsername] = useState("");
   const [email, setEmail] = useState("");
   const [group, setGroup] = useState("");
   const [show, setShow] = useState(false);
@@ -19,16 +20,22 @@ export default function EditUserManagement(props) {
   useEffect(() => {
     if (show) {
       setUsername(dataUserEdit.username);
+      setNewUsername(dataUserEdit.username);
       setEmail(dataUserEdit.email);
       setGroup(dataUserEdit.group);
     }
   }, [dataUserEdit, show]);
 
   const handleEditUser = async () => {
-    const response = await patchUser(username, email, group);
+    // console.log(username);
+    // console.log(newusername);
+    // console.log(email);
+    // console.log(group);
+    const response = await patchUser(username, newusername, email, group);
     if (response && response === "Edit user done") {
       handleUpdateUserFromModal({
         username: username,
+        newusername: newusername,
         id: dataUserEdit.id,
         email: email,
         group: group,
@@ -48,13 +55,22 @@ export default function EditUserManagement(props) {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <div className="mb-3">
+            <div className="mb-3 d-none">
               <label className="form-label">User Name</label>
               <input
                 type="text"
                 className="form-control"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">User Name</label>
+              <input
+                type="text"
+                className="form-control"
+                value={newusername}
+                onChange={(e) => setNewUsername(e.target.value)}
               />
             </div>
             <div className="mb-3">

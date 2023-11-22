@@ -57,7 +57,8 @@ function UserManagement() {
     let cloneData = _.cloneDeep(data);
     let index = cloneData.findIndex((item) => item.id === user.id);
     if (index !== -1) {
-      cloneData[index].username = user.username;
+      cloneData[index].username = user.newusername;
+      cloneData[index].newusername = user.newusername;
       cloneData[index].email = user.email;
       cloneData[index].group = user.group;
       setData(cloneData);

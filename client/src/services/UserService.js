@@ -80,8 +80,8 @@ export const postImportUser = async () => {
   }
 };
 
-export const patchUser = async (username, email, group) => {
-  const data = { username, email, group };
+export const patchUser = async (username, newusername, email, group) => {
+  const data = { username, newusername, email, group };
   try {
     const response = await fetch(api_user_url, {
       method: "PATCH",
@@ -111,7 +111,10 @@ export const deleteUser = async (selectedItems) => {
     const deletePromises = selectedItems.map((user) => {
       const requestOptions = {
         method: "DELETE",
-        headers,
+        headers : {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
         body: JSON.stringify({
           username: user.username,
         }),
