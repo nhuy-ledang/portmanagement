@@ -6,13 +6,29 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 async function loginUser(credentials) {
-  return fetch(`${process.env.REACT_APP_API_URL}/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(credentials),
-  }).then((data) => data.json());
+  try {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    });
+
+    if (!response.ok) {
+      throw new Error("Invalid response from the server.");
+    }
+
+    const contentType = response.headers.get("content-type");
+
+    if (contentType && contentType.includes("application/json")) {
+      return response.json();
+    } else {
+      return response.text();
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
 }
 
 export default function Login({ setToken }) {
@@ -38,20 +54,25 @@ export default function Login({ setToken }) {
       toast.error("Please fill in both Administrator and Password fields.");
       return;
     }
+
     try {
-      const token = await loginUser({
+      const response = await loginUser({
         adminname,
         password,
       });
-      if (token === null || token === undefined) {
-        toast.error("Invalid response from the server.");
-      } else if (token === "Wrong adminname or password") {
-        toast.error("Incorrect Administrator or Password.");
-      } else {
+
+      // console.log("Backend Response:", response);
+      
+      if (response === "Invailid adminname or password") {
+        toast.error("Invailid adminname or password");
+      } else if (response.token) {
         toast.success("Login successful!");
-        localStorage.setItem("token", token);
-        setToken(token);
-        setTimeout(() => {}, 3000);
+        setTimeout(() => {
+          localStorage.setItem("token", response);
+          setToken(response);
+        }, 3000);
+      } else {
+        toast.error("Wrong adminname or password");
       }
     } catch (error) {
       toast.error(error.message);
