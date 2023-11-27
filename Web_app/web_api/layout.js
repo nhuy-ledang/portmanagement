@@ -48,7 +48,10 @@ module.exports = {
 			console.log(req)
 			if(req.file){
 				if(layout.layoutdir != req.file.originalname){
-					fs.promises.unlink(process.env.UPLOAD_DIR_LAYOUT_IMAGE + layout.layoutdir);
+					try{
+						fs.promises.unlink(process.env.UPLOAD_DIR_LAYOUT_IMAGE + layout.layoutdir);
+					}
+					catch(error){}
 					layout.layoutdir = req.file.originalname;
 				}
 			}

@@ -5,6 +5,23 @@ const LayoutModel = require("../models/layout");
 const SwitchModel = require("../models/switch");
 const UserModel = require("../models/user");
 
+function changeVlan(portid, vlanid){
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+
+	var requestOptions = {
+	  method: 'PUT',
+	  headers: myHeaders,
+	  body: JSON.stringify({"vlanID": vlanid.toString()}),
+	  redirect: 'follow'
+	};
+	console.log(requestOptions.body)
+	console.log(process.env.SWITCHAPI+"/port/updatePortVlanID/"+portid);
+	fetch(process.env.SWITCHAPI+"/port/updatePortVlanID/"+portid, requestOptions).then(response => response.text())
+	.then(result => console.log(result))
+	.catch(error => console.log('error', error));
+}
+
 module.exports = {
 	listPort: function(req, res, next){
 		PortModel.find({}, '-_id -__v -switch').sort("layoutid").populate([{path:"user", select:"username email"},{path:"right", select:"right"},{path:"layout", select:"layoutname"}]).then(function(port){
@@ -101,6 +118,18 @@ module.exports = {
 			portid: req.body.portid
 		}).then(function(port){
 			return res.send("Port removed")
+		})
+	},
+	updateRight: function(userid, right){
+		PortModel.find({user: userid}).then(function(port){
+			console.log(port);
+			port.forEach(async item => {
+				item.right = right._id;
+				console.log(right.vlan);
+				console.log(item.portid);
+				changeVlan(item.portid,right.vlan);
+				item.save();
+			})
 		})
 	}
 }
