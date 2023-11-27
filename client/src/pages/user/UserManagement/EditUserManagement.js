@@ -26,25 +26,52 @@ export default function EditUserManagement(props) {
     }
   }, [dataUserEdit, show]);
 
+  // const handleEditUser = async () => {
+  //   // console.log(username);
+  //   // console.log(newusername);
+  //   // console.log(email);
+  //   // console.log(group);
+  //   const response = await patchUser(username, newusername, email, group);
+  //   if (response && response === "Edit user done") {
+  //     handleUpdateUserFromModal({
+  //       username: username,
+  //       newusername: newusername,
+  //       id: dataUserEdit.id,
+  //       email: email,
+  //       group: group,
+  //     });
+  //   }
+  //   handleClose();
+  //   toast.success("User edited successfully!");
+  //   console.log(response);
+  // };
+
   const handleEditUser = async () => {
-    // console.log(username);
-    // console.log(newusername);
-    // console.log(email);
-    // console.log(group);
-    const response = await patchUser(username, newusername, email, group);
-    if (response && response === "Edit user done") {
-      handleUpdateUserFromModal({
-        username: username,
-        newusername: newusername,
-        id: dataUserEdit.id,
-        email: email,
-        group: group,
-      });
+    try {
+      const response = await patchUser(username, newusername, email, group);
+  
+      if (response === "Edit user done") {
+        handleUpdateUserFromModal({
+          username,
+          newusername,
+          id: dataUserEdit.id,
+          email,
+          group,
+        });
+        toast.success("User edited successfully!");
+      } else if (response === "User already") {
+        toast.error("User already exists");
+      } else {
+        toast.error("Failed to edit user");
+      }
+  
+      handleClose();
+    } catch (error) {
+      console.error("Error editing user:", error.message);
+      toast.error("An error occurred while editing user");
     }
-    handleClose();
-    toast.success("User edited successfully!");
-    console.log(response);
   };
+  
 
   return (
     <>
