@@ -3,6 +3,7 @@ const csv = require('csv-parser');
 const bodyParser = require("body-parser");
 const UserModel = require("../models/user");
 const RightModel = require("../models/right");
+const PortManagement = require("../web_api/port")
 const {DateTime}  = require('luxon');
 
 
@@ -162,13 +163,20 @@ module.exports = {
 		          return res.send("Invailid input");
 		      }
 		      if(newusername){
-		      	user.username = newusername;
+		      	UserModel.findOne({username: newusername}).then(function(usertemp){
+		      		if(usertemp){
+		      			return res.send("User already")
+		      		}
+		      		else{
+		      			user.username = newusername;
+		      			user.email = email;
+					      user.group = group;
+					      user.created = created;
+					      user.save();
+					      return res.send("Edit user done")
+		      		}
+		      	})
 		      }
-		      user.email = email;
-		      user.group = group;
-		      user.created = created;
-		      user.save();
-		      return res.send("Edit user done")
 		    })
 		  }
 		  else{
@@ -183,29 +191,12 @@ module.exports = {
 			      var created = DateTime.now().toString();
 			      user.right = newright;
 			      user.created = created;
+			      PortManagement.updateRight(user._id, newright);
 			      user.save();
 			      return res.send("Edit right done")
 			    })
 		    })
 		  }
-	  },
-	  editRight: function(req,res, next){
-	    const{
-	      username,
-	      right
-	    } = req.body;
-	    UserModel.findOne({
-	      username: req.body.username
-	    }).then(function(user){
-	      var created = DateTime.now().toString();
-	      if (req.body.email == "" || req.body.fullname == "") {
-	          return res.send("Invailid input");
-	      }
-	      user.right = right._id;
-	      user.created = created;
-	      user.save();
-	      return res.send("Edit right done")
-	    })
 	  },
 	  deleteUser: function(req,res, next){
 	    UserModel.deleteOne({

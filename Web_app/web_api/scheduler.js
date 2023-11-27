@@ -22,9 +22,10 @@ function changeStatus(portid, status){
 	var requestOptions = {
 	  method: 'PUT',
 	  headers: myHeaders,
-	  body: {"status": status},
+	  body: JSON.stringify({"status": status}),
 	  redirect: 'follow'
 	};
+	//console.log( requestOptions.body);
 	fetch(process.env.SWITCHAPI+"/port/updatePortStatus/"+portid, requestOptions)
 }
 const task = cron.schedule('* * * * *', ()=>{
@@ -33,7 +34,13 @@ const task = cron.schedule('* * * * *', ()=>{
 	SchedulerModel.find({
 		datetime: time
 	}).then(function(scheduler){
-		scheduler.forEach( scheduler =>{
+		scheduler.forEach( item =>{
+			PortModel.findById(item.port).then(function(port){
+				port.status = item.changeto;
+				console.log(port.status);
+				changeStatus(port.portid, port.status);
+				port.save();
+			})
 		})
 		console.log(scheduler)
 		SchedulerModel.deleteMany({
@@ -64,7 +71,7 @@ module.exports = {
 
 	addScheduler: function(req, res, next){
 		const {
-			year,
+		    year,
 		    month,
 		    day,
 		    hours,
