@@ -25,11 +25,29 @@ function LayoutManagement() {
     ? JSON.parse(localStorage.token)?.token
     : null;
 
+  // useEffect(() => {
+  //   const fetchDataAndUpdateState = async () => {
+  //     try {
+  //       const layoutData = await getLayout(token);
+  //       setData(layoutData);
+  //     } catch (error) {
+  //       console.error("Error fetching layout data:", error);
+  //     }
+  //   };
+  //   fetchDataAndUpdateState();
+  // }, [token, currentPage]);
+  
   useEffect(() => {
     const fetchDataAndUpdateState = async () => {
       try {
         const layoutData = await getLayout(token);
-        setData(layoutData);
+        if (Array.isArray(layoutData)) {
+          setData(layoutData);
+        } else {
+          console.error("Invalid layout data format:", layoutData);
+          localStorage.removeItem("token");
+          window.location.reload();
+        }
       } catch (error) {
         console.error("Error fetching layout data:", error);
       }
@@ -107,70 +125,70 @@ function LayoutManagement() {
         </div>
         {data ? (
           <>
-          <div className="table-container">
-          <table>
-              <thead>
-                <tr>
-                  <th className="col-1">
-                    <input
-                      type="checkbox"
-                      checked={selectedItems.length === data.length}
-                      onChange={handleSelectAll}
-                    />
-                  </th>
-                  <th className="col-4 name-col">LAYOUT NAME</th>
-                  <th className="col-7 name-col">LAYOUT PLAN</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data
-                  .slice(
-                    currentPage * itemsPerPage,
-                    (currentPage + 1) * itemsPerPage
-                  )
-                  .map((layout) => (
-                    <tr key={layout.id}>
-                      <td className="table-data">
-                        <input
-                          type="checkbox"
-                          checked={selectedItems.includes(layout)}
-                          onChange={() => handleSelect(layout)}
-                        />
-                      </td>
-                      <td className="table-data adminname-item">
-                        {editingLayoutId === layout.id ? (
-                          <>
+            <div className="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th className="col-1">
+                      <input
+                        type="checkbox"
+                        checked={selectedItems.length === data.length}
+                        onChange={handleSelectAll}
+                      />
+                    </th>
+                    <th className="col-4 name-col">LAYOUT NAME</th>
+                    <th className="col-7 name-col">LAYOUT PLAN</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data
+                    .slice(
+                      currentPage * itemsPerPage,
+                      (currentPage + 1) * itemsPerPage
+                    )
+                    .map((layout) => (
+                      <tr key={layout.id}>
+                        <td className="table-data">
+                          <input
+                            type="checkbox"
+                            checked={selectedItems.includes(layout)}
+                            onChange={() => handleSelect(layout)}
+                          />
+                        </td>
+                        <td className="table-data adminname-item">
+                          {editingLayoutId === layout.id ? (
+                            <>
+                              <span onClick={() => handleEditLayout(layout.id)}>
+                                {layout.layoutname}
+                              </span>
+                              <div>
+                                <EditLayoutManagement
+                                  handleUpdateAdminFromModal={
+                                    handleUpdateAdminFromModal
+                                  }
+                                  dataLayoutEdit={layout}
+                                />
+                              </div>
+                            </>
+                          ) : (
                             <span onClick={() => handleEditLayout(layout.id)}>
                               {layout.layoutname}
                             </span>
-                            <div>
-                              <EditLayoutManagement
-                                handleUpdateAdminFromModal={
-                                  handleUpdateAdminFromModal
-                                }
-                                dataLayoutEdit={layout}
-                              />
-                            </div>
-                          </>
-                        ) : (
-                          <span onClick={() => handleEditLayout(layout.id)}>
-                            {layout.layoutname}
-                          </span>
-                        )}
-                      </td>
-                      <td className="table-data">
-                        <img
-                          className="img-layout"
-                          src={`${process.env.REACT_APP_API_URL_IMAGE}/${layout.layoutdir}`}
-                          alt={layout.layoutname}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-            
+                          )}
+                        </td>
+                        <td className="table-data">
+                          <img
+                            className="img-layout"
+                            src={`${process.env.REACT_APP_API_URL_IMAGE}/${layout.layoutdir}`}
+                            alt={layout.layoutname}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+
             <ReactPaginate
               previousLabel={"<"}
               nextLabel={">"}

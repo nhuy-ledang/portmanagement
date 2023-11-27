@@ -22,11 +22,29 @@ function PortAssignment() {
     ? JSON.parse(localStorage.token)?.token
     : null;
 
+  // useEffect(() => {
+  //   const fetchDataAndUpdateState = async () => {
+  //     try {
+  //       const portData = await getPort(token);
+  //       setData(portData);
+  //     } catch (error) {
+  //       console.error("Error fetching port data:", error);
+  //     }
+  //   };
+  //   fetchDataAndUpdateState();
+  // }, [token, currentPage]);
+
   useEffect(() => {
     const fetchDataAndUpdateState = async () => {
       try {
         const portData = await getPort(token);
-        setData(portData);
+        if (Array.isArray(portData)) {
+          setData(portData);
+        } else {
+          console.error("Invalid admin port format:", portData);
+          localStorage.removeItem("token");
+          window.location.reload();
+        }
       } catch (error) {
         console.error("Error fetching port data:", error);
       }

@@ -27,11 +27,29 @@ function UserManagement() {
     ? JSON.parse(localStorage.token)?.token
     : null;
 
+  // useEffect(() => {
+  //   const fetchDataAndUpdateState = async () => {
+  //     try {
+  //       const userData = await getUser(token);
+  //       setData(userData);
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error);
+  //     }
+  //   };
+  //   fetchDataAndUpdateState();
+  // }, [token, currentPage]);
+
   useEffect(() => {
     const fetchDataAndUpdateState = async () => {
       try {
         const userData = await getUser(token);
-        setData(userData);
+        if (Array.isArray(userData)) {
+          setData(userData);
+        } else {
+          console.error("Invalid admin user format:", userData);
+          localStorage.removeItem("token");
+          window.location.reload();
+        }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }

@@ -24,11 +24,29 @@ export default function PortScheduler() {
     ? JSON.parse(localStorage.token)?.token
     : null;
 
+  // useEffect(() => {
+  //   const fetchDataAndUpdateState = async () => {
+  //     try {
+  //       const schedulerData = await getPortScheduler(token);
+  //       setData(schedulerData);
+  //     } catch (error) {
+  //       console.error("Error fetching scheduler data:", error);
+  //     }
+  //   };
+  //   fetchDataAndUpdateState();
+  // }, [token, currentPage]);
+
   useEffect(() => {
     const fetchDataAndUpdateState = async () => {
       try {
         const schedulerData = await getPortScheduler(token);
-        setData(schedulerData);
+        if (Array.isArray(schedulerData)) {
+          setData(schedulerData);
+        } else {
+          console.error("Invalid admin scheduler format:", schedulerData);
+          localStorage.removeItem("token");
+          window.location.reload();
+        }
       } catch (error) {
         console.error("Error fetching scheduler data:", error);
       }

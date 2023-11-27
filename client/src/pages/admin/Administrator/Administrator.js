@@ -25,11 +25,29 @@ function Administrator() {
     ? JSON.parse(localStorage.token)?.token
     : null;
 
+  // useEffect(() => {
+  //   const fetchDataAndUpdateState = async () => {
+  //     try {
+  //       const adminData = await getAdmin(token);
+  //       setData(adminData);
+  //     } catch (error) {
+  //       console.error("Error fetching admin data:", error);
+  //     }
+  //   };
+  //   fetchDataAndUpdateState();
+  // }, [token, currentPage]);
+
   useEffect(() => {
     const fetchDataAndUpdateState = async () => {
       try {
         const adminData = await getAdmin(token);
-        setData(adminData);
+        if (Array.isArray(adminData)) {
+          setData(adminData);
+        } else {
+          console.error("Invalid admin data format:", adminData);
+          localStorage.removeItem("token");
+          window.location.reload();
+        }
       } catch (error) {
         console.error("Error fetching admin data:", error);
       }

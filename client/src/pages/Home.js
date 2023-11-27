@@ -131,7 +131,6 @@
 
 // export default Home;
 
-
 import React, { useEffect, useState } from "react";
 import "./Home.scss";
 import ReactPaginate from "react-paginate";
@@ -155,21 +154,38 @@ function Home() {
     ? JSON.parse(localStorage.token)?.token
     : null;
 
+  // useEffect(() => {
+  //   const fetchDataAndUpdateState = async () => {
+  //     try {
+  //       const layoutData = await getHomeLayout(token);
+  //       const portData = await getHomePort(token);
+  //       setLayoutData(layoutData);
+  //       setPortData(portData);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+  //   fetchDataAndUpdateState();
+  // }, [token]);
+
   useEffect(() => {
     const fetchDataAndUpdateState = async () => {
       try {
         const layoutData = await getHomeLayout(token);
         const portData = await getHomePort(token);
-        setLayoutData(layoutData);     
-        setPortData(portData);
-        // console.log(
-        //   "Layout names:",
-        //   layoutData.map((layout) => layout.layoutname)
-        // );
+        if (Array.isArray(layoutData) && Array.isArray(portData)) {
+          setLayoutData(layoutData);
+          setPortData(portData);
+        } else {
+          console.error("Invalid data format. Expected arrays.");
+          localStorage.removeItem("token");
+          window.location.reload();
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
+
     fetchDataAndUpdateState();
   }, [token]);
 
@@ -180,11 +196,16 @@ function Home() {
         {layoutData ? (
           <>
             {layoutData
-              .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+              .slice(
+                currentPage * itemsPerPage,
+                (currentPage + 1) * itemsPerPage
+              )
               .map((layout) => {
                 const filteredPorts = portData
                   ? portData.filter((port) =>
-                      port.layout.some((l) => l.layoutname === layout.layoutname)
+                      port.layout.some(
+                        (l) => l.layoutname === layout.layoutname
+                      )
                     )
                   : [];
                 if (filteredPorts.length === 0) {
