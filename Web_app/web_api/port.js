@@ -17,9 +17,9 @@ function changeVlan(portid, vlanid){
 	};
 	console.log(requestOptions.body)
 	console.log(process.env.SWITCHAPI+"/port/updatePortVlanID/"+portid);
-	fetch(process.env.SWITCHAPI+"/port/updatePortVlanID/"+portid, requestOptions).then(response => response.text())
-	.then(result => console.log(result))
-	.catch(error => console.log('error', error));
+	//fetch(process.env.SWITCHAPI+"/port/updatePortVlanID/"+portid, requestOptions).then(response => response.text())
+	//.then(result => console.log(result))
+	//.catch(error => console.log('error', error));
 }
 
 module.exports = {

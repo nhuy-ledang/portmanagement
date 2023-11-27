@@ -5,17 +5,7 @@ const {DateTime}  = require('luxon');
 const cron = require('node-cron');
 
 const scanAPI = "http://"+process.env.SERVER_IP+":"+process.env.SERVER_PORT+"/api/scheduler"
-function scan(){
-	var myHeaders = new Headers();
-	myHeaders.append("Authorization", process.env.LOCAL_TOKEN);
-	myHeaders.append("Content-Type", "application/json");
-	var requestOptions = {
-	  method: 'GET',
-	  headers: myHeaders,
-	  redirect: 'follow'
-	};
-	fetch(scanAPI, requestOptions)
-}
+
 function changeStatus(portid, status){
 	var myHeaders = new Headers();
 	myHeaders.append("Content-Type", "application/json");
@@ -26,7 +16,7 @@ function changeStatus(portid, status){
 	  redirect: 'follow'
 	};
 	//console.log( requestOptions.body);
-	fetch(process.env.SWITCHAPI+"/port/updatePortStatus/"+portid, requestOptions)
+	//fetch(process.env.SWITCHAPI+"/port/updatePortStatus/"+portid, requestOptions)
 }
 const task = cron.schedule('* * * * *', ()=>{
 	const time = DateTime.local().toLocaleString(DateTime.DATETIME_FULL);
@@ -54,6 +44,15 @@ const task = cron.schedule('* * * * *', ()=>{
 },{
 	scheduled:false
 })
+
+function scan(){
+	SchedulerModel.find({}).then(function(scheduler){
+		if(!scheduler.length){
+			console.log("Stop cron")
+			task.stop();
+		}
+	})
+}
 module.exports = {
 
 	listScheduler: function(req, res, next){
