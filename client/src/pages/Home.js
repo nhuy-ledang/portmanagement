@@ -246,7 +246,7 @@ function Home() {
                             <tr key={port.portid}>
                               <td className="table-data">{port.portname}</td>
                               <td className="table-data">
-                                {port.user[0].email}
+                                {port.user[0]?.email}
                               </td>
                               <td className="table-data">
                                 {port.right[0]?.right

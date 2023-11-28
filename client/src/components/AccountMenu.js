@@ -15,7 +15,7 @@ export default function AccountMenu() {
     setAccountDropdownVisible(false);
   };
 
-  const { token, setToken } = useToken();
+  const { setToken } = useToken();
   // console.log(token);
 
   return (

@@ -1,8 +1,8 @@
-const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
-const headers = {
-  "Content-Type": "application/json",
-  Authorization: token,
-};
+// const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
+// const headers = {
+//   "Content-Type": "application/json",
+//   Authorization: token,
+// };
 const api_port_scheduler_url = `${process.env.REACT_APP_API_URL}/scheduler`;
 const api_port_layout_url = `${process.env.REACT_APP_API_URL}/layout`;
 
@@ -12,12 +12,11 @@ export const getPortScheduler = async (token) => {
       console.error("Token is missing or invalid. Please log in.");
       return null;
     }
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: token,
-    };
     const response = await fetch(api_port_scheduler_url, {
-      headers,
+      headers:{
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
     });
     return await response.json();
   } catch (error) {
@@ -26,22 +25,19 @@ export const getPortScheduler = async (token) => {
   }
 };
 
-export const postPortScheduler = async (requestData) => {
+export const postPortScheduler = async (requestData, token) => {
   try {
     // Kiểm tra token
     if (!token) {
       console.error("Token is missing or invalid. Please log in.");
       return;
     }
-
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: token,
-    };
-
     const response = await fetch(api_port_scheduler_url, {
       method: "POST",
-      headers,
+      headers:{
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
       body: JSON.stringify(requestData),
     });
 
@@ -57,11 +53,14 @@ export const postPortScheduler = async (requestData) => {
   }
 };
 
-export const deletePortScheduler = (selectedItems) => {
+export const deletePortScheduler = (selectedItems, token) => {
   const deletePromises = selectedItems.map((scheduler) => {
     const requestOptions = {
       method: "DELETE",
-      headers: headers,
+      headers:{
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
       body: JSON.stringify({
         id: scheduler.id,
       }),

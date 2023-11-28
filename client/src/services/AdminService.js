@@ -1,8 +1,8 @@
-const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
-const headers = {
-  "Content-Type": "application/json",
-  Authorization: token,
-};
+// const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
+// const headers = {
+//   "Content-Type": "application/json",
+//   Authorization: token,
+// };
 const api_admin_url = `${process.env.REACT_APP_API_URL}/admin`;
 const api_admin_change_pass_url = `${api_admin_url}?password=true`;
 
@@ -13,12 +13,11 @@ export const getAdmin = async (token) => {
       console.error("Token is missing or invalid. Please log in.");
       return null;
     }
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: token,
-    };
     const response = await fetch(api_admin_url, {
-      headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
     });
     return await response.json();
   } catch (error) {
@@ -32,7 +31,8 @@ export const postAdmin = async (
   email,
   password,
   confirmpassword,
-  fullname
+  fullname,
+  token
 ) => {
   const data = { adminname, email, password, confirmpassword, fullname };
   try {
@@ -42,7 +42,10 @@ export const postAdmin = async (
     }
     const response = await fetch(api_admin_url, {
       method: "POST",
-      headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
       body: JSON.stringify(data),
     });
 
@@ -62,7 +65,10 @@ export const patchAdmin = async (adminname, email, fullname, token) => {
   try {
     const response = await fetch(api_admin_url, {
       method: "PATCH",
-      headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
       body: JSON.stringify(data),
     });
     if (!response.ok) {
@@ -76,11 +82,14 @@ export const patchAdmin = async (adminname, email, fullname, token) => {
   }
 };
 
-export const deleteAdmin = (selectedItems) => {
+export const deleteAdmin = (selectedItems, token) => {
   const deletePromises = selectedItems.map((admin) => {
     const requestOptions = {
       method: "DELETE",
-      headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
       body: JSON.stringify({
         adminname: admin.adminname,
       }),
@@ -106,7 +115,7 @@ export const deleteAdmin = (selectedItems) => {
 };
 
 
-export const changePassAdmin = async (password) => {
+export const changePassAdmin = async (password, token) => {
   const data = { password };
   try {
     const response = await fetch(api_admin_change_pass_url, {

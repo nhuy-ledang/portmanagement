@@ -64,8 +64,9 @@ function LayoutManagement() {
   };
 
   const handleUpdateAdminFromModal = (layout) => {
-    console.log(">>> Check handleUpdateLayoutFromModal:", layout);
-    console.log(">> Check data: ", data);
+    // console.log(">>> Check handleUpdateLayoutFromModal:", layout);
+    // console.log(">> Check data: ", data);
+    console.log(layout);
   };
 
   const handleSelect = (layout) => {
@@ -85,7 +86,7 @@ function LayoutManagement() {
   };
 
   const deleteSelectedLayout = () => {
-    deleteLayout(selectedItems)
+    deleteLayout(selectedItems, token)
       .then(() => {
         getLayout(token).then((layoutData) => {
           setData(layoutData);

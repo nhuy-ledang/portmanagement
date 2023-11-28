@@ -92,7 +92,7 @@ function Administrator() {
   };
 
   const deleteSelectedAdmin = () => {
-    deleteAdmin(selectedItems)
+    deleteAdmin(selectedItems, token)
       .then(() => {
         getAdmin(token).then((adminData) => {
           setData(adminData);

@@ -81,11 +81,6 @@ function UserManagement() {
       cloneData[index].group = user.group;
       setData(cloneData);
     }
-
-    // console.log(">> Check handleUpdateAdminFromModal:", user);
-    // console.log(">> Check data:", data);
-    // console.log(">> Check cloneData:", cloneData);
-    // console.log(">> Check index:", index);
   };
 
   const handleSelect = (user) => {
@@ -105,7 +100,7 @@ function UserManagement() {
   };
 
   const deleteSelectedUser = () => {
-    deleteUser(selectedItems)
+    deleteUser(selectedItems, token)
       .then(() => {
         getUser(token).then((userData) => {
           setData(userData);

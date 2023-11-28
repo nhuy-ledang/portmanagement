@@ -89,13 +89,15 @@ export default function ChangePasswordAdmin(props) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
+  const token = localStorage.token
+  ? JSON.parse(localStorage.token)?.token
+  : null;
   const handleEditAdmin = async () => {
     if (password !== confirmPassword) {
       toast.error("Password and Confirm Password must match");
     } else {
       try {
-        const response = await changePassAdmin(password);
+        const response = await changePassAdmin(password, token);
         console.log(response);
         toast.success("Admin edited successfully!");
         handleClose();

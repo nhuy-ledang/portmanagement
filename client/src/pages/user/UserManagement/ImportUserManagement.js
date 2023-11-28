@@ -46,7 +46,7 @@ export default function ImportUserManagement(props) {
 
     delete options.headers["Content-Type"];
 
-    fetch(urlImportCSV, options)
+    fetch(urlImportCSV, options, token)
       .then((response) => {
         if (response.ok) {
           toast.success("Import successful!");

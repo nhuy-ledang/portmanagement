@@ -1,8 +1,8 @@
-const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
-const headers = {
-  "Content-Type": "application/json",
-  Authorization: token,
-};
+// const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
+// const headers = {
+//   "Content-Type": "application/json",
+//   Authorization: token,
+// };
 const api_layout_url = `${process.env.REACT_APP_API_URL}/layout`;
 
 export const getLayout = async (token) => {
@@ -11,12 +11,11 @@ export const getLayout = async (token) => {
       console.error("Token is missing or invalid. Please log in.");
       return null;
     }
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: token,
-    };
     const response = await fetch(api_layout_url, {
-      headers,
+      headers:{
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
     });
     return await response.json();
   } catch (error) {
@@ -86,7 +85,7 @@ export const patchLayout = (id, layoutname, image, token) => {
     });
 };
 
-export const deleteLayout = (selectedItems) => {
+export const deleteLayout = (selectedItems, token) => {
   if (!token) {
     console.error("Token is missing or invalid. Please log in.");
     return;
@@ -95,7 +94,10 @@ export const deleteLayout = (selectedItems) => {
   const deletePromises = selectedItems.map((admin) => {
     const requestOptions = {
       method: "DELETE",
-      headers: headers,
+      headers:{
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
       body: JSON.stringify({
         layoutname: admin.layoutname,
       }),

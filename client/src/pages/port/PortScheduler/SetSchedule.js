@@ -13,7 +13,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { isFormCreateValid } from "../../../validations/ScheduleValidation";
 
 export default function SetSchedule(props) {
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate] = useState(new Date());
   const [selectedDateTime, setSelectedDateTime] = useState(startDate);
   const [layoutnames, setLayoutnames] = useState([]);
   const [portnames, setPortnames] = useState([]);
@@ -22,7 +22,9 @@ export default function SetSchedule(props) {
   const [status, setStatus] = useState("");
   const [show, setShow] = useState(false);
   const { handleUpdateTable } = props;
-
+  const token = localStorage.token
+    ? JSON.parse(localStorage.token)?.token
+    : null;
   const handleClose = () => {
     setShow(false);
     setSelectedDateTime(new Date());
@@ -52,7 +54,7 @@ export default function SetSchedule(props) {
     console.log(">>Check formattedDateTime: ", formattedDateTime);
 
     try {
-      const res = await postPortScheduler(requestData);
+      const res = await postPortScheduler(requestData, token);
       console.log(res);
       if (res === "Add scheduler succeed") {
         handleClose();

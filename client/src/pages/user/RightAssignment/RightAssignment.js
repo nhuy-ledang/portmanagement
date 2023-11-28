@@ -65,10 +65,10 @@ function UserRightistrator() {
     let index = data.findIndex((item) => item.id === user.id);
     cloneData[index].right = user.right;
     setData(cloneData);
-    console.log(">> Check handleUpdateUserRightFromModal:", user);
-    console.log(">> Check data:", data);
-    console.log(">> Check cloneData:", cloneData);
-    console.log(">> Check index:", index);
+    // console.log(">> Check handleUpdateUserRightFromModal:", user);
+    // console.log(">> Check data:", data);
+    // console.log(">> Check cloneData:", cloneData);
+    // console.log(">> Check index:", index);
   };
 
   return (

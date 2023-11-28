@@ -75,7 +75,7 @@ export default function PortScheduler() {
   };
 
   const deleteSelectedAdmin = () => {
-    deletePortScheduler(selectedItems)
+    deletePortScheduler(selectedItems, token)
       .then(() => {
         getPortScheduler(token).then((schedulerData) => {
           setData(schedulerData);

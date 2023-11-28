@@ -27,7 +27,9 @@ export default function CreateAdministrator(props) {
     setFullname("");
   };
   const handleShow = () => setShow(true);
-
+  const token = localStorage.token
+  ? JSON.parse(localStorage.token)?.token
+  : null;
   const handleCreateAdmin = async () => {
     if (
       isFormCreateValid(
@@ -48,7 +50,8 @@ export default function CreateAdministrator(props) {
             email,
             password,
             confirmpassword,
-            fullname
+            fullname,
+            token
           );
           console.log(res);
           if (res === "Admin already") {

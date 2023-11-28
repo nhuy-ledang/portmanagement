@@ -17,7 +17,7 @@ export default function AssignRight(props) {
   const [rightOptions, setRightOptions] = useState([]);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
+  const token = localStorage.token ? JSON.parse(localStorage.token)?.token : null;
   useEffect(() => {
     if (show && dataUserRightEdit) {
       setUsername(dataUserRightEdit.username);
@@ -28,7 +28,7 @@ export default function AssignRight(props) {
 
   const handleEditUser = async () => {
     try {
-      const response = await patchUserRight(username, right);
+      const response = await patchUserRight(username, right, token);
       if (response && response === "Edit right done") {
         handleUpdateUserRightFromModal({
           username: username,

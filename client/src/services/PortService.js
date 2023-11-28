@@ -13,12 +13,11 @@ export const getPort = async (token) => {
       console.error("Token is missing or invalid. Please log in.");
       return null;
     }
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: token,
-    };
     const response = await fetch(api_port_url, {
-      headers,
+      headers:{
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
     });
     return await response.json();
   } catch (error) {

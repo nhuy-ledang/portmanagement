@@ -21,23 +21,32 @@ export default function CreateUserManagement(props) {
     setEmail("");
   };
   const handleShow = () => setShow(true);
+  const token = localStorage.token
+    ? JSON.parse(localStorage.token)?.token
+    : null;
 
   const handleCreateUser = async () => {
     if (isFormCreateValid(username, email, group) && isValidEmail(email)) {
-      const res = await postUser(username, email, group);
-      console.log(res);
-      if (res === "User already") {
-        toast.error("User already exists");
-      } else if (res === "Add user succeed") {
-        handleClose();
-        toast.success("User created successfully!");
-        await handleUpdateTable({
-          username,
-          email,
-          group,
-        });
-      } else {
-        toast.error("Error!");
+      try {
+        const res = await postUser(username, email, group, token);
+        console.log(res);
+
+        if (res === "User already") {
+          toast.error("User already exists");
+        } else if (res === "Add user succeed") {
+          handleClose();
+          toast.success("User created successfully!");
+          await handleUpdateTable({
+            username,
+            email,
+            group,
+          });
+        } else {
+          toast.error("Error!");
+        }
+      } catch (error) {
+        console.error("Error creating user:", error);
+        toast.error("Error creating user");
       }
     } else {
       toast.error("Please enter a valid email address");

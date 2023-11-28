@@ -15,7 +15,9 @@ export default function EditAdministrator(props) {
   const { dataAdminEdit, handleUpdateAdminFromModal } = props;
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
+  const token = localStorage.token
+  ? JSON.parse(localStorage.token)?.token
+  : null;
   useEffect(() => {
     if (show) {
       setAdminname(dataAdminEdit.adminname);
@@ -25,7 +27,7 @@ export default function EditAdministrator(props) {
   }, [dataAdminEdit, show]);
 
   const handleEditAdmin = async () => {
-    const response = await patchAdmin(adminname, email, fullname);
+    const response = await patchAdmin(adminname, email, fullname, token);
     if (response && response === "Edit admin done") {
       handleUpdateAdminFromModal({
         adminname: adminname,

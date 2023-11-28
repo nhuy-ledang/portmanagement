@@ -14,7 +14,9 @@ export default function EditLayoutManagement(props) {
   const [show, setShow] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState("");
   const { dataLayoutEdit, handleUpdateAdminFromModal } = props;
-
+  const token = localStorage.token
+  ? JSON.parse(localStorage.token)?.token
+  : null;
   const handleShow = () => setShow(true);
   const handleClose = () => {
     setShow(false);
@@ -65,10 +67,6 @@ export default function EditLayoutManagement(props) {
     console.log(layoutdir);
     console.log(image);
     if (layoutname) {
-      const token = localStorage.token
-        ? JSON.parse(localStorage.token)?.token
-        : null;
-
       if (image) {
         patchLayout(id, layoutname, image, token)
           .then((res) => {

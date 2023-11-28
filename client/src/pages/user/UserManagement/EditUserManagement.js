@@ -25,7 +25,9 @@ export default function EditUserManagement(props) {
       setGroup(dataUserEdit.group);
     }
   }, [dataUserEdit, show]);
-
+  const token = localStorage.token
+    ? JSON.parse(localStorage.token)?.token
+    : null;
   // const handleEditUser = async () => {
   //   // console.log(username);
   //   // console.log(newusername);
@@ -48,8 +50,14 @@ export default function EditUserManagement(props) {
 
   const handleEditUser = async () => {
     try {
-      const response = await patchUser(username, newusername, email, group);
-  
+      const response = await patchUser(
+        username,
+        newusername,
+        email,
+        group,
+        token
+      );
+
       if (response === "Edit user done") {
         handleUpdateUserFromModal({
           username,
@@ -64,14 +72,13 @@ export default function EditUserManagement(props) {
       } else {
         toast.error("Failed to edit user");
       }
-  
+
       handleClose();
     } catch (error) {
       console.error("Error editing user:", error.message);
       toast.error("An error occurred while editing user");
     }
   };
-  
 
   return (
     <>
