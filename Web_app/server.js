@@ -74,47 +74,47 @@ app.use('/images',express.static(imageDir));
 //     console.log("Đã xóa " + result.deletedCount + " tài liệu trong collection.");
 // });
 
-// AdminModel.findOne({
-//   adminname: "admin"
-// }).then(function(user){
-//   if (user) {
-//     console.log("Admin already");
-//     return 0;
-//   }
-//   bcrypt.hash("admin", salt)
-//   .then(function(hashpassword) {
-//     const AdminData = new AdminModel({
-//       adminname: "admin",
-//       password: hashpassword,
-//       email: "",
-//       fullname: "",
-//       created: ""
-//     });
-//     AdminData.save({
-//       alo: console.log("Admin save Done")
-//     });
-//   })
-// })
+AdminModel.findOne({
+  adminname: "admin"
+}).then(function(user){
+  if (user) {
+    console.log("Admin already");
+    return 0;
+  }
+  bcrypt.hash("admin", salt)
+  .then(function(hashpassword) {
+    const AdminData = new AdminModel({
+      adminname: "admin",
+      password: hashpassword,
+      email: "",
+      fullname: "",
+      created: ""
+    });
+    AdminData.save({
+      alo: console.log("Admin save Done")
+    });
+  })
+})
 UserModel.findOne({
   username: "Nobody"
 }).then(function(user) {
-    if (user) {
-      console.log("User already");
-      return 0;
-    }
-    RightModel.findOne( {right:"No access"} ).then(function(right){
-      const UserData = new UserModel({
-        id:0,
-        username: "Nobody",
-        email: "nobody@gmail.com",
-        group: "No group",
-        right: right._id
-      });
-      UserData.save({
-        alo: console.log("User save done")
-      })
-    })
+if (user) {
+  console.log("User already");
+  return 0;
+}
+RightModel.findOne( {right:"No access"} ).then(function(right){
+  const UserData = new UserModel({
+    id:0,
+    username: "Nobody",
+    email: "nobody@gmail.com",
+    group: "No group",
+    right: right._id
+  });
+  UserData.save({
+    alo: console.log("User save done")
   })
+})
+})
 
 // RightModel.insertMany([
 //   {
