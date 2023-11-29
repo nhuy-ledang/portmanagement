@@ -82,7 +82,7 @@ function PortAssignment() {
                 <tr>
                   <th className="col-3 name-col">PORT NAME</th>
                   <th className="col-5 name-col">LAYOUT NAME</th>
-                  <th className="col-3 name-col">USER</th>
+                  <th className="col-2 name-col">USER</th>
                   <th className="col-2 name-col">RIGHT</th>
                   <th className="col-2 name-col">STATUS</th>
                 </tr>
