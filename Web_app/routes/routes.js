@@ -7,6 +7,7 @@ const LayoutManagement = require("../web_api/layout")
 const RightManagement = require("../web_api/right")
 const SchedulerManagement = require("../web_api/scheduler")
 const PortManagement = require("../web_api/port")
+const DeviceManagement = require("../web_api/device")
 const Logger = require("../web_api/log")
 const Auth = require("../middleware/auth");
 const uploadcsvMiddleware = require("../middleware/csvUpload.js");
@@ -39,6 +40,9 @@ router.post('/port', Auth, Log, PortManagement.addPort)
 router.get('/port', Auth, Log, PortManagement.listPort)
 router.patch('/port', Auth, Log, PortManagement.editPort)
 router.delete('/port', Auth, Log, PortManagement.deletePort)
+
+router.get('/device', Auth, Log, DeviceManagement.listMac)
+
 
 router.get('/log', Auth, Log, Logger.listLog)
 router.get('/right', Auth, Log, RightManagement.listRight)

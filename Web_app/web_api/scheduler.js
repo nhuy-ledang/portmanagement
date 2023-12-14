@@ -4,7 +4,6 @@ const PortModel = require("../models/port");
 const {DateTime}  = require('luxon');
 const cron = require('node-cron');
 
-const scanAPI = "http://"+process.env.SERVER_IP+":"+process.env.SERVER_PORT+"/api/scheduler"
 
 function changeStatus(portid, status){
 	var myHeaders = new Headers();
@@ -16,7 +15,7 @@ function changeStatus(portid, status){
 	  redirect: 'follow'
 	};
 	//console.log( requestOptions.body);
-	//fetch(process.env.SWITCHAPI+"/port/updatePortStatus/"+portid, requestOptions)
+	fetch(process.env.SWITCH_API+"/port/updatePortStatus/"+portid, requestOptions)
 }
 const task = cron.schedule('* * * * *', ()=>{
 	const time = DateTime.local().toLocaleString(DateTime.DATETIME_FULL);

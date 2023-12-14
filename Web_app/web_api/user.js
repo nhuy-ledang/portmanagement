@@ -149,6 +149,7 @@ module.exports = {
     },
     editUser: function(req,res, next){
     	if(req.query.right!='true'){
+    		console.log(req.body)
 		    const{
 		      username,
 		      newusername,
@@ -162,7 +163,14 @@ module.exports = {
 		      if (req.body.email == "" || req.body.fullname == "") {
 		          return res.send("Invailid input");
 		      }
-		      if(newusername){
+		      if(newusername === username){
+		      	user.email = email;
+				    user.group = group;
+				    user.created = created;
+				    user.save();
+				    return res.send("Edit user done")
+				  }
+				  else{
 		      	UserModel.findOne({username: newusername}).then(function(usertemp){
 		      		if(usertemp){
 		      			return res.send("User already")

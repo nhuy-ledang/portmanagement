@@ -65,11 +65,15 @@ module.exports = {
 			layoutname: req.body.layoutname
 		}).then(function(layout){
 			// console.log(layout);
-			try{
-				fs.promises.unlink(process.env.UPLOAD_DIR_LAYOUT_IMAGE + layout.layoutdir);
-			}
-			catch(error){}
-			return res.send("Layout removed")
+			fs.promises.unlink(process.env.UPLOAD_DIR_LAYOUT_IMAGE + layout.layoutdir)
+    		.then(() => {
+		        return res.send("Layout removed");
+		    })
+		    .catch(error => {
+		        console.error("Error while unlinking:", error);
+		        // Handle the error as needed
+		        return res.send("Layout removed");
+		    });
 		})
 	}
 }

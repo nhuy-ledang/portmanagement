@@ -8,12 +8,13 @@ const cors = require('cors');
 const {DateTime}  = require('luxon'); 
 const bcrypt = require("bcryptjs");
 
-const AdminModel = require("../Web_App/models/admin");
-const UserModel = require("../Web_App/models/user");
+const AdminModel = require("./models/admin");
+const UserModel = require("./models/user");
 const LayoutModel = require("./models/layout");
 const RightModel = require("./models/right");
 const SwitchModel = require("./models/switch");
 const PortModel = require("./models/port");
+const DeviceModel = require("./models/device");
 
 const SchedulerModel = require("./models/scheduler");
 const jwt = require("jsonwebtoken");
@@ -74,47 +75,52 @@ app.use('/images',express.static(imageDir));
 //     console.log("Đã xóa " + result.deletedCount + " tài liệu trong collection.");
 // });
 
-AdminModel.findOne({
-  adminname: "admin"
-}).then(function(user){
-  if (user) {
-    console.log("Admin already");
-    return 0;
-  }
-  bcrypt.hash("admin", salt)
-  .then(function(hashpassword) {
-    const AdminData = new AdminModel({
-      adminname: "admin",
-      password: hashpassword,
-      email: "",
-      fullname: "",
-      created: ""
-    });
-    AdminData.save({
-      alo: console.log("Admin save Done")
-    });
-  })
-})
+DeviceModel.deleteMany({}).then(function(result) {
+    // if (err) throw err;
+    console.log("Đã xóa " + result.deletedCount + " tài liệu trong collection.");
+});
+
+// AdminModel.findOne({
+//   adminname: "admin"
+// }).then(function(user){
+//   if (user) {
+//     console.log("Admin already");
+//     return 0;
+//   }
+//   bcrypt.hash("admin", salt)
+//   .then(function(hashpassword) {
+//     const AdminData = new AdminModel({
+//       adminname: "admin",
+//       password: hashpassword,
+//       email: "",
+//       fullname: "",
+//       created: ""
+//     });
+//     AdminData.save({
+//       alo: console.log("Admin save Done")
+//     });
+//   })
+// })
 UserModel.findOne({
   username: "Nobody"
 }).then(function(user) {
-if (user) {
-  console.log("User already");
-  return 0;
-}
-RightModel.findOne( {right:"No access"} ).then(function(right){
-  const UserData = new UserModel({
-    id:0,
-    username: "Nobody",
-    email: "nobody@gmail.com",
-    group: "No group",
-    right: right._id
-  });
-  UserData.save({
-    alo: console.log("User save done")
+    if (user) {
+      console.log("User already");
+      return 0;
+    }
+    RightModel.findOne( {right:"No access"} ).then(function(right){
+      const UserData = new UserModel({
+        id:0,
+        username: "Nobody",
+        email: "nobody@gmail.com",
+        group: "No group",
+        right: right._id
+      });
+      UserData.save({
+        alo: console.log("User save done")
+      })
+    })
   })
-})
-})
 
 // RightModel.insertMany([
 //   {
